@@ -216,6 +216,6 @@
   -->
   <Target Name="AfterBuild" />
   <PropertyGroup>
-    <PostBuildEvent>cp "Anime Quiz.exe" "Anime Quiz v0.5-beta.exe"</PostBuildEvent>
+    <PostBuildEvent>cp "Anime Quiz.exe" "Anime Quiz v0.6-beta.exe"</PostBuildEvent>
   </PropertyGroup>
 </Project>

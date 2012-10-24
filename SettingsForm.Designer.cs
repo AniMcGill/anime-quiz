@@ -45,17 +45,26 @@
             this.musicFolderTextBox = new System.Windows.Forms.TextBox();
             this.musicFolderLabel = new System.Windows.Forms.Label();
             this.gameFolderLabel = new System.Windows.Forms.Label();
+            this.settingsTab = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.songDurationLabel = new System.Windows.Forms.Label();
+            this.songDuration = new System.Windows.Forms.TextBox();
+            this.secondsLabel = new System.Windows.Forms.Label();
             this.volumeGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.volumeBar)).BeginInit();
             this.folderGroupBox.SuspendLayout();
+            this.settingsTab.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // defaultFolderBox
             // 
             this.defaultFolderBox.Enabled = false;
-            this.defaultFolderBox.Location = new System.Drawing.Point(121, 14);
+            this.defaultFolderBox.Location = new System.Drawing.Point(109, 14);
             this.defaultFolderBox.Name = "defaultFolderBox";
-            this.defaultFolderBox.Size = new System.Drawing.Size(354, 20);
+            this.defaultFolderBox.Size = new System.Drawing.Size(345, 20);
             this.defaultFolderBox.TabIndex = 1;
             // 
             // cancelBtn
@@ -80,7 +89,7 @@
             // 
             // browseBtn
             // 
-            this.browseBtn.Location = new System.Drawing.Point(479, 14);
+            this.browseBtn.Location = new System.Drawing.Point(458, 12);
             this.browseBtn.Name = "browseBtn";
             this.browseBtn.Size = new System.Drawing.Size(75, 23);
             this.browseBtn.TabIndex = 5;
@@ -93,7 +102,7 @@
             this.reloadCheckBox.AutoSize = true;
             this.reloadCheckBox.Checked = true;
             this.reloadCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.reloadCheckBox.Location = new System.Drawing.Point(12, 122);
+            this.reloadCheckBox.Location = new System.Drawing.Point(6, 122);
             this.reloadCheckBox.Name = "reloadCheckBox";
             this.reloadCheckBox.Size = new System.Drawing.Size(170, 17);
             this.reloadCheckBox.TabIndex = 6;
@@ -103,7 +112,7 @@
             // autostartMusicBtn
             // 
             this.autostartMusicBtn.AutoSize = true;
-            this.autostartMusicBtn.Location = new System.Drawing.Point(12, 145);
+            this.autostartMusicBtn.Location = new System.Drawing.Point(6, 6);
             this.autostartMusicBtn.Name = "autostartMusicBtn";
             this.autostartMusicBtn.Size = new System.Drawing.Size(141, 17);
             this.autostartMusicBtn.TabIndex = 7;
@@ -113,7 +122,7 @@
             // volumeGroupBox
             // 
             this.volumeGroupBox.Controls.Add(this.volumeBar);
-            this.volumeGroupBox.Location = new System.Drawing.Point(12, 173);
+            this.volumeGroupBox.Location = new System.Drawing.Point(6, 142);
             this.volumeGroupBox.Name = "volumeGroupBox";
             this.volumeGroupBox.Size = new System.Drawing.Size(280, 68);
             this.volumeGroupBox.TabIndex = 8;
@@ -141,7 +150,7 @@
             this.folderGroupBox.Controls.Add(this.gameFolderLabel);
             this.folderGroupBox.Controls.Add(this.defaultFolderBox);
             this.folderGroupBox.Controls.Add(this.browseBtn);
-            this.folderGroupBox.Location = new System.Drawing.Point(12, 12);
+            this.folderGroupBox.Location = new System.Drawing.Point(6, 12);
             this.folderGroupBox.Name = "folderGroupBox";
             this.folderGroupBox.Size = new System.Drawing.Size(563, 104);
             this.folderGroupBox.TabIndex = 9;
@@ -159,7 +168,7 @@
             // 
             // screenshotFolderBrowseBtn
             // 
-            this.screenshotFolderBrowseBtn.Location = new System.Drawing.Point(479, 64);
+            this.screenshotFolderBrowseBtn.Location = new System.Drawing.Point(458, 64);
             this.screenshotFolderBrowseBtn.Name = "screenshotFolderBrowseBtn";
             this.screenshotFolderBrowseBtn.Size = new System.Drawing.Size(75, 23);
             this.screenshotFolderBrowseBtn.TabIndex = 14;
@@ -169,7 +178,7 @@
             // 
             // musicFolderBrowseBtn
             // 
-            this.musicFolderBrowseBtn.Location = new System.Drawing.Point(479, 38);
+            this.musicFolderBrowseBtn.Location = new System.Drawing.Point(458, 38);
             this.musicFolderBrowseBtn.Name = "musicFolderBrowseBtn";
             this.musicFolderBrowseBtn.Size = new System.Drawing.Size(75, 23);
             this.musicFolderBrowseBtn.TabIndex = 13;
@@ -180,17 +189,17 @@
             // screenshotFolderTextBox
             // 
             this.screenshotFolderTextBox.Enabled = false;
-            this.screenshotFolderTextBox.Location = new System.Drawing.Point(121, 66);
+            this.screenshotFolderTextBox.Location = new System.Drawing.Point(109, 66);
             this.screenshotFolderTextBox.Name = "screenshotFolderTextBox";
-            this.screenshotFolderTextBox.Size = new System.Drawing.Size(354, 20);
+            this.screenshotFolderTextBox.Size = new System.Drawing.Size(345, 20);
             this.screenshotFolderTextBox.TabIndex = 12;
             // 
             // musicFolderTextBox
             // 
             this.musicFolderTextBox.Enabled = false;
-            this.musicFolderTextBox.Location = new System.Drawing.Point(121, 40);
+            this.musicFolderTextBox.Location = new System.Drawing.Point(109, 40);
             this.musicFolderTextBox.Name = "musicFolderTextBox";
-            this.musicFolderTextBox.Size = new System.Drawing.Size(354, 20);
+            this.musicFolderTextBox.Size = new System.Drawing.Size(345, 20);
             this.musicFolderTextBox.TabIndex = 11;
             // 
             // musicFolderLabel
@@ -211,15 +220,76 @@
             this.gameFolderLabel.TabIndex = 6;
             this.gameFolderLabel.Text = "Game Folder";
             // 
+            // settingsTab
+            // 
+            this.settingsTab.Controls.Add(this.tabPage1);
+            this.settingsTab.Controls.Add(this.tabPage2);
+            this.settingsTab.Location = new System.Drawing.Point(12, 12);
+            this.settingsTab.Name = "settingsTab";
+            this.settingsTab.SelectedIndex = 0;
+            this.settingsTab.Size = new System.Drawing.Size(560, 242);
+            this.settingsTab.TabIndex = 16;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage1.Controls.Add(this.folderGroupBox);
+            this.tabPage1.Controls.Add(this.reloadCheckBox);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(552, 216);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Game Settings";
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage2.Controls.Add(this.secondsLabel);
+            this.tabPage2.Controls.Add(this.songDuration);
+            this.tabPage2.Controls.Add(this.songDurationLabel);
+            this.tabPage2.Controls.Add(this.autostartMusicBtn);
+            this.tabPage2.Controls.Add(this.volumeGroupBox);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(552, 216);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Music Settings";
+            // 
+            // songDurationLabel
+            // 
+            this.songDurationLabel.AutoSize = true;
+            this.songDurationLabel.Location = new System.Drawing.Point(3, 28);
+            this.songDurationLabel.Name = "songDurationLabel";
+            this.songDurationLabel.Size = new System.Drawing.Size(73, 13);
+            this.songDurationLabel.TabIndex = 9;
+            this.songDurationLabel.Text = "Play songs for";
+            // 
+            // songDuration
+            // 
+            this.songDuration.Location = new System.Drawing.Point(82, 25);
+            this.songDuration.Name = "songDuration";
+            this.songDuration.Size = new System.Drawing.Size(30, 20);
+            this.songDuration.TabIndex = 10;
+            this.songDuration.Text = "30";
+            this.songDuration.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.num_KeyPress);
+            // 
+            // secondsLabel
+            // 
+            this.secondsLabel.AutoSize = true;
+            this.secondsLabel.Location = new System.Drawing.Point(118, 28);
+            this.secondsLabel.Name = "secondsLabel";
+            this.secondsLabel.Size = new System.Drawing.Size(47, 13);
+            this.secondsLabel.TabIndex = 11;
+            this.secondsLabel.Text = "seconds";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(584, 295);
-            this.Controls.Add(this.folderGroupBox);
-            this.Controls.Add(this.volumeGroupBox);
-            this.Controls.Add(this.autostartMusicBtn);
-            this.Controls.Add(this.reloadCheckBox);
+            this.Controls.Add(this.settingsTab);
             this.Controls.Add(this.okBtn);
             this.Controls.Add(this.cancelBtn);
             this.Name = "SettingsForm";
@@ -229,8 +299,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.volumeBar)).EndInit();
             this.folderGroupBox.ResumeLayout(false);
             this.folderGroupBox.PerformLayout();
+            this.settingsTab.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -253,5 +327,11 @@
         private System.Windows.Forms.TextBox musicFolderTextBox;
         private System.Windows.Forms.Label musicFolderLabel;
         private System.Windows.Forms.Label gameFolderLabel;
+        private System.Windows.Forms.TabControl settingsTab;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Label secondsLabel;
+        private System.Windows.Forms.TextBox songDuration;
+        private System.Windows.Forms.Label songDurationLabel;
     }
 }

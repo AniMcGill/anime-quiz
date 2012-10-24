@@ -153,5 +153,17 @@ namespace Anime_Quiz.Properties {
                 this["defaultScreenshotFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public int songDuration {
+            get {
+                return ((int)(this["songDuration"]));
+            }
+            set {
+                this["songDuration"] = value;
+            }
+        }
     }
 }

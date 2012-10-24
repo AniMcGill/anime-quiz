@@ -21,6 +21,7 @@ namespace Anime_Quiz
             reloadCheckBox.Checked = Settings.Default.reloadPrevious;
             autostartMusicBtn.Checked = Settings.Default.autostartSong;
             volumeBar.Value = Settings.Default.defaultVolume;
+            songDuration.Text = Settings.Default.songDuration.ToString();
         }
 
 
@@ -66,6 +67,11 @@ namespace Anime_Quiz
             Settings.Default.autostartSong = caller.Checked;
         }*/
 
+        private void num_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
+                e.Handled = true;
+        }
         //Save the settings
         private void okBtn_Click(object sender, EventArgs e)
         {
@@ -75,6 +81,7 @@ namespace Anime_Quiz
             Settings.Default.reloadPrevious = reloadCheckBox.Checked;
             Settings.Default.autostartSong = autostartMusicBtn.Checked;
             Settings.Default.defaultVolume = volumeBar.Value;
+            Settings.Default.songDuration = Convert.ToInt32(songDuration.Text);
             this.Close();
         }
         private void cancelBtn_Click(object sender, EventArgs e)

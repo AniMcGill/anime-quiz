@@ -27,6 +27,7 @@ namespace Anime_Quiz
         WindowsMediaPlayer WMP;
         TrackBar progressBar;
         Timer timer;
+        Timer playTimer;
 
         //Constructors for Screenshot question
         PictureBox screenshotBox;
@@ -75,8 +76,8 @@ namespace Anime_Quiz
                     questionPanel.Controls.Add(audioButtons);
 
                     WMP = new WindowsMediaPlayer();
-                    //WMP.PositionChange += new _WMPOCXEvents_PositionChangeEventHandler(WMP_PositionChange);
                     WMP.MediaError += new _WMPOCXEvents_MediaErrorEventHandler(WMP_MediaError);
+                    //WMP.PlayStateChange += new _WMPOCXEvents_PlayStateChangeEventHandler(WMP_PlayStateChange);
                     WMP.settings.autoStart = Settings.Default.autostartSong;
                     WMP.URL = question;
                     WMP.settings.volume = Settings.Default.defaultVolume;
@@ -85,14 +86,19 @@ namespace Anime_Quiz
 
                     progressBar = new TrackBar();
                     progressBar.Width = 200;
+                    progressBar.Minimum = 0;
                     progressBar.Maximum = (int) WMP.currentMedia.duration;
+                    progressBar.TickStyle = TickStyle.None; //Do not display ticks for smother scrolling
                     progressBar.Scroll += new EventHandler(progressBar_Scroll);
 
                     //Add a timer to refresh the progressBar position every second
-                    timer = new Timer();
+                    timer = new System.Windows.Forms.Timer();
                     timer.Interval = 1000;
                     timer.Tick += new EventHandler(timer_Tick);
-                    if (Settings.Default.autostartSong) timer.Start();
+
+                    //Start the timers
+                    if (Settings.Default.autostartSong)
+                        timer.Start();
 
                     Button playBtn = new Button();
                     //playBtn.BackgroundImage = Image.FromFile("Data/play.png");
@@ -148,29 +154,53 @@ namespace Anime_Quiz
         {
             WMP.controls.play();
             timer.Start();
+            createPlayTimer();
         }
         void pauseBtn_Click(object sender, EventArgs e)
         {
             if (WMP.playState.Equals(WMPPlayState.wmppsPaused)) WMP.controls.play();
-            else WMP.controls.pause();
+            else
+            {
+                WMP.controls.pause();
+                playTimer.Dispose();
+            }
         }
         void stopBtn_Click(object sender, EventArgs e)
         {
             WMP.controls.stop();
+            playTimer.Dispose();
         }
         void progressBar_Scroll(object sender, EventArgs e)
         {
             WMP.controls.currentPosition = Convert.ToDouble(progressBar.Value);
-        }
-        void timer_Tick(object sender, EventArgs e)
-        {
-            progressBar.Value = (int) WMP.controls.currentPosition;
         }
 
         void WMP_MediaError(object pMediaObject)
         {
             MessageBox.Show("Error: cannot open or play music file");
             this.Close();
+        }
+        #endregion
+
+        #region Timers
+        void timer_Tick(object sender, EventArgs e)
+        {
+            progressBar.Value = (int)WMP.controls.currentPosition;
+        }
+        void createPlayTimer()
+        {
+            if (WMP.controls.currentPosition <= Settings.Default.songDuration)
+            {
+                playTimer = new Timer();
+                playTimer.Interval = 1000 * (Settings.Default.songDuration - (int)WMP.controls.currentPosition);
+                playTimer.Tick += new EventHandler(playTimer_Tick);
+                playTimer.Start();
+            }
+        }
+        void playTimer_Tick(object sender, EventArgs e)
+        {
+            WMP.controls.pause();
+            playTimer.Dispose();
         }
         #endregion
 
@@ -207,6 +237,5 @@ namespace Anime_Quiz
             Settings.Default.tempQuestion = null;
             Settings.Default.tempType = null;
         }
-
     }
 }

@@ -23,12 +23,12 @@ namespace Anime_Quiz
         //Data
         QuestionSet questionSet;
         FlowLayoutPanel gamePanel = new FlowLayoutPanel();
-        Screen gameScreen;
+        //Screen gameScreen;
 
         //Constants
         Color ANSWERED_COLOR = Color.Black;
-        Color UNANSWERED_BACKCOLOR = Color.Azure;
-        Color UNANSWERED_FORECOLOR = Color.Gold;
+        Color UNANSWERED_BACKCOLOR = Color.Transparent;
+        Color UNANSWERED_FORECOLOR = Color.Red;
 
         public GameBoard()
         {
@@ -50,8 +50,25 @@ namespace Anime_Quiz
                 }
             }
             //Set the current screen
-            gameScreen = Screen.FromControl(this);
+            //gameScreen = Screen.FromControl(this);
         }
+
+        #region Screens
+        private void showForm(Form form)
+        {
+            Screen[] screens = Screen.AllScreens;
+            //If there are two screens, set the form in the second screen
+            if (screens.Length > 1) 
+                setFormLocation(form, screens[1]);
+            form.ShowDialog();
+        }
+
+        private void setFormLocation(Form form, Screen screen)
+        {
+            Rectangle bounds = screen.Bounds;
+            form.SetBounds(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+        }
+        #endregion
 
         #region Behaviors
         private void saveData(string filename)
@@ -185,7 +202,7 @@ namespace Anime_Quiz
             {
                 if (!questionSet[i].answered)
                 {
-                    Label pointLabel = new Label();
+                    /*Label pointLabel = new Label();
                     pointLabel.Name = i.ToString();
                     pointLabel.Text = questionSet[i].points.ToString();
                     pointLabel.TextAlign = ContentAlignment.MiddleCenter;
@@ -193,14 +210,24 @@ namespace Anime_Quiz
                     pointLabel.Width = 150;
                     pointLabel.Height = 75;
                     pointLabel.BorderStyle = BorderStyle.Fixed3D;
+                    pointLabel.FlatStyle = FlatStyle.Standard;
                     pointLabel.BackColor = UNANSWERED_BACKCOLOR;
                     pointLabel.ForeColor = UNANSWERED_FORECOLOR;
                     pointLabel.Click += new EventHandler(pointLabel_Click);
-                    gamePanel.Controls.Add(pointLabel);
+                    gamePanel.Controls.Add(pointLabel);*/
+                    Button pointBtn = new Button();
+                    pointBtn.Name = i.ToString();
+                    pointBtn.Text = questionSet[i].points.ToString();
+                    pointBtn.Font = new Font("Microsoft Sans Serif", 20);
+                    pointBtn.Width = 150;
+                    pointBtn.Height = 75;
+                    pointBtn.BackColor = UNANSWERED_BACKCOLOR;
+                    pointBtn.ForeColor = UNANSWERED_FORECOLOR;
+                    pointBtn.Click += new EventHandler(pointBtn_Click);
+                    gamePanel.Controls.Add(pointBtn);
                 }
             }
         }
-
         void openQuestion(int index)
         {
             //Load the question and questionType into temporary variables to pass to QuestionForm
@@ -211,13 +238,14 @@ namespace Anime_Quiz
             QuestionForm questionForm = new QuestionForm();
 
             //Set the form in the current monitor
-            questionForm.StartPosition = FormStartPosition.Manual;
-            Rectangle bounds = gameScreen.Bounds;
-            questionForm.SetBounds(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+            //questionForm.StartPosition = FormStartPosition.Manual;
+            //Rectangle bounds = gameScreen.Bounds;
+            //questionForm.SetBounds(bounds.X, bounds.Y, bounds.Width, bounds.Height);
 
             questionForm.answer = questionSet[index].answer;
             questionForm.answered = questionSet[index].answered;
-            questionForm.ShowDialog();
+            //questionForm.ShowDialog();
+            showForm(questionForm);
 
             //After the question has been answered, get information
             Settings.Default.saveState = false;
@@ -268,6 +296,11 @@ namespace Anime_Quiz
             int index = Convert.ToInt32(caller.Name);
             openQuestion(index);
         }
+        void pointBtn_Click(object sender, EventArgs e)
+        {
+            Button caller = (Button)sender;
+            openQuestion(Convert.ToInt32(caller.Name));
+        }
 
         //If we can't display recent files, remove this method and its references altogether
         private void updateRecentFiles()
@@ -301,7 +334,8 @@ namespace Anime_Quiz
                 GameEditor newGame = new GameEditor();
                 //Set the form in the current monitor
                 newGame.StartPosition = FormStartPosition.Manual;
-                Rectangle bounds = gameScreen.Bounds;
+                Rectangle bounds = Screen.PrimaryScreen.Bounds;
+                //Rectangle bounds = gameScreen.Bounds;
                 newGame.SetBounds(bounds.X, bounds.Y, bounds.Width, bounds.Height);
                 newGame.ShowDialog();
                 //Settings.Default.saveState = true;
@@ -325,7 +359,7 @@ namespace Anime_Quiz
             Settings.Default.Save();
             //if(MessageBox.Show(CultureInfo.CurrentUICulture.Name.Equals("ja-JP")?"ゲームを終了します。よろしいですか？":"Are you sure you want to quit?",
             //    CultureInfo.CurrentUICulture.Name.Equals("ja-JP") ? "( TДT)" : "You are making me sad", MessageBoxButtons.OKCancel) == DialogResult.OK)
-            if (MessageBox.Show("Are you sure you want to quit?", "You are making me sad Eri-chan", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (MessageBox.Show("Are you sure you want to quit?", "You make me sad Eri-chan", MessageBoxButtons.OKCancel) == DialogResult.OK)
                 Application.Exit();
         }
         #endregion
@@ -335,14 +369,17 @@ namespace Anime_Quiz
         {
             this.WindowState = FormWindowState.Maximized;
             this.FormBorderStyle = FormBorderStyle.None;
-            this.mainMenu.Visible = false;
+            this.Bounds = Screen.FromControl(this).Bounds;
+            this.TopMost = true;
+            this.mainMenu.Visible = true;
         }
         private void windowedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.WindowState = FormWindowState.Normal;
+            this.WindowState = FormWindowState.Maximized;
             this.FormBorderStyle = FormBorderStyle.Sizable;
             this.mainMenu.Visible = true;
         }
+
         #endregion
 
         #region SettingsMenu
