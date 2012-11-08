@@ -28,7 +28,7 @@ namespace Anime_Quiz
         //Constants
         Color ANSWERED_COLOR = Color.Black;
         Color UNANSWERED_BACKCOLOR = Color.Transparent;
-        Color UNANSWERED_FORECOLOR = Color.Red;
+        Color UNANSWERED_FORECOLOR = Color.Black;
 
         public GameBoard()
         {

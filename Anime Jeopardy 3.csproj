@@ -59,7 +59,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -216,6 +216,7 @@
   -->
   <Target Name="AfterBuild" />
   <PropertyGroup>
-    <PostBuildEvent>cp "Anime Quiz.exe" "Anime Quiz v0.6-beta.exe"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

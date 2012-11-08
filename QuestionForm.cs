@@ -47,7 +47,7 @@ namespace Anime_Quiz
             questionPanel.Height = ClientRectangle.Height - 50;
             Controls.Add(questionPanel);
 
-            questionLabel.Text = "問題）";
+            questionLabel.Text = "Entry）";
             questionLabel.TextAlign = ContentAlignment.TopLeft;
             questionLabel.AutoSize = true;
             questionLabel.Width = ClientRectangle.Width;
