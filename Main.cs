@@ -36,16 +36,11 @@ namespace Anime_Quiz
             //Localization test
             //Thread.CurrentThread.CurrentUICulture = new CultureInfo("ja-JP");
             Settings.Default.saveState = true;
-            GameForm gameForm = new GameForm();
-            gameForm.MdiParent = this;
-            gameForm.Show();
             //If there is a currentFile, load it. This doesn't work from closing GameEditor
-            /*if (Settings.Default.reloadPrevious && Settings.Default.currentFile != String.Empty && loadFileBehavior(Settings.Default.currentFile))
-                loadGameBehavior();*/
+            if (Settings.Default.reloadPrevious && Settings.Default.currentFile != String.Empty && loadFileBehavior(Settings.Default.currentFile))
+                loadGameBehavior();
             //Limit the number of recent files
             //TODO: this only works when the application is restarted
-           
-            /*
             if (Settings.Default.recentFiles == null) Settings.Default.recentFiles = new ArrayList(10);
             if (Settings.Default.recentFiles.Count > 0)
             {
@@ -53,7 +48,7 @@ namespace Anime_Quiz
                 {
                     ToolStripMenuItem recent = (ToolStripMenuItem)recentToolStripMenuItem.DropDownItems.Add((string)Settings.Default.recentFiles[i]);
                 }
-            }*/
+            }
             //Set the current screen
             //gameScreen = Screen.FromControl(this);
         }
@@ -249,10 +244,8 @@ namespace Anime_Quiz
 
             questionForm.answer = questionSet[index].answer;
             questionForm.answered = questionSet[index].answered;
-            questionForm.MdiParent = this;
-            questionForm.Show();
             //questionForm.ShowDialog();
-            //showForm(questionForm);
+            showForm(questionForm);
 
             //After the question has been answered, get information
             Settings.Default.saveState = false;
