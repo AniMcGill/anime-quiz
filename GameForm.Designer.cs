@@ -1,6 +1,6 @@
 ﻿namespace Anime_Quiz
 {
-    partial class GameBoard
+    partial class GameForm
     {
         /// <summary>
         /// Required designer variable.
@@ -136,23 +136,18 @@
             this.helpToolStripMenuItem.Text = "Help";
             this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
             // 
-            // GameBoard
+            // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1008, 730);
-            this.Controls.Add(this.mainMenu);
-            this.IsMdiContainer = true;
-            this.MainMenuStrip = this.mainMenu;
-            this.Name = "GameBoard";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "Anime Quiz";
+            this.Name = "GameForm";
+            this.Text = "GameForm";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GameBoard_FormClosing);
             this.mainMenu.ResumeLayout(false);
             this.mainMenu.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -171,4 +166,3 @@
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
     }
 }
-

@@ -1,24 +1,20 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Anime_Quiz.Properties;
-using Anime_Quiz.DataModel;
-using System.Collections;
 using System.Xml.Serialization;
-using System.IO;
-using System.Xml;
-//using System.Globalization;
-//using System.Threading;
-
+using Anime_Quiz.DataModel;
+using Anime_Quiz.Properties;
 
 namespace Anime_Quiz
 {
-    public partial class GameBoard : Form
+    public partial class GameForm : Form
     {
         //Data
         QuestionSet questionSet;
@@ -29,23 +25,17 @@ namespace Anime_Quiz
         Color ANSWERED_COLOR = Color.Black;
         Color UNANSWERED_BACKCOLOR = Color.Transparent;
         Color UNANSWERED_FORECOLOR = Color.Red;
-
-        public GameBoard()
+        public GameForm()
         {
             InitializeComponent();
             //Localization test
             //Thread.CurrentThread.CurrentUICulture = new CultureInfo("ja-JP");
             Settings.Default.saveState = true;
-            GameForm gameForm = new GameForm();
-            gameForm.MdiParent = this;
-            gameForm.Show();
             //If there is a currentFile, load it. This doesn't work from closing GameEditor
-            /*if (Settings.Default.reloadPrevious && Settings.Default.currentFile != String.Empty && loadFileBehavior(Settings.Default.currentFile))
-                loadGameBehavior();*/
+            if (Settings.Default.reloadPrevious && Settings.Default.currentFile != String.Empty && loadFileBehavior(Settings.Default.currentFile))
+                loadGameBehavior();
             //Limit the number of recent files
             //TODO: this only works when the application is restarted
-           
-            /*
             if (Settings.Default.recentFiles == null) Settings.Default.recentFiles = new ArrayList(10);
             if (Settings.Default.recentFiles.Count > 0)
             {
@@ -53,17 +43,16 @@ namespace Anime_Quiz
                 {
                     ToolStripMenuItem recent = (ToolStripMenuItem)recentToolStripMenuItem.DropDownItems.Add((string)Settings.Default.recentFiles[i]);
                 }
-            }*/
+            }
             //Set the current screen
             //gameScreen = Screen.FromControl(this);
         }
-
         #region Screens
         private void showForm(Form form)
         {
             Screen[] screens = Screen.AllScreens;
             //If there are two screens, set the form in the second screen
-            if (screens.Length > 1) 
+            if (screens.Length > 1)
                 setFormLocation(form, screens[1]);
             form.ShowDialog();
         }
@@ -74,7 +63,6 @@ namespace Anime_Quiz
             form.SetBounds(bounds.X, bounds.Y, bounds.Width, bounds.Height);
         }
         #endregion
-
         #region Behaviors
         private void saveData(string filename)
         {
@@ -134,7 +122,7 @@ namespace Anime_Quiz
             }
         }
         private void loadGameBehavior()
-        {   
+        {
             gamePanel.Location = new Point(12, 75);
             gamePanel.AutoScroll = true;
             gamePanel.Width = ClientRectangle.Width - 20;
@@ -249,7 +237,7 @@ namespace Anime_Quiz
 
             questionForm.answer = questionSet[index].answer;
             questionForm.answered = questionSet[index].answered;
-            questionForm.MdiParent = this;
+            questionForm.MdiParent = this.MdiParent;
             questionForm.Show();
             //questionForm.ShowDialog();
             //showForm(questionForm);
@@ -404,12 +392,5 @@ namespace Anime_Quiz
             helpForm.Show();
         }
         #endregion
-
-        private void GameBoard_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //if (CultureInfo.CurrentUICulture.Name.Equals("ja-JP")) isSafeOverwrite("本ゲームはセブされていない。ゲームデータをセブしますか？");
-            //else isSafeOverwrite("There are unsaved changes. Do you want to save them before closing?");
-            isSafeOverwrite("There are unsaved changes. Do you want to save them before closing?");
-        }
     }
 }

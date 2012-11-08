@@ -60,6 +60,7 @@
             this.Controls.Add(this.closeBtn);
             this.Controls.Add(this.answerBtn);
             this.Name = "QuestionForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Question";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.QuestionForm_FormClosing);
