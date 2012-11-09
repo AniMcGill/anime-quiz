@@ -1,5 +1,9 @@
 Anime Quiz
 ==============
+v0.7MDI-beta
+--------------
+- Initial MDI implementation
+
 v0.6-beta
 --------------
 - Changed pointLabel text color to black
@@ -17,7 +21,7 @@ v0.4-beta
 - Fixed answeredCheckBox positioning for Screenshot type Question
 - Fixed a bug where saving after deleting a Question would return an error by adding a feature that automatically ignores blanks
 - Increased the number of default folders saved in Settings to 4: one load, one Question-type, one Music-type, one Screenshot-type
-- Switched to using WindowsMediaPlayer libraries (WMPLib) from MediaControl which didn’t accept utf-8 strings
+- Switched to using WindowsMediaPlayer libraries (WMPLib) from MediaControl which didnï¿½t accept utf-8 strings
 - Added a volume control Setting
 Removed:
 - Save button in main window > autosave
