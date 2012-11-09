@@ -227,7 +227,6 @@
   -->
   <Target Name="AfterBuild" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>copy "Anime Quiz.exe" "Anime Quiz v0.7MDI-beta.exe"</PostBuildEvent>
   </PropertyGroup>
 </Project>
