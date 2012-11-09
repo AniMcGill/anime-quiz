@@ -497,7 +497,7 @@ namespace Anime_Quiz
         {
             if (Settings.Default.currentFile == String.Empty) saveAsBehavior();
             else saveData(Settings.Default.currentFile);
-            updateRecentFiles();
+            //updateRecentFiles();
         }
         private void loadBehavior()
         {
@@ -545,7 +545,8 @@ namespace Anime_Quiz
             removeBtn.Enabled = state;
             genBtn.Enabled = !state;
         }
-        private void updateRecentFiles()
+        
+        /*private void updateRecentFiles()
         {
             //Add the file to the list of recent files
             if (Settings.Default.recentFiles.Contains(Settings.Default.currentFile))
@@ -553,7 +554,7 @@ namespace Anime_Quiz
             //Remove the oldest file if the list is full
             else if (Settings.Default.recentFiles.Count == 10) Settings.Default.recentFiles.RemoveAt(0);
             Settings.Default.recentFiles.Add(Settings.Default.currentFile);
-        }
+        }*/
         private bool isSafeOverwrite(string message)
         {
             if (!Settings.Default.saveState)
@@ -691,7 +692,7 @@ namespace Anime_Quiz
             {
                 Settings.Default.currentFile = gameLoad.FileName;
                 loadBehavior();
-                updateRecentFiles();
+                //updateRecentFiles();
             }           
         }
         private void cancelBtn_Click(object sender, EventArgs e)

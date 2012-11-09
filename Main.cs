@@ -1,17 +1,17 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Anime_Quiz.Properties;
-using Anime_Quiz.DataModel;
-using System.Collections;
-using System.Xml.Serialization;
-using System.IO;
 using System.Xml;
+using System.Xml.Serialization;
+using Anime_Quiz.DataModel;
+using Anime_Quiz.Properties;
 //using System.Globalization;
 //using System.Threading;
 
@@ -36,7 +36,7 @@ namespace Anime_Quiz
 
         #region Behaviors
         //If we can't display recent files, remove this method and its references altogether
-        private void updateRecentFiles()
+        /*private void updateRecentFiles()
         {
             //Add the file to the list of recent files
             if (Settings.Default.recentFiles.Contains(Settings.Default.currentFile))
@@ -44,7 +44,7 @@ namespace Anime_Quiz
             //Remove the oldest file if the list is full
             else if (Settings.Default.recentFiles.Count == 10) Settings.Default.recentFiles.RemoveAt(0);
             Settings.Default.recentFiles.Add(Settings.Default.currentFile);
-        }
+        }*/
         private bool isSafeOverwrite(string message)
         {
             if (!Settings.Default.saveState)

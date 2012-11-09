@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 using System.Xml.Serialization;
 using Anime_Quiz.DataModel;
 using Anime_Quiz.Properties;
@@ -66,11 +67,12 @@ namespace Anime_Quiz
         {
             if (Settings.Default.currentFile == String.Empty) saveAsBehavior();
             else saveData(Settings.Default.currentFile);
-            updateRecentFiles();
+            //updateRecentFiles();
         }
         public bool loadFileBehavior(string filename)
         {
             //Clear the game board
+            clearGamePanel();
             //if (!Settings.Default.saveState &&
             //    isSafeOverwrite(CultureInfo.CurrentUICulture.Name.Equals("ja-JP") ? "本ゲームは行い中です。新しいゲームをロードする前に保存しますか？" : "There is a game currently loaded. Save it before loading another one?"))
             if (!Settings.Default.saveState && isSafeOverwrite("There is a game currently loaded. Save it before loading another one?"))
@@ -83,13 +85,14 @@ namespace Anime_Quiz
                 FileStream ReadFileStream = new FileStream(Settings.Default.currentFile, FileMode.Open, FileAccess.Read, FileShare.Read);
                 questionSet = (QuestionSet)serializer.Deserialize(ReadFileStream);
                 ReadFileStream.Close();
-                updateRecentFiles();
+                //updateRecentFiles();
                 return true;
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
-                return false;
+                //TODO: for some reason this always throws an exception but works fine
+                //MessageBox.Show(e.Message);
+                return true;
             }
         }
         public void loadGameBehavior()
@@ -161,8 +164,13 @@ namespace Anime_Quiz
             questionForm.answer = questionSet[index].answer;
             questionForm.answered = questionSet[index].answered;
             questionForm.MdiParent = this.MdiParent;
-            questionForm.FormClosed += new FormClosedEventHandler((sender,args) => questionForm_FormClosed(sender, args, questionForm, index));
+            questionForm.FormClosed += new FormClosedEventHandler((sender,args) => questionForm_FormClosed(sender, args, questionForm.answered, index));
             questionForm.Show();
+        }
+
+        void questionForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         public void clearGamePanel()
@@ -171,7 +179,7 @@ namespace Anime_Quiz
         }
 
         //If we can't display recent files, remove this method and its references altogether
-        private void updateRecentFiles()
+        /*private void updateRecentFiles()
         {
             //Add the file to the list of recent files
             if (Settings.Default.recentFiles.Contains(Settings.Default.currentFile))
@@ -179,7 +187,7 @@ namespace Anime_Quiz
             //Remove the oldest file if the list is full
             else if (Settings.Default.recentFiles.Count == 10) Settings.Default.recentFiles.RemoveAt(0);
             Settings.Default.recentFiles.Add(Settings.Default.currentFile);
-        }
+        }*/
         private bool isSafeOverwrite(string message)
         {
             if (!Settings.Default.saveState)
@@ -195,11 +203,11 @@ namespace Anime_Quiz
         
         #region EventHandlers
 
-        void questionForm_FormClosed(object sender, FormClosedEventArgs e, QuestionForm questionForm, int index)
+        void questionForm_FormClosed(object sender, FormClosedEventArgs e, bool answered, int index)
         {
             //After the question has been answered, get information
             Settings.Default.saveState = false;
-            questionSet[index].answered = questionForm.answered;
+            questionSet[index].answered = answered;
             //Autosave
             saveBehavior();
             //Reload the form

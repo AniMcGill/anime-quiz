@@ -98,10 +98,11 @@ namespace Anime_Quiz
 
                     //Start the timers
                     if (Settings.Default.autostartSong)
+                    {
                         timer.Start();
-
+                        createPlayTimer();
+                    }
                     Button playBtn = new Button();
-                    //playBtn.BackgroundImage = Image.FromFile("Data/play.png");
                     Assembly currentAssembly = Assembly.GetExecutingAssembly();
                     Stream playImgStream = currentAssembly.GetManifestResourceStream("Anime_Quiz.Data.play.png");
                     playBtn.BackgroundImage = Image.FromStream(playImgStream);
