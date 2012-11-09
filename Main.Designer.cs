@@ -142,8 +142,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1008, 730);
             this.Controls.Add(this.mainMenu);
+            this.IsMdiContainer = true;
             this.MainMenuStrip = this.mainMenu;
             this.Name = "GameBoard";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Anime Quiz";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.mainMenu.ResumeLayout(false);
