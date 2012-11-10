@@ -44,6 +44,7 @@
             // 
             // closeBtn
             // 
+            this.closeBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.closeBtn.Location = new System.Drawing.Point(93, 12);
             this.closeBtn.Name = "closeBtn";
             this.closeBtn.Size = new System.Drawing.Size(75, 23);
@@ -54,8 +55,10 @@
             // 
             // QuestionForm
             // 
+            this.AcceptButton = this.answerBtn;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.closeBtn;
             this.ClientSize = new System.Drawing.Size(1008, 730);
             this.Controls.Add(this.closeBtn);
             this.Controls.Add(this.answerBtn);

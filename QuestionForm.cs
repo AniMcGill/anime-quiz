@@ -168,8 +168,11 @@ namespace Anime_Quiz
         }
         void stopBtn_Click(object sender, EventArgs e)
         {
-            WMP.controls.stop();
-            playTimer.Dispose();
+            if (WMP.playState.Equals(WMPPlayState.wmppsPaused) || WMP.playState.Equals(WMPPlayState.wmppsPlaying))
+            {
+                WMP.controls.stop();
+                playTimer.Dispose();
+            }
         }
         void progressBar_Scroll(object sender, EventArgs e)
         {

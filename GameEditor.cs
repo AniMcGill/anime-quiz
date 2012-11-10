@@ -12,6 +12,7 @@ using System.Xml.Serialization;
 using Anime_Quiz.DataModel;
 using Anime_Quiz.Properties;
 using System.Collections;
+using System.Reflection;
 //using System.Globalization;
 
 namespace Anime_Quiz
@@ -207,9 +208,10 @@ namespace Anime_Quiz
             imagePath.Margin = new Padding(20, 0, 20, 0);
             imagePath.Width = 200;
             imagePath.Height = 70;
-            //TODO: set a blank placeholder
-            //Image image = Image.FromFile(picture.question);
-            //imagePath.Image = image.GetThumbnailImage(200, 60, null, new System.IntPtr());
+
+            Assembly currentAssembly = Assembly.GetExecutingAssembly();
+            Stream defaultImageStream = currentAssembly.GetManifestResourceStream("Anime_Quiz.Data.maedax.png");
+            imagePath.Image = Image.FromStream(defaultImageStream);
             screenshotPanel.Controls.Add(imagePath);
 
             //Answer text box

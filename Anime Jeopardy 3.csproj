@@ -217,6 +217,11 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\maedax.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -227,6 +232,6 @@
   -->
   <Target Name="AfterBuild" />
   <PropertyGroup>
-    <PostBuildEvent>copy "Anime Quiz.exe" "Anime Quiz v0.7MDI-beta.exe"</PostBuildEvent>
+    <PostBuildEvent>copy "Anime Quiz.exe" "Anime Quiz v0.7.1-beta.exe"</PostBuildEvent>
   </PropertyGroup>
 </Project>

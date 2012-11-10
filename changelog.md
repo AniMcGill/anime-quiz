@@ -1,5 +1,12 @@
 Anime Quiz
 ==============
+v0.7.1-beta
+--------------
+- Minor bugfixes
+- Scaled the volume down by 10
+- Fixed music stop button when not playing music
+- Added maedax picture on empty screenshots
+
 v0.7MDI-beta
 --------------
 - Initial MDI implementation

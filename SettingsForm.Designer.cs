@@ -48,9 +48,9 @@
             this.settingsTab = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.songDurationLabel = new System.Windows.Forms.Label();
-            this.songDuration = new System.Windows.Forms.TextBox();
             this.secondsLabel = new System.Windows.Forms.Label();
+            this.songDuration = new System.Windows.Forms.TextBox();
+            this.songDurationLabel = new System.Windows.Forms.Label();
             this.volumeGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.volumeBar)).BeginInit();
             this.folderGroupBox.SuspendLayout();
@@ -132,12 +132,12 @@
             // volumeBar
             // 
             this.volumeBar.Location = new System.Drawing.Point(6, 19);
-            this.volumeBar.Maximum = 1000;
+            this.volumeBar.Maximum = 100;
             this.volumeBar.Name = "volumeBar";
             this.volumeBar.Size = new System.Drawing.Size(268, 45);
             this.volumeBar.TabIndex = 0;
-            this.volumeBar.TickFrequency = 50;
-            this.volumeBar.Value = 200;
+            this.volumeBar.TickFrequency = 5;
+            this.volumeBar.Value = 20;
             // 
             // folderGroupBox
             // 
@@ -257,14 +257,14 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Music Settings";
             // 
-            // songDurationLabel
+            // secondsLabel
             // 
-            this.songDurationLabel.AutoSize = true;
-            this.songDurationLabel.Location = new System.Drawing.Point(3, 28);
-            this.songDurationLabel.Name = "songDurationLabel";
-            this.songDurationLabel.Size = new System.Drawing.Size(73, 13);
-            this.songDurationLabel.TabIndex = 9;
-            this.songDurationLabel.Text = "Play songs for";
+            this.secondsLabel.AutoSize = true;
+            this.secondsLabel.Location = new System.Drawing.Point(118, 28);
+            this.secondsLabel.Name = "secondsLabel";
+            this.secondsLabel.Size = new System.Drawing.Size(47, 13);
+            this.secondsLabel.TabIndex = 11;
+            this.secondsLabel.Text = "seconds";
             // 
             // songDuration
             // 
@@ -275,14 +275,14 @@
             this.songDuration.Text = "30";
             this.songDuration.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.num_KeyPress);
             // 
-            // secondsLabel
+            // songDurationLabel
             // 
-            this.secondsLabel.AutoSize = true;
-            this.secondsLabel.Location = new System.Drawing.Point(118, 28);
-            this.secondsLabel.Name = "secondsLabel";
-            this.secondsLabel.Size = new System.Drawing.Size(47, 13);
-            this.secondsLabel.TabIndex = 11;
-            this.secondsLabel.Text = "seconds";
+            this.songDurationLabel.AutoSize = true;
+            this.songDurationLabel.Location = new System.Drawing.Point(3, 28);
+            this.songDurationLabel.Name = "songDurationLabel";
+            this.songDurationLabel.Size = new System.Drawing.Size(73, 13);
+            this.songDurationLabel.TabIndex = 9;
+            this.songDurationLabel.Text = "Play songs for";
             // 
             // SettingsForm
             // 
