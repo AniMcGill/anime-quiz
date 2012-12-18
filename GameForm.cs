@@ -128,6 +128,12 @@ namespace Anime_Quiz
 
             //Load the actual question labels
             loadLabelBehavior();
+            
+            // Open the team editor if no team has been configured.
+            if (Settings.Default.scoreSet == null)
+            {
+                GameBoard.openTeamEditor();
+            }
         }
 
         void loadLabelBehavior()

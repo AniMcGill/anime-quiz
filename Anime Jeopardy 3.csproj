@@ -80,6 +80,8 @@
     <Compile Include="CueTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DataModel\Score.cs" />
+    <Compile Include="DataModel\Team.cs" />
     <Compile Include="GameEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,6 +123,12 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TeamEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TeamEditor.Designer.cs">
+      <DependentUpon>TeamEditor.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="GameEditor.ja-JP.resx">
       <DependentUpon>GameEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -160,6 +168,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TeamEditor.resx">
+      <DependentUpon>TeamEditor.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="ClassDiagram1.cd" />

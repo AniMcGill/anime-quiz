@@ -56,6 +56,12 @@ namespace Anime_Quiz
             }
             return true;
         }
+
+        public static void openTeamEditor()
+        {
+            TeamEditor teamEditor = new TeamEditor();
+            teamEditor.Show();
+        }
         #endregion
 
         #region FileMenu
@@ -92,6 +98,13 @@ namespace Anime_Quiz
                 Application.Exit();
         }
         #endregion
+        
+        #region TeamMenu
+        private void teamConfigToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            openTeamEditor();
+        }
+        #endregion
 
         #region ViewMenu
         private void fullToolStripMenuItem_Click(object sender, EventArgs e)
@@ -126,6 +139,14 @@ namespace Anime_Quiz
             helpForm.Show();
         }
         #endregion
+
+        private void GameBoard_Load(object sender, EventArgs e)
+        {
+
+
+        }
+
+
 
     }
 }
