@@ -38,7 +38,7 @@
     <Setting Name="songDuration" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
-    <Setting Name="scoreSet" Type="System.Collections.ArrayList" Scope="User">
+    <Setting Name="scoreSet" Type="Anime_Quiz.DataModel.ScoreSet" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

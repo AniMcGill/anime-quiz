@@ -22,7 +22,7 @@ namespace Anime_Quiz
             Settings.Default.saveState = false;
             if (Settings.Default.scoreSet != null)
             {
-                scoreSet = (ScoreSet[])Settings.Default.scoreSet.ToArray(); //TODO: invalid cast here
+                scoreSet = Settings.Default.scoreSet;
                 loadTeamNames();
             }
             else
@@ -31,17 +31,17 @@ namespace Anime_Quiz
 
         private void loadTeamNames()
         {
-            foreach (Label label in this.Controls)
+            foreach (TextBox textBox in this.Controls.OfType<TextBox>())
             {
-                int index = Int32.Parse(label.Name.Substring(label.Name.Length - 1, 1));
-                label.Text = scoreSet[index - 1].getTeamName();
+                int index = Int32.Parse(textBox.Name.Substring(textBox.Name.Length - 1, 1));
+                textBox.Text = scoreSet[index - 1].getTeamName();
             }
         }
 
+        // TODO: there is a bug where the settings aren't saved.
         private bool saveTeams()
         {
-            Settings.Default.scoreSet = new ArrayList();
-            Settings.Default.scoreSet.Capacity = 4;
+            Settings.Default.scoreSet = new ScoreSet[4];
             foreach (TextBox textBox in this.Controls.OfType<TextBox>())
             {
                 if (textBox.Text == string.Empty)
@@ -58,7 +58,7 @@ namespace Anime_Quiz
                         scoreSet[index - 1] = new ScoreSet(textBox.Text);
                 }
             }
-            Settings.Default.scoreSet.AddRange(scoreSet);
+            Settings.Default.scoreSet = scoreSet;
             Settings.Default.saveState = true;
             return true;
         }

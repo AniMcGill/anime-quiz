@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using Anime_Quiz.DataModel;
 namespace Anime_Quiz.Properties {
     
     
@@ -165,16 +166,27 @@ namespace Anime_Quiz.Properties {
                 this["songDuration"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.ArrayList scoreSet {
+        public ScoreSet[] scoreSet
+        {
+            get
+            {
+                return ((ScoreSet[])(this["scoreSet"]));
+            }
+            set
+            {
+                this["scoreSet"] = value;
+            }
+        }
+        /*public global::System.Collections.ArrayList scoreSet {
             get {
                 return ((global::System.Collections.ArrayList)(this["scoreSet"]));
             }
             set {
                 this["scoreSet"] = value;
             }
-        }
+        }*/
     }
 }
