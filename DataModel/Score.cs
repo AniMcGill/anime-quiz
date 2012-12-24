@@ -52,6 +52,10 @@ namespace Anime_Quiz.DataModel
         {
             this._teamName = newName;
         }
+        public Score[] getScores()
+        {
+            return (Score[]) setArray.ToArray();
+        }
         public int getTotalScore()
         {
             int totalScore = 0;

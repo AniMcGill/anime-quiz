@@ -116,6 +116,12 @@
     <Compile Include="QuestionForm.Designer.cs">
       <DependentUpon>QuestionForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ScoreForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ScoreForm.Designer.cs">
+      <DependentUpon>ScoreForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="SettingsForm.cs">
       <SubType>Form</SubType>
@@ -162,6 +168,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="QuestionForm.resx">
       <DependentUpon>QuestionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ScoreForm.resx">
+      <DependentUpon>ScoreForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsForm.ja-JP.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>

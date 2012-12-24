@@ -130,7 +130,7 @@ namespace Anime_Quiz
             loadLabelBehavior();
             
             // Open the team editor if no team has been configured.
-            if (Settings.Default.scoreSet == null)
+            if (Settings.Default.scoreSet == null && Settings.Default.useScoreSystem)
             {
                 GameBoard.openTeamEditor();
             }

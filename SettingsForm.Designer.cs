@@ -51,6 +51,7 @@
             this.secondsLabel = new System.Windows.Forms.Label();
             this.songDuration = new System.Windows.Forms.TextBox();
             this.songDurationLabel = new System.Windows.Forms.Label();
+            this.useScoreSystemCheckbox = new System.Windows.Forms.CheckBox();
             this.volumeGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.volumeBar)).BeginInit();
             this.folderGroupBox.SuspendLayout();
@@ -233,6 +234,7 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage1.Controls.Add(this.useScoreSystemCheckbox);
             this.tabPage1.Controls.Add(this.folderGroupBox);
             this.tabPage1.Controls.Add(this.reloadCheckBox);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -284,6 +286,16 @@
             this.songDurationLabel.TabIndex = 9;
             this.songDurationLabel.Text = "Play songs for";
             // 
+            // useScoreSystemCheckbox
+            // 
+            this.useScoreSystemCheckbox.AutoSize = true;
+            this.useScoreSystemCheckbox.Location = new System.Drawing.Point(6, 145);
+            this.useScoreSystemCheckbox.Name = "useScoreSystemCheckbox";
+            this.useScoreSystemCheckbox.Size = new System.Drawing.Size(154, 17);
+            this.useScoreSystemCheckbox.TabIndex = 10;
+            this.useScoreSystemCheckbox.Text = "Use scoring system (BETA)";
+            this.useScoreSystemCheckbox.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -333,5 +345,6 @@
         private System.Windows.Forms.Label secondsLabel;
         private System.Windows.Forms.TextBox songDuration;
         private System.Windows.Forms.Label songDurationLabel;
+        private System.Windows.Forms.CheckBox useScoreSystemCheckbox;
     }
 }

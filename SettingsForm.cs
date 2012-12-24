@@ -19,6 +19,8 @@ namespace Anime_Quiz
             musicFolderTextBox.Text = Settings.Default.defaultMusicFolder;
             screenshotFolderTextBox.Text = Settings.Default.defaultScreenshotFolder;
             reloadCheckBox.Checked = Settings.Default.reloadPrevious;
+            useScoreSystemCheckbox.Checked = Settings.Default.useScoreSystem;
+
             autostartMusicBtn.Checked = Settings.Default.autostartSong;
             volumeBar.Value = Settings.Default.defaultVolume;
             songDuration.Text = Settings.Default.songDuration.ToString();
@@ -79,6 +81,8 @@ namespace Anime_Quiz
             Settings.Default.defaultMusicFolder = musicFolderTextBox.Text;
             Settings.Default.defaultScreenshotFolder = screenshotFolderTextBox.Text;
             Settings.Default.reloadPrevious = reloadCheckBox.Checked;
+            Settings.Default.useScoreSystem = useScoreSystemCheckbox.Checked;
+
             Settings.Default.autostartSong = autostartMusicBtn.Checked;
             Settings.Default.defaultVolume = volumeBar.Value;
             Settings.Default.songDuration = Convert.ToInt32(songDuration.Text);

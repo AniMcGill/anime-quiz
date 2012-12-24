@@ -22,6 +22,7 @@ namespace Anime_Quiz
     {
         //Forms
         GameForm gameForm = new GameForm();
+        ScoreForm scoreForm = new ScoreForm();
 
         public GameBoard()
         {
@@ -32,6 +33,9 @@ namespace Anime_Quiz
             
             gameForm.MdiParent = this;
             gameForm.Show();
+            
+            //BETA
+            scoreForm.Show();
         }
 
         #region Behaviors
