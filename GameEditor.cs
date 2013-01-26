@@ -14,6 +14,7 @@ using Anime_Quiz.Properties;
 using System.Collections;
 using System.Reflection;
 //using System.Globalization;
+using System.Data.SQLite;
 
 namespace Anime_Quiz
 {
@@ -25,6 +26,7 @@ namespace Anime_Quiz
 
         //Data array
         QuestionSet questionSet;
+        Question blankQuestion = new Question(String.Empty, String.Empty, String.Empty, 0, false);
 
         public GameEditor()
         {
@@ -58,15 +60,15 @@ namespace Anime_Quiz
             {
                 case "Question":
                     for (int i = 0; i < numQuest; i++)
-                        addQuestion();
+                        addQuestion(blankQuestion);
                     break;
                 case "Music":
                     for (int i = 0; i < numQuest; i++)
-                        addMusic();
+                        addMusic(blankQuestion);
                     break;
                 case "Screenshot":
                     for (int i = 0; i < numQuest; i++)
-                        addScreenshot();
+                        addScreenshot(blankQuestion);
                     break;
                 default:
                     /*if (CultureInfo.CurrentUICulture.Name.Equals("ja-JP"))
@@ -80,184 +82,69 @@ namespace Anime_Quiz
             setAddRemoveGenBtn(true);
         }
 
-        private void addQuestion()
+        #region Panel Items
+        private FlowLayoutPanel addPanel()
         {
             FlowLayoutPanel questionPanel = new FlowLayoutPanel();
             questionPanel.Width = 200;
             questionPanel.Height = 210;
             gamePanel.Controls.Add(questionPanel);
 
-            //Question text box
-            Label questionLabel = new Label();
-            questionLabel.Text = selectedType;
-            questionLabel.Margin = new Padding(20, 20, 0, 0);
-            questionPanel.Controls.Add(questionLabel);
-            TextBox questionTextBox = new TextBox();
-            questionTextBox.Multiline = true;
-            questionTextBox.AcceptsReturn = true;
-            questionTextBox.Width = 200;
-            questionTextBox.Height = 40;
-            questionTextBox.Margin = new Padding(20, 0, 20, 0);
-            questionPanel.Controls.Add(questionTextBox);
+            return questionPanel;
+        }
 
+        private void addAnswerLabel(FlowLayoutPanel panel, Question question)
+        {
             //Answer text box
             Label answerLabel = new Label();
             //answerLabel.Text = CultureInfo.CurrentUICulture.Name.Equals("ja-JP")?"答え:":"Answer:";
             answerLabel.Text = "Answer";
             answerLabel.Margin = new Padding(20, 5, 0, 0);
-            questionPanel.Controls.Add(answerLabel);
+            panel.Controls.Add(answerLabel);
             TextBox answerTextBox = new TextBox();
             answerTextBox.Multiline = true;
             answerTextBox.AcceptsReturn = true;
+            answerTextBox.Text = question.answer;
             answerTextBox.Width = 200;
             answerTextBox.Margin = new Padding(20, 0, 20, 0);
-            questionPanel.Controls.Add(answerTextBox);
-
+            panel.Controls.Add(answerTextBox);
+        }
+        private void addPointsLabel(FlowLayoutPanel panel, Question question)
+        {
             //Number of points
             Label pointLabel = new Label();
             //pointLabel.Text = CultureInfo.CurrentUICulture.Name.Equals("ja-JP")?"ポイント: ":"Points: ";
             pointLabel.Text = "Points: ";
             pointLabel.Width = 50;
             pointLabel.Margin = new Padding(20, 0, 0, 0);
-            questionPanel.Controls.Add(pointLabel);
+            panel.Controls.Add(pointLabel);
             TextBox pointTextBox = new TextBox();
             pointTextBox.Multiline = false;
+            pointTextBox.Text = question.points.ToString();
             pointTextBox.Width = 25;
             pointTextBox.Margin = new Padding(0, 0, 0, 0);
             pointTextBox.KeyPress += num_KeyPress;
-            questionPanel.Controls.Add(pointTextBox);
-
-            //Question answered or not
-            CheckBox answeredCheckBox = new CheckBox();
-            answeredCheckBox.Text = "Answered";
-            answeredCheckBox.Margin = new Padding(20, 0, 0, 0);
-            answeredCheckBox.Checked = false;
-            questionPanel.Controls.Add(answeredCheckBox);
+            panel.Controls.Add(pointTextBox);
         }
-        private void addMusic()
+        private void addAnsweredLabel(FlowLayoutPanel panel, Question question)
         {
-            FlowLayoutPanel soundPanel = new FlowLayoutPanel();
-            soundPanel.Width = 200;
-            soundPanel.Height = 210;
-            gamePanel.Controls.Add(soundPanel);
-
-            //Screenshot box
-            Button soundPicker = new Button();
-            soundPicker.Text = selectedType;
-            soundPicker.Margin = new Padding(20, 20, 0, 0);
-            soundPicker.Width = 75;
-            soundPicker.Height = 23;
-            soundPicker.Click += new EventHandler(soundPicker_Click);
-            soundPanel.Controls.Add(soundPicker);
-            Label soundPath = new Label();
-            soundPath.Margin = new Padding(20, 0, 20, 0);
-            soundPath.Width = 200;
-            soundPath.Height = 50;
-            soundPanel.Controls.Add(soundPath);
-
-            //Answer text box
-            Label answerLabel = new Label();
-            //answerLabel.Text = CultureInfo.CurrentUICulture.Name.Equals("ja-JP") ? "答え:" : "Answer:";
-            answerLabel.Text = "Answer:";
-            answerLabel.Margin = new Padding(20, 5, 0, 0);
-            soundPanel.Controls.Add(answerLabel);
-            TextBox answerTextBox = new TextBox();
-            answerTextBox.Multiline = true;
-            answerTextBox.AcceptsReturn = true;
-            answerTextBox.Width = 200;
-            answerTextBox.Margin = new Padding(20, 0, 20, 0);
-            soundPanel.Controls.Add(answerTextBox);
-
-            //Number of points
-            Label pointLabel = new Label();
-            //pointLabel.Text = CultureInfo.CurrentUICulture.Name.Equals("ja-JP") ? "ポイント: " : "Points: ";
-            pointLabel.Text = "Points: ";
-            pointLabel.Width = 50;
-            pointLabel.Margin = new Padding(20, 0, 0, 20);
-            soundPanel.Controls.Add(pointLabel);
-            TextBox pointTextBox = new TextBox();
-            pointTextBox.Multiline = false;
-            pointTextBox.Width = 25;
-            pointTextBox.Margin = new Padding(0, 0, 0, 0);
-            pointTextBox.KeyPress += num_KeyPress;
-            soundPanel.Controls.Add(pointTextBox);
-
             //Question answered or not
             CheckBox answeredCheckBox = new CheckBox();
             answeredCheckBox.Text = "Answered";
             answeredCheckBox.Margin = new Padding(20, 0, 0, 0);
-            answeredCheckBox.Checked = false;
-            soundPanel.Controls.Add(answeredCheckBox);
+            answeredCheckBox.Checked = question.answered;
+            panel.Controls.Add(answeredCheckBox);
         }
-        private void addScreenshot()
-        {
-            FlowLayoutPanel screenshotPanel = new FlowLayoutPanel();
-            screenshotPanel.Width = 200;
-            screenshotPanel.Height = 210;
-            gamePanel.Controls.Add(screenshotPanel);
+        #endregion
 
-            //Screenshot box
-            Button imageChooser = new Button();
-            imageChooser.Text = selectedType;
-            imageChooser.Margin = new Padding(20, 20, 0, 0);
-            imageChooser.Width = 75;
-            imageChooser.Height = 23;
-            imageChooser.Click += new EventHandler(imageChooser_Click);
-            screenshotPanel.Controls.Add(imageChooser);
-            Label imagePath = new Label();
-            imagePath.Margin = new Padding(20, 0, 20, 0);
-            imagePath.Width = 200;
-            imagePath.Height = 70;
-
-            Assembly currentAssembly = Assembly.GetExecutingAssembly();
-            Stream defaultImageStream = currentAssembly.GetManifestResourceStream("Anime_Quiz.Data.maedax.png");
-            imagePath.Image = Image.FromStream(defaultImageStream);
-            screenshotPanel.Controls.Add(imagePath);
-
-            //Answer text box
-            Label answerLabel = new Label();
-            //answerLabel.Text = CultureInfo.CurrentUICulture.Name.Equals("ja-JP") ? "答え:" : "Answer:";
-            answerLabel.Text = "Answer";
-            answerLabel.Margin = new Padding(20, 5, 0, 0);
-            screenshotPanel.Controls.Add(answerLabel);
-            TextBox answerTextBox = new TextBox();
-            answerTextBox.Multiline = true;
-            answerTextBox.AcceptsReturn = true;
-            answerTextBox.Width = 200;
-            answerTextBox.Margin = new Padding(20, 0, 20, 0);
-            screenshotPanel.Controls.Add(answerTextBox);
-
-            //Number of points
-            Label pointLabel = new Label();
-            //pointLabel.Text = CultureInfo.CurrentUICulture.Name.Equals("ja-JP") ? "ポイント: " : "Points: ";
-            pointLabel.Text = "Points: ";
-            pointLabel.Width = 50;
-            pointLabel.Margin = new Padding(20, 0, 0, 0);
-            screenshotPanel.Controls.Add(pointLabel);
-            TextBox pointTextBox = new TextBox();
-            pointTextBox.Multiline = false;
-            pointTextBox.Width = 25;
-            pointTextBox.Margin = new Padding(0, 0, 0, 0);
-            pointTextBox.KeyPress += num_KeyPress;
-            screenshotPanel.Controls.Add(pointTextBox);
-
-            //Question answered or not
-            CheckBox answeredCheckBox = new CheckBox();
-            answeredCheckBox.Text = "Answered";
-            answeredCheckBox.Margin = new Padding(20, 0, 0, 0);
-            answeredCheckBox.Checked = false;
-            screenshotPanel.Controls.Add(answeredCheckBox);
-        }
+        #region Questions
         private void addQuestion(Question question)
         {
-            FlowLayoutPanel questionPanel = new FlowLayoutPanel();
-            questionPanel.Width = 200;
-            questionPanel.Height = 210;
-            gamePanel.Controls.Add(questionPanel);
+            FlowLayoutPanel questionPanel = addPanel();
 
             //Question text box
             Label questionLabel = new Label();
-            questionLabel.Text = question.type;
+            questionLabel.Text = selectedType;
             questionLabel.Margin = new Padding(20, 20, 0, 0);
             questionPanel.Controls.Add(questionLabel);
             TextBox questionTextBox = new TextBox();
@@ -269,160 +156,61 @@ namespace Anime_Quiz
             questionTextBox.Margin = new Padding(20, 0, 20, 0);
             questionPanel.Controls.Add(questionTextBox);
 
-            //Answer text box
-            Label answerLabel = new Label();
-            //answerLabel.Text = CultureInfo.CurrentUICulture.Name.Equals("ja-JP")?"答え:":"Answer:";
-            answerLabel.Text = "Answer";
-            answerLabel.Margin = new Padding(20, 5, 0, 0);
-            questionPanel.Controls.Add(answerLabel);
-            TextBox answerTextBox = new TextBox();
-            answerTextBox.Multiline = true;
-            answerTextBox.AcceptsReturn = true;
-            answerTextBox.Text = question.answer;
-            answerTextBox.Width = 200;
-            answerTextBox.Margin = new Padding(20, 0, 20, 0);
-            questionPanel.Controls.Add(answerTextBox);
-
-            //Number of points
-            Label pointLabel = new Label();
-            //pointLabel.Text = CultureInfo.CurrentUICulture.Name.Equals("ja-JP")?"ポイント: ":"Points: ";
-            pointLabel.Text = "Points: ";
-            pointLabel.Width = 50;
-            pointLabel.Margin = new Padding(20, 0, 0, 20);
-            questionPanel.Controls.Add(pointLabel);
-            TextBox pointTextBox = new TextBox();
-            pointTextBox.Multiline = false;
-            pointTextBox.Text = question.points.ToString();
-            pointTextBox.Width = 25;
-            pointTextBox.Margin = new Padding(0, 0, 0, 0);
-            pointTextBox.KeyPress += num_KeyPress;
-            questionPanel.Controls.Add(pointTextBox);
-
-            //Question answered or not
-            CheckBox answeredCheckBox = new CheckBox();
-            answeredCheckBox.Text = "Answered";
-            answeredCheckBox.Margin = new Padding(20, 0, 0, 0);
-            answeredCheckBox.Checked = question.answered;
-            questionPanel.Controls.Add(answeredCheckBox);
+            addAnswerLabel(questionPanel, question);
+            addPointsLabel(questionPanel, question);
+            addAnsweredLabel(questionPanel, question);
         }
-        private void addMusic(Question song)
+        private void addMusic(Question question)
         {
-            FlowLayoutPanel soundPanel = new FlowLayoutPanel();
-            soundPanel.Width = 200;
-            soundPanel.Height = 210;
-            gamePanel.Controls.Add(soundPanel);
+            FlowLayoutPanel soundPanel = addPanel();
 
-            //Screenshot box
+            //Music box
             Button soundPicker = new Button();
-            soundPicker.Text = song.type;
+            soundPicker.Text = selectedType;
             soundPicker.Margin = new Padding(20, 20, 0, 0);
             soundPicker.Width = 75;
             soundPicker.Height = 23;
             soundPicker.Click += new EventHandler(soundPicker_Click);
             soundPanel.Controls.Add(soundPicker);
             Label soundPath = new Label();
-            soundPath.Text = song.question;
             soundPath.Margin = new Padding(20, 0, 20, 0);
+            soundPath.Text = question.question;
             soundPath.Width = 200;
             soundPath.Height = 50;
             soundPanel.Controls.Add(soundPath);
 
-            //Answer text box
-            Label answerLabel = new Label();
-            //answerLabel.Text = CultureInfo.CurrentUICulture.Name.Equals("ja-JP") ? "答え:" : "Answer:";
-            answerLabel.Text = "Answer:";
-            answerLabel.Margin = new Padding(20, 5, 0, 0);
-            soundPanel.Controls.Add(answerLabel);
-            TextBox answerTextBox = new TextBox();
-            answerTextBox.Multiline = true;
-            answerTextBox.AcceptsReturn = true;
-            answerTextBox.Text = song.answer;
-            answerTextBox.Width = 200;
-            answerTextBox.Margin = new Padding(20, 0, 20, 0);
-            soundPanel.Controls.Add(answerTextBox);
-
-            //Number of points
-            Label pointLabel = new Label();
-            //pointLabel.Text = CultureInfo.CurrentUICulture.Name.Equals("ja-JP") ? "ポイント: " : "Points: ";
-            pointLabel.Text = "Points: ";
-            pointLabel.Width = 50;
-            pointLabel.Margin = new Padding(20, 0, 0, 20);
-            soundPanel.Controls.Add(pointLabel);
-            TextBox pointTextBox = new TextBox();
-            pointTextBox.Multiline = false;
-            pointTextBox.Text = song.points.ToString();
-            pointTextBox.Width = 25;
-            pointTextBox.Margin = new Padding(0, 0, 0, 0);
-            pointTextBox.KeyPress += num_KeyPress;
-            soundPanel.Controls.Add(pointTextBox);
-
-            //Question answered or not
-            CheckBox answeredCheckBox = new CheckBox();
-            answeredCheckBox.Text = "Answered";
-            answeredCheckBox.Margin = new Padding(20, 0, 0, 0);
-            answeredCheckBox.Checked = song.answered;
-            soundPanel.Controls.Add(answeredCheckBox);
+            addAnswerLabel(soundPanel, question);
+            addPointsLabel(soundPanel, question);
+            addAnsweredLabel(soundPanel, question);
         }
-        private void addScreenshot(Question picture)
+        private void addScreenshot(Question question)
         {
-            FlowLayoutPanel screenshotPanel = new FlowLayoutPanel();
-            screenshotPanel.Width = 200;
-            screenshotPanel.Height = 210;
-            gamePanel.Controls.Add(screenshotPanel);
+            FlowLayoutPanel screenshotPanel = addPanel();
 
             //Screenshot box
             Button imageChooser = new Button();
-            imageChooser.Text = picture.type;
+            imageChooser.Text = selectedType;
             imageChooser.Margin = new Padding(20, 20, 0, 0);
             imageChooser.Width = 75;
             imageChooser.Height = 23;
             imageChooser.Click += new EventHandler(imageChooser_Click);
             screenshotPanel.Controls.Add(imageChooser);
             Label imagePath = new Label();
-            imagePath.Text = picture.question;
             imagePath.Margin = new Padding(20, 0, 20, 0);
+            imagePath.Text = question.question;
             imagePath.Width = 200;
             imagePath.Height = 70;
-            Image image = Image.FromFile(picture.question);
-            imagePath.Image = image.GetThumbnailImage(200, 60, null, new System.IntPtr());
+
+            Assembly currentAssembly = Assembly.GetExecutingAssembly();
+            Stream defaultImageStream = currentAssembly.GetManifestResourceStream("Anime_Quiz.Data.maedax.png");
+            imagePath.Image = Image.FromStream(defaultImageStream);
             screenshotPanel.Controls.Add(imagePath);
 
-            //Answer text box
-            Label answerLabel = new Label();
-            //answerLabel.Text = CultureInfo.CurrentUICulture.Name.Equals("ja-JP") ? "答え:" : "Answer:";
-            answerLabel.Text = "Answer";
-            answerLabel.Margin = new Padding(20, 5, 0, 0);
-            screenshotPanel.Controls.Add(answerLabel);
-            TextBox answerTextBox = new TextBox();
-            answerTextBox.Multiline = true;
-            answerTextBox.AcceptsReturn = true;
-            answerTextBox.Text = picture.answer;
-            answerTextBox.Width = 200;
-            answerTextBox.Margin = new Padding(20, 0, 20, 0);
-            screenshotPanel.Controls.Add(answerTextBox);
-
-            //Number of points
-            Label pointLabel = new Label();
-            //pointLabel.Text = CultureInfo.CurrentUICulture.Name.Equals("ja-JP") ? "ポイント: " : "Points: ";
-            pointLabel.Text = "Points: ";
-            pointLabel.Width = 50;
-            pointLabel.Margin = new Padding(20, 0, 0, 0);
-            screenshotPanel.Controls.Add(pointLabel);
-            TextBox pointTextBox = new TextBox();
-            pointTextBox.Multiline = false;
-            pointTextBox.Text = picture.points.ToString();
-            pointTextBox.Width = 25;
-            pointTextBox.Margin = new Padding(0, 0, 0, 0);
-            pointTextBox.KeyPress += num_KeyPress;
-            screenshotPanel.Controls.Add(pointTextBox);
-
-            //Question answered or not
-            CheckBox answeredCheckBox = new CheckBox();
-            answeredCheckBox.Text = "Answered";
-            answeredCheckBox.Margin = new Padding(20, 0, 0, 0);
-            answeredCheckBox.Checked = picture.answered;
-            screenshotPanel.Controls.Add(answeredCheckBox);
+            addAnswerLabel(screenshotPanel, question);
+            addPointsLabel(screenshotPanel, question);
+            addAnsweredLabel(screenshotPanel, question);
         }
+        #endregion
 
         private bool storeData()
         {
@@ -459,6 +247,36 @@ namespace Anime_Quiz
             }
             return true;
         }
+
+        /// <summary>
+        ///     Save each Question in the QuestionSet to the database.
+        /// </summary>
+        /// <param name="questionSetID">The QuestionSet to which the current questions belong.</param>
+        private void saveToDatabase(int questionSetID)
+        {
+            if (storeData())
+            {
+                SQLiteDatabase sqlDB = new SQLiteDatabase();
+                foreach (Question question in questionSet)
+                {
+                    Dictionary<String, String> data = new Dictionary<string, string>();
+                    data.Add("content", question.question);
+                    data.Add("answer", question.answer);
+                    data.Add("points", question.points.ToString());
+                    data.Add("answered", question.answered.ToString());
+                    data.Add("questionSet", questionSetID.ToString());
+                    try
+                    {
+                        sqlDB.Insert("Questions", data);
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                    }
+                }
+            }
+        }
+
         private void saveData(string filename)
         {
             //If the data has been correctly stored, write it to file.
@@ -488,18 +306,46 @@ namespace Anime_Quiz
 
         private void saveAsBehavior()
         {
-            if (gameSave.ShowDialog() == DialogResult.OK)
+            saveToDatabase(0);
+            /*if (gameSave.ShowDialog() == DialogResult.OK)
             {
-                Settings.Default.currentFile = gameSave.FileName;
-                saveData(Settings.Default.currentFile);
-            }
+                //Settings.Default.currentFile = gameSave.FileName;
+                //saveData(Settings.Default.currentFile);
+            }*/
         }
         //If there are no currentFile, prompt for SaveAs
         private void saveBehavior()
         {
+            saveAsBehavior();
+            /*
             if (Settings.Default.currentFile == String.Empty) saveAsBehavior();
             else saveData(Settings.Default.currentFile);
+            */
             //updateRecentFiles();
+        }
+        private void loadFromDatabaseBehavior(int questionSetID)
+        {
+            clearPanel();
+            SQLiteDatabase sqlDB = new SQLiteDatabase();
+            DataTable questionTable;
+            DataTable questionSetTable;
+            String query = String.Format("select CONTENT, ANSWER, POINTS, ANSWERED from QUESTIONS where questionSetID = {0}", questionSetID);
+            questionTable = sqlDB.getDataTable(query);
+            String tableQuery = String.Format("select TYPE from QUESTIONSETS where questionSetID = {0}", questionSetID);
+            questionSetTable = sqlDB.getDataTable(tableQuery);
+            //Change the saveState to false
+            Settings.Default.saveState = false;
+            cancelBtn.Text = "Close";
+
+            //Create the number of specified question boxes for the selected game type.          
+            gamePanel.Location = new Point(12, 56);
+            gamePanel.AutoScroll = true;
+            gamePanel.Width = ClientRectangle.Width - 20;
+            gamePanel.Height = ClientRectangle.Height - 64;
+            Controls.Add(gamePanel);
+            //Get the type
+            //selectedType = questionSetTable.Rows["TYPE"].ToString();
+            //TODO: incomplete!!
         }
         private void loadBehavior()
         {
@@ -648,13 +494,13 @@ namespace Anime_Quiz
             switch (selectedType)
             {
                 case "Question":
-                    addQuestion();
+                    addQuestion(blankQuestion);
                     break;
                 case "Music":
-                    addMusic();
+                    addMusic(blankQuestion);
                     break;
                 case "Screenshot":
-                    addScreenshot();
+                    addScreenshot(blankQuestion);
                     break;
             }
         }
