@@ -19,8 +19,9 @@ using Microsoft.VisualBasic;
 
 namespace Anime_Quiz
 {
-    public partial class GameEditor : Form
+    public partial class GameSetEditor : Form
     {
+        //new gameset
         SQLiteDatabase sqlDB = new SQLiteDatabase();
 
         Types selectedType;
@@ -31,9 +32,11 @@ namespace Anime_Quiz
         QuestionSet questionSet;
         Question blankQuestion = new Question(null, String.Empty, 0, false);
 
-        public GameEditor()
+        public GameSetEditor()
         {
             InitializeComponent();
+
+            //TODO: load info from database
 
             //Set the initial directory for our file choosers if the default folder is configured
             if (Settings.Default.defaultFolder != String.Empty)

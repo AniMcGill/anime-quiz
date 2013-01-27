@@ -20,7 +20,7 @@ namespace Anime_Quiz.DataModel
         /// </summary>
         public SQLiteDatabase()
         {
-            dbConnection = "Data Source=animequiz.s3db";
+            dbConnection = "Data Source=animequiz.s3db;Version=3";
         }
         /// <summary>
         ///     Single Param Constructor for specifying the DB file.
@@ -228,6 +228,27 @@ namespace Anime_Quiz.DataModel
             catch
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        ///     Gets the ID associated with the QuestionSet name
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
+        public int getQuestionSetID(string setName)
+        {
+            String command = String.Format("select ID from QuestionSets where NAME = '{0}'", setName);
+            DataTable result = this.getDataTable(command);
+            try
+            {
+                DataRow row = result.Rows[0];
+                return (int)row["id"];
+                //return (int)result.Rows[0]["id"];   //never reached
+            }
+            catch (Exception e)
+            {
+                return -1;
             }
         }
     }

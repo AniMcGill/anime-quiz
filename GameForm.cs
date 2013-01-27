@@ -161,8 +161,10 @@ namespace Anime_Quiz
         void openQuestion(int index)
         {
             //Load the question and questionType into temporary variables to pass to QuestionForm
-            Settings.Default.tempQuestion = questionSet[index].question;
-            Settings.Default.tempType = questionSet[index].type;
+            //Settings.Default.tempQuestion = questionSet[index].question;
+            //Settings.Default.tempType = questionSet[index].type;
+
+            //TODO: temporarily store the current question or questionID
 
             //Open the Question in a new form
             QuestionForm questionForm = new QuestionForm();

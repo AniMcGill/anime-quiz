@@ -35,7 +35,7 @@ namespace Anime_Quiz
             gameForm.Show();
             
             //BETA
-            scoreForm.Show();
+            //scoreForm.Show();
         }
 
         #region Behaviors

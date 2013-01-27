@@ -9,8 +9,13 @@ using System.Drawing;
 
 namespace Anime_Quiz.DataModel
 {
+    public enum Types { Question, Music, Screenshot };
+
     public class QuestionSet:ICollection
     {
+        private string _name;
+        private Types _type;
+
         private ArrayList setArray = new ArrayList();
         public Question this[int index]
         {
@@ -40,16 +45,34 @@ namespace Anime_Quiz.DataModel
         {
             setArray.Add(newQuestion);
         }
+
+        public string name
+        {
+            get { return _name; }
+            set { _name = value; }
+        }
+        public Types type
+        {
+            get { return _type; }
+            set { _type = value; }
+        }
     }
 
     public class Question
     {
-        private string _question;
+        private int _questionID;
+        private byte[] _question;
         private string _answer;
-        private string _type;
+        //private Types _type;
         private int _points;
         private bool _answered;
-        public string question
+
+        public int questionID
+        {
+            get { return _questionID; }
+            set { _questionID = value; }
+        }
+        public byte[] question
         {
             get { return _question; }
             set { _question = value; }
@@ -59,11 +82,12 @@ namespace Anime_Quiz.DataModel
             get { return _answer; }
             set { _answer = value; }
         }
-        public string type
+        /*
+        public Types type
         {
             get { return _type; }
             set { _type = value; }
-        }
+        }*/
         public int points
         {
             get { return _points; }
@@ -78,6 +102,14 @@ namespace Anime_Quiz.DataModel
         public Question()
         {
         }
+        public Question(byte[] q, string a, int p, bool state)
+        {
+            this._question = q;
+            this._answer = a;
+            this._points = p;
+            this._answered = state;
+        }
+        /*
         public Question(string q, string a, string  type, int p, bool state)
         {
             this._question = q;
@@ -86,5 +118,6 @@ namespace Anime_Quiz.DataModel
             this._points = p;
             this._answered = state;
         }
+        */
     }
 }

@@ -188,5 +188,17 @@ namespace Anime_Quiz.Properties {
                 this["useScoreSystem"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public Anime_Quiz.DataModel.QuestionSet currentSet {
+            get {
+                return ((Anime_Quiz.DataModel.QuestionSet)(this["currentSet"]));
+            }
+            set {
+                this["currentSet"] = value;
+            }
+        }
     }
 }

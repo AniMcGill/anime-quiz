@@ -44,5 +44,8 @@
     <Setting Name="useScoreSystem" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="currentSet" Type="Anime_Quiz.DataModel.QuestionSet" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

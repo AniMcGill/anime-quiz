@@ -1,6 +1,6 @@
 ﻿namespace Anime_Quiz
 {
-    partial class GameEditor
+    partial class GameSetEditor
     {
         /// <summary>
         /// Required designer variable.
