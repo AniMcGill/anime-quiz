@@ -101,6 +101,10 @@ namespace Anime_Quiz.DataModel
 
         public Question()
         {
+            this._question = null;
+            this.answer = String.Empty;
+            this._points = 0;
+            this._answered = false;
         }
         public Question(byte[] q, string a, int p, bool state)
         {

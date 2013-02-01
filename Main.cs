@@ -74,7 +74,7 @@ namespace Anime_Quiz
             //Save in progress game and open editor
             if (isSafeOverwrite("There is a game in progress. Do you want to save it before proceeding?"))
             {
-                GameEditor newGame = new GameEditor();
+                GameSetEditor newGame = new GameSetEditor();
                 //Set the form in a new Window (on dual screens, it will be on the monitor 1
                 newGame.ShowDialog();
                 //Settings.Default.saveState = true;

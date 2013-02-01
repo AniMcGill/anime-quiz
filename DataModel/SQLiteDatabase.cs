@@ -242,12 +242,11 @@ namespace Anime_Quiz.DataModel
             DataTable result = this.getDataTable(command);
             try
             {
-                DataRow row = result.Rows[0];
-                return (int)row["id"];
-                //return (int)result.Rows[0]["id"];   //never reached
+                return Convert.ToInt32(result.Rows[0]["id"]);   //assumes no collision
             }
             catch (Exception e)
             {
+                MessageBox.Show(e.Message);
                 return -1;
             }
         }

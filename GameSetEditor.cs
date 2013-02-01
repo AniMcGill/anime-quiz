@@ -24,31 +24,26 @@ namespace Anime_Quiz
         //new gameset
         SQLiteDatabase sqlDB = new SQLiteDatabase();
 
-        Types selectedType;
-        int numQuest;
-        FlowLayoutPanel gamePanel = new FlowLayoutPanel();
-
-        //Data array
         QuestionSet questionSet;
-        Question blankQuestion = new Question(null, String.Empty, 0, false);
+        Question blankQuestion = new Question();
+        Types selectedType;
+
+        int numQuest;   //to deprecate
+        FlowLayoutPanel gamePanel = new FlowLayoutPanel();  //to deprecate?
 
         public GameSetEditor()
         {
             InitializeComponent();
-
+            questionSet = new QuestionSet();
+            loadQuestionSets();
             //TODO: load info from database
-
-            //Set the initial directory for our file choosers if the default folder is configured
-            if (Settings.Default.defaultFolder != String.Empty)
-            {
-                gameSave.InitialDirectory = Settings.Default.defaultFolder;
-                gameLoad.InitialDirectory = Settings.Default.defaultFolder;
-            }
+            /*
             //Load the last game if there is one in memory
             if (Settings.Default.currentSet != null)
                 loadFromDatabaseBehavior(0);    //not implemented
             //if (Settings.Default.currentFile != String.Empty)
             //    loadBehavior();
+            */
         }
 
         private void reinitializeGameBoard()
@@ -89,6 +84,29 @@ namespace Anime_Quiz
             }
             setAddRemoveGenBtn(true);
         }
+        #region DataGrids
+
+        /// <summary>
+        ///     Loads the QuestionSets from the database and display them in a ComboBox
+        /// </summary>
+        private void loadQuestionSets()
+        {
+            String query = "select * from QuestionSets";
+            DataTable queryData = sqlDB.getDataTable(query);
+            ComboBox questionSetList = new ComboBox();
+            questionSetList.Location = new Point(12,12);
+            questionSetList.Text = "Select a game to load";
+            questionSetList.TabIndex = 1;
+            questionSetList.SelectedIndexChanged += questionSetList_SelectedIndexChanged;
+            foreach (DataRow row in queryData.Rows)
+            {
+                questionSetList.Items.Add(row["name"]);
+            }
+            Controls.Add(questionSetList);
+        }
+
+        
+        #endregion
 
         #region Panel Items
         private FlowLayoutPanel addPanel()
@@ -287,33 +305,6 @@ namespace Anime_Quiz
             }
         }
 
-        /*
-        private void saveData(string filename)
-        {
-            //If the data has been correctly stored, write it to file.
-            if (storeData())
-            {
-                //XmlRootAttribute xRoot = new XmlRootAttribute(selectedType);
-                XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
-                ns.Add("", "");
-                Type[] newTypes = new Type[2];
-                newTypes[0] = typeof(Question);
-                newTypes[1] = typeof(ArrayList);
-
-                // Note that only the collection is serialized -- not the 
-                // QuestionSetType or any other public property of the class.
-                XmlSerializer serializer = new XmlSerializer(typeof(QuestionSet),newTypes);
-                TextWriter stream = new StreamWriter(filename);
-                serializer.Serialize(stream, questionSet,ns);
-                stream.Close();
-                Settings.Default.saveState = true;
-                //cancelBtn.Text = CultureInfo.CurrentUICulture.Name.Equals("ja-JP")?"閉じる":"Close";
-                cancelBtn.Text = "Close";
-            }
-            else Settings.Default.currentFile = String.Empty;
-        }
-        */
-        
         #region Behaviors
 
         private void saveAsBehavior()
@@ -422,16 +413,6 @@ namespace Anime_Quiz
             removeBtn.Enabled = state;
             genBtn.Enabled = !state;
         }
-        
-        /*private void updateRecentFiles()
-        {
-            //Add the file to the list of recent files
-            if (Settings.Default.recentFiles.Contains(Settings.Default.currentFile))
-                Settings.Default.recentFiles.Remove(Settings.Default.currentFile);
-            //Remove the oldest file if the list is full
-            else if (Settings.Default.recentFiles.Count == 10) Settings.Default.recentFiles.RemoveAt(0);
-            Settings.Default.recentFiles.Add(Settings.Default.currentFile);
-        }*/
         private bool isSafeOverwrite(string message)
         {
             if (!Settings.Default.saveState)
@@ -460,6 +441,14 @@ namespace Anime_Quiz
         #endregion
 
         #region EventHandlers
+
+        void questionSetList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox senderComboBox = sender as ComboBox;
+            questionSet.name = senderComboBox.SelectedItem.ToString();
+            selectedType = (Types) sqlDB.getQuestionSetID(questionSet.name);
+            questionSet.type = selectedType;
+        }
 
         void soundPicker_Click(object sender, EventArgs e)
         {

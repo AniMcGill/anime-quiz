@@ -51,7 +51,7 @@
             "Question",
             "Music",
             "Screenshot"});
-            this.gameType.Location = new System.Drawing.Point(12, 12);
+            this.gameType.Location = new System.Drawing.Point(149, 48);
             this.gameType.Name = "gameType";
             this.gameType.Size = new System.Drawing.Size(125, 21);
             this.gameType.TabIndex = 0;
@@ -184,7 +184,7 @@
             this.uncheckBtn.UseVisualStyleBackColor = true;
             this.uncheckBtn.Click += new System.EventHandler(this.uncheckBtn_Click);
             // 
-            // GameEditor
+            // GameSetEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -204,7 +204,7 @@
             this.Controls.Add(this.loadBtn);
             this.Controls.Add(this.saveBtn);
             this.Controls.Add(this.gameType);
-            this.Name = "GameEditor";
+            this.Name = "GameSetEditor";
             this.Text = "Game Editor";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GameEditor_FormClosing);
