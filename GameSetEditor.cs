@@ -82,10 +82,8 @@ namespace Anime_Quiz
                         "Something went wrong", MessageBoxButtons.OK);
                     break;
             }
-            setAddRemoveGenBtn(true);
         }
-        #region DataGrids
-
+        #region Database Load
         /// <summary>
         ///     Loads the QuestionSets from the database and display them in a ComboBox
         /// </summary>
@@ -95,16 +93,27 @@ namespace Anime_Quiz
             DataTable queryData = sqlDB.getDataTable(query);
             ComboBox questionSetList = new ComboBox();
             questionSetList.Location = new Point(12,12);
+            questionSetList.Size = new Size(163, 21);
             questionSetList.Text = "Select a game to load";
             questionSetList.TabIndex = 1;
             questionSetList.SelectedIndexChanged += questionSetList_SelectedIndexChanged;
+
             foreach (DataRow row in queryData.Rows)
             {
                 questionSetList.Items.Add(row["name"]);
             }
             Controls.Add(questionSetList);
         }
-
+        private void loadQuestions()
+        {
+            int questionSetID = sqlDB.getQuestionSetID(questionSet.name);
+            String query = String.Format("select * from Questions where questionSet = '{0}'", questionSetID);
+            DataTable queryData = sqlDB.getDataTable(query);
+            DataGridView questionGridView = new DataGridView();
+            questionGridView.Location = new Point(12, 40);
+            questionGridView.DataSource = queryData;
+            Controls.Add(questionGridView);
+        }
         
         #endregion
 
@@ -287,7 +296,7 @@ namespace Anime_Quiz
                 foreach (Question question in questionSet)
                 {
                     Dictionary<String, String> data = new Dictionary<string, string>();
-                    data.Add("content", GetString(question.question));
+                    data.Add("question", GetString(question.question));
                     data.Add("answer", question.answer);
                     data.Add("points", question.points.ToString());
                     data.Add("answered", question.answered.ToString());
@@ -349,7 +358,7 @@ namespace Anime_Quiz
 
             DataTable questionTable;
             DataTable questionSetTable;
-            String query = String.Format("select CONTENT, ANSWER, POINTS, ANSWERED from QUESTIONS where ID = {0}", questionSetID);
+            String query = String.Format("select QUESTION, ANSWER, POINTS, ANSWERED from QUESTIONS where ID = {0}", questionSetID);
             questionTable = sqlDB.getDataTable(query);
             String tableQuery = String.Format("select TYPE from QUESTIONSETS where ID = {0}", questionSetID);
             questionSetTable = sqlDB.getDataTable(tableQuery);
@@ -367,52 +376,12 @@ namespace Anime_Quiz
             //selectedType = questionSetTable.Rows["TYPE"].ToString();
             //TODO: incomplete!!
         }
-        private void loadBehavior()
-        {
-            clearPanel();
-            XmlSerializer serializer = new XmlSerializer(typeof(QuestionSet));
-            //FileStream ReadFileStream = new FileStream(@gameLoad.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-            FileStream ReadFileStream = new FileStream(Settings.Default.currentFile, FileMode.Open, FileAccess.Read, FileShare.Read);
-            questionSet = (QuestionSet)serializer.Deserialize(ReadFileStream);
-            ReadFileStream.Close();
-            //Change the saveState to false
-            Settings.Default.saveState = false;
-            cancelBtn.Text = "Close";
-            //Create the number of specified question boxes for the selected game type.          
-            gamePanel.Location = new Point(12, 56);
-            gamePanel.AutoScroll = true;
-            gamePanel.Width = ClientRectangle.Width - 20;
-            gamePanel.Height = ClientRectangle.Height - 64;
-            Controls.Add(gamePanel);
-            //Get the type
-            selectedType = questionSet.type;
-            switch (selectedType)
-            {
-                case Types.Question:
-                    foreach (Question question in questionSet)
-                        addQuestion(question);
-                    break;
-                case Types.Music:
-                    foreach (Question song in questionSet)
-                        addMusic(song);
-                    break;
-                case Types.Screenshot:
-                    foreach (Question picture in questionSet)
-                        addScreenshot(picture);
-                    break;
-            }
-            setAddRemoveGenBtn(true);
-        }
+        
         void clearPanel()
         {
             while (gamePanel.Controls.Count > 0) gamePanel.Controls.Clear();
         }
-        void setAddRemoveGenBtn(bool state)
-        {
-            addBtn.Enabled = state;
-            removeBtn.Enabled = state;
-            genBtn.Enabled = !state;
-        }
+
         private bool isSafeOverwrite(string message)
         {
             if (!Settings.Default.saveState)
@@ -442,12 +411,23 @@ namespace Anime_Quiz
 
         #region EventHandlers
 
+        /// <summary>
+        ///     Keeps track of the selected QuestionSet and load the Questions from it.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void questionSetList_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Save the current selection
             ComboBox senderComboBox = sender as ComboBox;
             questionSet.name = senderComboBox.SelectedItem.ToString();
             selectedType = (Types) sqlDB.getQuestionSetID(questionSet.name);
             questionSet.type = selectedType;
+
+            // Load the Questions
+            loadQuestions();
+
+            clrBtn.Enabled = true;
         }
 
         void soundPicker_Click(object sender, EventArgs e)
@@ -488,54 +468,34 @@ namespace Anime_Quiz
             }
         }
 
-        private void genBtn_Click(object sender, EventArgs e)
-        {
-            //selectedType = (string)gameType.SelectedItem;
-            selectedType = (Types)gameType.SelectedIndex;
-            numQuest = Convert.ToInt32(numQuestions.Text);
-            reinitializeGameBoard();
-        }
         private void clearBtn_Click(object sender, EventArgs e)
         {
-            //If there are unsaved changes, prompt to save.
-            if (isSafeOverwrite("This will erase any unsaved changes. Would you like to save?"))
+            if (MessageBox.Show("Are you sure you want to clear this QuestionSet? This cannot be undone.", "Confirm deletion", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                //Then clear the game board and reset saveState
-                //Also chear the currentFile setting to effectively start a new file
-                clearPanel();
-                Settings.Default.saveState = true;
-                Settings.Default.currentFile = String.Empty;
-                setAddRemoveGenBtn(false);
+                sqlDB.ClearTable(questionSet.name);
+                clrBtn.Enabled = false;
+                loadQuestionSets();
             }
+        }
+        private void gameType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            addBtn.Enabled = true;
         }
         private void addBtn_Click(object sender, EventArgs e)
         {
-            switch (selectedType)
-            {
-                case Types.Question:
-                    addQuestion(blankQuestion);
-                    break;
-                case Types.Music:
-                    addMusic(blankQuestion);
-                    break;
-                case Types.Screenshot:
-                    addScreenshot(blankQuestion);
-                    break;
-            }
+            String newSetName = newSetTextbox.Text;
+            Types newSetType = (Types)(gameType.SelectedIndex + 1);
+            Dictionary<String, String> data = new Dictionary<string, string>();
+            data.Add("name", newSetName);
+            data.Add("type", ((int)newSetType).ToString());
+            sqlDB.Insert("QuestionSets", data);
+
+            //TODO: load the new set as the current one
         }
-        private void removeBtn_Click(object sender, EventArgs e)
-        {
-            //Remove the last Question
-            gamePanel.Controls[gamePanel.Controls.Count - 1].Dispose();
-        }
+
         private void uncheckBtn_Click(object sender, EventArgs e)
         {
-            //If a checkbox is checked, uncheck it.
-            for (int i = 0; i < gamePanel.Controls.Count; i++)
-            {
-                CheckBox testBox = (CheckBox)gamePanel.Controls[i].Controls[6];
-                if (testBox.Checked) testBox.Checked = false;
-            }
+            throw new NotImplementedException();
         }
         private void num_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -543,27 +503,9 @@ namespace Anime_Quiz
                 e.Handled = true;
         }
 
-        private void saveAsBtn_Click(object sender, EventArgs e)
-        {
-            saveAsBehavior();
-        }
-        private void saveBtn_Click(object sender, EventArgs e)
-        {
-            saveBehavior();
-        }
-        private void loadBtn_Click(object sender, EventArgs e)
-        {
-            if (!isSafeOverwrite("There are unsaved changes. Do you want to save them before loading another game?"))
-                return;
-            if (gameLoad.ShowDialog() == DialogResult.OK)
-            {
-                Settings.Default.currentFile = gameLoad.FileName;
-                loadBehavior();
-                //updateRecentFiles();
-            }           
-        }
         private void cancelBtn_Click(object sender, EventArgs e)
         {
+            throw new NotImplementedException();
             if (isSafeOverwrite("There are unsaved changes. Do you want to save them before closing this form?"))
             {
                 Settings.Default.saveState = true;
@@ -604,5 +546,9 @@ namespace Anime_Quiz
             return new string(chars);
         }
         #endregion
+
+        
+
+        
     }
 }
