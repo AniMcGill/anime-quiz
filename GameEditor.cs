@@ -216,7 +216,7 @@ namespace Anime_Quiz
             addAnsweredLabel(screenshotPanel, question);
         }
         #endregion
-
+        /*
         private bool storeData()
         {
             if (questionSet == null)
@@ -228,7 +228,7 @@ namespace Anime_Quiz
                 //Check if there is an empty question and skips it
                 if (gamePanel.Controls[i].Controls[1].Text == string.Empty &&
                     gamePanel.Controls[i].Controls[3].Text == string.Empty &&
-                    gamePanel.Controls[i].Controls[5].Text == string.Empty) { /*do nothing*/}
+                    gamePanel.Controls[i].Controls[5].Text == string.Empty) { //do nothing*/}
                 //Check if there is an empty field and return an error.
                 else if (gamePanel.Controls[i].Controls[1].Text == string.Empty ||
                     gamePanel.Controls[i].Controls[3].Text == string.Empty ||
@@ -253,7 +253,7 @@ namespace Anime_Quiz
                 }
             }
             return true;
-        }
+        }*/
 
         /// <summary>
         ///     Save each Question in the QuestionSet to the database.
@@ -324,8 +324,8 @@ namespace Anime_Quiz
             data.Add("type", ((int)questionSet.type).ToString());
             sqlDB.Insert("QuestionSets", data);
 
-            int questionSetId = sqlDB.getQuestionSetID(questionSetName);
-            saveToDatabase(questionSetId);
+            //int questionSetId = sqlDB.getQuestionSetID(questionSetName);
+            //saveToDatabase(questionSetId);
             /*if (gameSave.ShowDialog() == DialogResult.OK)
             {
                 //Settings.Default.currentFile = gameSave.FileName;
@@ -340,8 +340,8 @@ namespace Anime_Quiz
                 saveAsBehavior();
             else
             {
-                int questionSetId = sqlDB.getQuestionSetID(Settings.Default.currentSet.name);
-                saveToDatabase(questionSetId);
+                //int questionSetId = sqlDB.getQuestionSetID(Settings.Default.currentSet.name);
+                //saveToDatabase(questionSetId);
             }
             /*
             if (Settings.Default.currentFile == String.Empty) saveAsBehavior();

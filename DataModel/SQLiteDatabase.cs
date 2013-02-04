@@ -190,7 +190,34 @@ namespace Anime_Quiz.DataModel
             }
             return returnCode;
         }
-
+        /// <summary>
+        ///     Updates the database by rewriting existing entries.
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public bool InsertOrReplace(String tableName, Dictionary<String, String> data)
+        {
+            String columns = "";
+            String values = "";
+            foreach (KeyValuePair<String, String> val in data)
+            {
+                columns += String.Format(" {0},", val.Key.ToString());
+                values += String.Format(" '{0}',", val.Value);
+            }
+            columns = columns.Substring(0, columns.Length - 1);
+            values = values.Substring(0, values.Length - 1);
+            try
+            {
+                this.executeNonQuery(String.Format("insert or replace into {0}({1}) values({2});", tableName, columns, values));
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                return false;
+            }
+            return true;
+        }
         /// <summary>
         ///     Allows the programmer to easily delete all data from the DB.
         /// </summary>
@@ -232,22 +259,36 @@ namespace Anime_Quiz.DataModel
         }
 
         /// <summary>
-        ///     Gets the ID associated with the QuestionSet name
+        ///     Rename the QuestionSet and cascade the changes to the Questions.
         /// </summary>
-        /// <param name="tableName"></param>
+        /// <param name="oldName">The old QuestionSet name</param>
+        /// <param name="newName">The updated QuestionSet name</param>
         /// <returns></returns>
-        public int getQuestionSetID(string setName)
+        public bool renameQuestionSet(string oldName, string newName)
         {
-            String command = String.Format("select ID from QuestionSets where NAME = '{0}'", setName);
+            Dictionary<String, String> questionSetData = new Dictionary<String, String>();
+            questionSetData.Add("name", newName);
+            String questionSetCmd = String.Format("name = '{0}'", oldName);
+
+            Dictionary<String, String> questionData = new Dictionary<string, string>();
+            questionData.Add("questionSet", newName);
+            String questionDataCmd = String.Format("questionSet = '{0}'", oldName);
+
+            return this.Update("QuestionSets", questionSetData, questionSetCmd) 
+                && this.Update("Questions", questionData, questionDataCmd);
+        }
+        public Types getQuestionSetType(string setName)
+        {
+            String command = String.Format("select TYPE from QuestionSets where NAME = '{0}'", setName);
             DataTable result = this.getDataTable(command);
             try
             {
-                return Convert.ToInt32(result.Rows[0]["id"]);   //assumes no collision
+                return (Types)Convert.ToInt32(result.Rows[0]["type"]);
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
-                return -1;
+                return Types.Question;
             }
         }
     }

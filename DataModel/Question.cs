@@ -17,10 +17,18 @@ namespace Anime_Quiz.DataModel
         private Types _type;
 
         private ArrayList setArray = new ArrayList();
+
+        public QuestionSet(String name, Types type)
+        {
+            this._name = name;
+            this._type = type;
+        }
+
         public Question this[int index]
         {
             get { return (Question)setArray[index]; }
         }
+
         public void CopyTo(Array a, int index)
         {
             setArray.CopyTo(a, index);

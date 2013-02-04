@@ -37,6 +37,8 @@
             this.newSetLabel = new System.Windows.Forms.Label();
             this.newSetTextbox = new System.Windows.Forms.TextBox();
             this.addBtn = new System.Windows.Forms.Button();
+            this.delBtn = new System.Windows.Forms.Button();
+            this.renameBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // gameType
@@ -46,7 +48,7 @@
             "Question",
             "Music",
             "Screenshot"});
-            this.gameType.Location = new System.Drawing.Point(597, 12);
+            this.gameType.Location = new System.Drawing.Point(316, 43);
             this.gameType.Name = "gameType";
             this.gameType.Size = new System.Drawing.Size(121, 21);
             this.gameType.TabIndex = 3;
@@ -83,7 +85,7 @@
             this.clrBtn.Location = new System.Drawing.Point(200, 10);
             this.clrBtn.Name = "clrBtn";
             this.clrBtn.Size = new System.Drawing.Size(75, 23);
-            this.clrBtn.TabIndex = 3;
+            this.clrBtn.TabIndex = 5;
             this.clrBtn.Text = "Clear";
             this.clrBtn.UseVisualStyleBackColor = true;
             this.clrBtn.Click += new System.EventHandler(this.clearBtn_Click);
@@ -93,7 +95,7 @@
             this.uncheckBtn.Location = new System.Drawing.Point(815, 10);
             this.uncheckBtn.Name = "uncheckBtn";
             this.uncheckBtn.Size = new System.Drawing.Size(75, 23);
-            this.uncheckBtn.TabIndex = 10;
+            this.uncheckBtn.TabIndex = 8;
             this.uncheckBtn.Text = "Uncheck All";
             this.uncheckBtn.UseVisualStyleBackColor = true;
             this.uncheckBtn.Click += new System.EventHandler(this.uncheckBtn_Click);
@@ -101,7 +103,7 @@
             // newSetLabel
             // 
             this.newSetLabel.AutoSize = true;
-            this.newSetLabel.Location = new System.Drawing.Point(293, 15);
+            this.newSetLabel.Location = new System.Drawing.Point(12, 46);
             this.newSetLabel.Name = "newSetLabel";
             this.newSetLabel.Size = new System.Drawing.Size(140, 13);
             this.newSetLabel.TabIndex = 0;
@@ -110,7 +112,7 @@
             // newSetTextbox
             // 
             this.newSetTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.newSetTextbox.Location = new System.Drawing.Point(431, 12);
+            this.newSetTextbox.Location = new System.Drawing.Point(150, 43);
             this.newSetTextbox.Name = "newSetTextbox";
             this.newSetTextbox.Size = new System.Drawing.Size(160, 21);
             this.newSetTextbox.TabIndex = 2;
@@ -118,13 +120,33 @@
             // addBtn
             // 
             this.addBtn.Enabled = false;
-            this.addBtn.Location = new System.Drawing.Point(724, 10);
+            this.addBtn.Location = new System.Drawing.Point(443, 41);
             this.addBtn.Name = "addBtn";
             this.addBtn.Size = new System.Drawing.Size(53, 23);
             this.addBtn.TabIndex = 4;
             this.addBtn.Text = "Add";
             this.addBtn.UseVisualStyleBackColor = true;
             this.addBtn.Click += new System.EventHandler(this.addBtn_Click);
+            // 
+            // delBtn
+            // 
+            this.delBtn.Location = new System.Drawing.Point(281, 10);
+            this.delBtn.Name = "delBtn";
+            this.delBtn.Size = new System.Drawing.Size(75, 23);
+            this.delBtn.TabIndex = 6;
+            this.delBtn.Text = "Delete";
+            this.delBtn.UseVisualStyleBackColor = true;
+            this.delBtn.Click += new System.EventHandler(this.delBtn_Click);
+            // 
+            // renameBtn
+            // 
+            this.renameBtn.Location = new System.Drawing.Point(362, 10);
+            this.renameBtn.Name = "renameBtn";
+            this.renameBtn.Size = new System.Drawing.Size(75, 23);
+            this.renameBtn.TabIndex = 7;
+            this.renameBtn.Text = "Rename";
+            this.renameBtn.UseVisualStyleBackColor = true;
+            this.renameBtn.Click += new System.EventHandler(this.renameBtn_Click);
             // 
             // GameSetEditor
             // 
@@ -134,6 +156,8 @@
             this.AutoSize = true;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.ClientSize = new System.Drawing.Size(1008, 730);
+            this.Controls.Add(this.renameBtn);
+            this.Controls.Add(this.delBtn);
             this.Controls.Add(this.addBtn);
             this.Controls.Add(this.newSetTextbox);
             this.Controls.Add(this.newSetLabel);
@@ -161,5 +185,7 @@
         private System.Windows.Forms.Label newSetLabel;
         private System.Windows.Forms.TextBox newSetTextbox;
         private System.Windows.Forms.Button addBtn;
+        private System.Windows.Forms.Button delBtn;
+        private System.Windows.Forms.Button renameBtn;
     }
 }

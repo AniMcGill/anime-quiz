@@ -103,6 +103,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataModel\CurrentQuestionSet.cs" />
     <Compile Include="GameSetEditor.cs">
       <SubType>Form</SubType>
     </Compile>

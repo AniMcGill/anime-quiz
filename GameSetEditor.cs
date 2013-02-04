@@ -24,7 +24,10 @@ namespace Anime_Quiz
         //new gameset
         SQLiteDatabase sqlDB = new SQLiteDatabase();
 
-        QuestionSet questionSet;
+        ComboBox questionSetList;
+        DataGridView questionGridView;
+
+        //QuestionSet questionSet;
         Question blankQuestion = new Question();
         Types selectedType;
 
@@ -34,16 +37,12 @@ namespace Anime_Quiz
         public GameSetEditor()
         {
             InitializeComponent();
-            questionSet = new QuestionSet();
             loadQuestionSets();
-            //TODO: load info from database
-            /*
-            //Load the last game if there is one in memory
             if (Settings.Default.currentSet != null)
-                loadFromDatabaseBehavior(0);    //not implemented
-            //if (Settings.Default.currentFile != String.Empty)
-            //    loadBehavior();
-            */
+            {
+                CurrentQuestionSet.setInstance(Settings.Default.currentSet);
+                loadQuestions();
+            }
         }
 
         private void reinitializeGameBoard()
@@ -89,9 +88,11 @@ namespace Anime_Quiz
         /// </summary>
         private void loadQuestionSets()
         {
+            Controls.Remove(questionSetList);
+
             String query = "select * from QuestionSets";
             DataTable queryData = sqlDB.getDataTable(query);
-            ComboBox questionSetList = new ComboBox();
+            questionSetList = new ComboBox();
             questionSetList.Location = new Point(12,12);
             questionSetList.Size = new Size(163, 21);
             questionSetList.Text = "Select a game to load";
@@ -106,15 +107,21 @@ namespace Anime_Quiz
         }
         private void loadQuestions()
         {
-            int questionSetID = sqlDB.getQuestionSetID(questionSet.name);
-            String query = String.Format("select * from Questions where questionSet = '{0}'", questionSetID);
+            Controls.Remove(questionGridView);
+            QuestionSet instance = CurrentQuestionSet.getInstance();
+
+            String query = String.Format("select * from Questions where questionSet = '{0}'", instance.name);
             DataTable queryData = sqlDB.getDataTable(query);
-            DataGridView questionGridView = new DataGridView();
-            questionGridView.Location = new Point(12, 40);
+            questionGridView = new DataGridView();
+            questionGridView.Location = new Point(12, 75);
+            questionGridView.Width = 1024;  //todo: auto-size
             questionGridView.DataSource = queryData;
+            questionGridView.CellFormatting += questionGridView_CellFormatting;
             Controls.Add(questionGridView);
+
+            clrBtn.Enabled = true;
+            delBtn.Enabled = true;
         }
-        
         #endregion
 
         #region Panel Items
@@ -249,8 +256,8 @@ namespace Anime_Quiz
 
         private bool storeData()
         {
-            if (questionSet == null)
-                questionSet = new QuestionSet();
+            //if (questionSet == null)
+                //questionSet = new QuestionSet();
             
             //For each questionPanel in gamePanel, get each Question and save it.
             for (int i = 0; i < gamePanel.Controls.Count; i++)
@@ -279,12 +286,13 @@ namespace Anime_Quiz
                     //string type = (string)gamePanel.Controls[i].Controls[0].Text;
                     int point = Convert.ToInt32(gamePanel.Controls[i].Controls[5].Text);
                     bool answered = ((CheckBox)gamePanel.Controls[i].Controls[6]).Checked;
-                    questionSet.Add(new Question(question, answer, point, answered));
+                    //questionSet.Add(new Question(question, answer, point, answered));
                 }
             }
             return true;
         }
 
+        /*
         /// <summary>
         ///     Save each Question in the QuestionSet to the database.
         /// </summary>
@@ -312,14 +320,14 @@ namespace Anime_Quiz
                     }
                 }
             }
-        }
+        }*/
 
         #region Behaviors
-
+        /*
         private void saveAsBehavior()
         {
             string questionSetName = Interaction.InputBox("Choose a name for this Question Set: ", "Game Editor", "sample");
-            questionSet = new QuestionSet();
+            //questionSet = new QuestionSet();
             questionSet.name = questionSetName;
             questionSet.type = selectedType;
             Dictionary<string,string> data = new Dictionary<string,string>();
@@ -327,15 +335,16 @@ namespace Anime_Quiz
             data.Add("type", ((int)questionSet.type).ToString());
             sqlDB.Insert("QuestionSets", data);
 
-            int questionSetId = sqlDB.getQuestionSetID(questionSetName);
-            saveToDatabase(questionSetId);
-            /*if (gameSave.ShowDialog() == DialogResult.OK)
+            //int questionSetId = sqlDB.getQuestionSetID(questionSetName);
+            //saveToDatabase(questionSetId);
+            if (gameSave.ShowDialog() == DialogResult.OK)
             {
                 //Settings.Default.currentFile = gameSave.FileName;
                 //saveData(Settings.Default.currentFile);
-            }*/
-        }
+            }
+        }*/
         //If there are no currentFile, prompt for SaveAs
+        /*
         private void saveBehavior()
         {
             saveAsBehavior();
@@ -343,15 +352,15 @@ namespace Anime_Quiz
                 saveAsBehavior();
             else
             {
-                int questionSetId = sqlDB.getQuestionSetID(Settings.Default.currentSet.name);
-                saveToDatabase(questionSetId);
+                //int questionSetId = sqlDB.getQuestionSetID(Settings.Default.currentSet.name);
+                //saveToDatabase(questionSetId);
             }
-            /*
-            if (Settings.Default.currentFile == String.Empty) saveAsBehavior();
-            else saveData(Settings.Default.currentFile);
-            */
+            
+            //if (Settings.Default.currentFile == String.Empty) saveAsBehavior();
+            //else saveData(Settings.Default.currentFile);
+            
             //updateRecentFiles();
-        }
+        }*/
         private void loadFromDatabaseBehavior(int questionSetID)
         {
             clearPanel();
@@ -381,7 +390,7 @@ namespace Anime_Quiz
         {
             while (gamePanel.Controls.Count > 0) gamePanel.Controls.Clear();
         }
-
+        /*
         private bool isSafeOverwrite(string message)
         {
             if (!Settings.Default.saveState)
@@ -393,7 +402,8 @@ namespace Anime_Quiz
                 else if (confirm == DialogResult.Yes) saveBehavior();
             }
             return true;
-        }
+        }*/
+        /*
         private bool isSafeOverwrite(string message, MessageBoxButtons buttons)
         {
             if (!Settings.Default.saveState)
@@ -405,10 +415,101 @@ namespace Anime_Quiz
                 else if (confirm == DialogResult.Yes) saveBehavior();
             }
             return true;
-        }
+        }*/
 
         #endregion
 
+        #region Buttons
+        /// <summary>
+        ///     Clears the questions in the current QuestionSet.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void clearBtn_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to clear this QuestionSet? This cannot be undone.", "Confirm deletion", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                sqlDB.ClearTable(CurrentQuestionSet.getInstance().name);
+                clrBtn.Enabled = false;
+                loadQuestionSets();
+            }
+        }
+        private void addBtn_Click(object sender, EventArgs e)
+        {
+            String newSetName = newSetTextbox.Text;
+            Types newSetType = (Types)(gameType.SelectedIndex + 1);
+            Dictionary<String, String> data = new Dictionary<string, string>();
+            data.Add("name", newSetName);
+            data.Add("type", ((int)newSetType).ToString());
+            if (sqlDB.Insert("QuestionSets", data))
+            {
+                loadQuestionSets();
+                //TODO: load the new set as the current one. involves saving the previous set.
+                CurrentQuestionSet.setInstance(new QuestionSet(newSetName, newSetType));
+                loadQuestions();
+            }
+        }
+        /// <summary>
+        ///     Deletes the entire QuestionSet from the database
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void delBtn_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to delete the entire QuestionSet? This cannot be undone.", "Confirm deletion", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                if (sqlDB.Delete("QuestionSets", String.Format("name = '{0}'", CurrentQuestionSet.getInstance().name)))
+                {
+                    CurrentQuestionSet.setInstance(null);   //set the instance to null?
+                    delBtn.Enabled = false;
+                    loadQuestionSets();
+                }
+                else
+                    MessageBox.Show("There was a problem completing the operation", "Error", MessageBoxButtons.OK);
+            }
+        }
+        /// <summary>
+        ///     Renames the QuestionSet
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void renameBtn_Click(object sender, EventArgs e)
+        {
+            string questionSetName = Interaction.InputBox("Choose a new name: ", "Rename");
+            try
+            {
+                if (questionSetName != String.Empty)
+                {
+                    String oldName = CurrentQuestionSet.getInstance().name;
+                    CurrentQuestionSet.getInstance().name = questionSetName;
+                    if (!sqlDB.renameQuestionSet(oldName,questionSetName))
+                        throw new Exception("There was an error renaming the QuestionSet.");
+                    loadQuestionSets();
+                }
+                else
+                    throw new ArgumentNullException("Name cannot be blank.");
+            }
+            catch (Exception crap)
+            {
+                MessageBox.Show(crap.Message);
+            }
+        }
+
+        private void uncheckBtn_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+        private void cancelBtn_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+            /*if (isSafeOverwrite("There are unsaved changes. Do you want to save them before closing this form?"))
+            {
+                Settings.Default.saveState = true;
+                this.Close();
+            }*/
+        }
+        #endregion
+        
         #region EventHandlers
 
         /// <summary>
@@ -420,21 +521,57 @@ namespace Anime_Quiz
         {
             // Save the current selection
             ComboBox senderComboBox = sender as ComboBox;
-            questionSet.name = senderComboBox.SelectedItem.ToString();
-            selectedType = (Types) sqlDB.getQuestionSetID(questionSet.name);
-            questionSet.type = selectedType;
+            String questionSetName = senderComboBox.SelectedItem.ToString();
+            Types questionSetType = sqlDB.getQuestionSetType(questionSetName);
+            CurrentQuestionSet.setInstance(new QuestionSet(questionSetName, questionSetType));
 
             // Load the Questions
             loadQuestions();
+        }
+                
+        /// <summary>
+        ///     Enables the add QuestionSet button when a type has been selected.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void gameType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            addBtn.Enabled = true;
+        }
+        
+        private void num_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
+                e.Handled = true;
+        }    
 
-            clrBtn.Enabled = true;
+        private void GameEditor_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //isSafeOverwrite("Really quit? How about saving unsaved changes?", MessageBoxButtons.YesNo);
+            Settings.Default.currentSet = CurrentQuestionSet.getInstance();
+            Settings.Default.saveState = true;
+        }
+        /// <summary>
+        ///     Format the cell for the question column, which is of type blob
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void questionGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if ((sender as DataGridView).Columns[e.ColumnIndex].Name == "question")
+            {
+                if (e.Value != null)
+                {
+                    e.Value = e.Value.ToString();
+                }
+            }
         }
 
         void soundPicker_Click(object sender, EventArgs e)
         {
             OpenFileDialog soundFile = new OpenFileDialog();
             //If a default directory has been defined for the soundPicker, set it
-            if (Settings.Default.defaultMusicFolder != String.Empty) 
+            if (Settings.Default.defaultMusicFolder != String.Empty)
                 soundFile.InitialDirectory = Settings.Default.defaultMusicFolder;
             //soundFile.Filter = "MP3 files (*.mp3)|*.mp3|MP4 files (*.mp4)|*.mp4|WAV files (*.wav)|*.wav|WMA files (*.wma)|*.wma";
             soundFile.Filter = "Music Formats|" +
@@ -467,58 +604,6 @@ namespace Anime_Quiz
                 imagePath.Image = image.GetThumbnailImage(200, 40, null, new System.IntPtr());
             }
         }
-
-        private void clearBtn_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("Are you sure you want to clear this QuestionSet? This cannot be undone.", "Confirm deletion", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                sqlDB.ClearTable(questionSet.name);
-                clrBtn.Enabled = false;
-                loadQuestionSets();
-            }
-        }
-        private void gameType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            addBtn.Enabled = true;
-        }
-        private void addBtn_Click(object sender, EventArgs e)
-        {
-            String newSetName = newSetTextbox.Text;
-            Types newSetType = (Types)(gameType.SelectedIndex + 1);
-            Dictionary<String, String> data = new Dictionary<string, string>();
-            data.Add("name", newSetName);
-            data.Add("type", ((int)newSetType).ToString());
-            sqlDB.Insert("QuestionSets", data);
-
-            //TODO: load the new set as the current one
-        }
-
-        private void uncheckBtn_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-        private void num_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
-                e.Handled = true;
-        }
-
-        private void cancelBtn_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-            if (isSafeOverwrite("There are unsaved changes. Do you want to save them before closing this form?"))
-            {
-                Settings.Default.saveState = true;
-                this.Close();
-            }
-        }
-
-        private void GameEditor_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            isSafeOverwrite("Really quit? How about saving unsaved changes?", MessageBoxButtons.YesNo);
-            Settings.Default.saveState = true;
-        }
-
         #endregion
 
         #region helpers
@@ -545,10 +630,6 @@ namespace Anime_Quiz
             System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
             return new string(chars);
         }
-        #endregion
-
-        
-
-        
+        #endregion  
     }
 }
