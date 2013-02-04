@@ -110,15 +110,18 @@ namespace Anime_Quiz
             Controls.Remove(questionGridView);
             QuestionSet instance = CurrentQuestionSet.getInstance();
 
-            String query = String.Format("select * from Questions where questionSet = '{0}'", instance.name);
-            DataTable queryData = sqlDB.getDataTable(query);
+            ArrayList questionsArray = new ArrayList();
+            questionsArray = instance.getQuestions();
+            
+            //DataTable queryData = instance.getQuestionDataTable();
             questionGridView = new DataGridView();
             questionGridView.Location = new Point(12, 75);
             questionGridView.Width = 1024;  //todo: auto-size
-            questionGridView.DataSource = queryData;
+            //questionGridView.DataSource = queryData;
+            questionGridView.DataSource = questionsArray;
             questionGridView.CellFormatting += questionGridView_CellFormatting;
             Controls.Add(questionGridView);
-
+            
             clrBtn.Enabled = true;
             delBtn.Enabled = true;
         }

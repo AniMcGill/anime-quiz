@@ -6,6 +6,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Collections;
 using System.Drawing;
+using System.Data;
 
 namespace Anime_Quiz.DataModel
 {
@@ -28,7 +29,7 @@ namespace Anime_Quiz.DataModel
         {
             get { return (Question)setArray[index]; }
         }
-
+        #region Collection
         public void CopyTo(Array a, int index)
         {
             setArray.CopyTo(a, index);
@@ -49,6 +50,7 @@ namespace Anime_Quiz.DataModel
         {
             return setArray.GetEnumerator();
         }
+        #endregion
         public void Add(Question newQuestion)
         {
             setArray.Add(newQuestion);
@@ -64,6 +66,73 @@ namespace Anime_Quiz.DataModel
             get { return _type; }
             set { _type = value; }
         }
+        /// <summary>
+        ///     Gets the Questions DataTable for the current QuestionSet
+        /// </summary>
+        /// <returns>A DataTable</returns>
+        public DataTable getQuestionDataTable()
+        {
+            String query = String.Format("select * from Questions where questionSet = '{0}'", _name);
+            SQLiteDatabase sqlDB = new SQLiteDatabase();
+            return sqlDB.getDataTable(query);
+        }
+
+        /// <summary>
+        ///     Gets the Questions for the current QuestionSet as an ArrayList
+        /// </summary>
+        /// <returns>An ArrayList of Questions</returns>
+        public ArrayList getQuestions()
+        {
+            DataTable data = getQuestionDataTable();
+            foreach (DataRow row in data.Rows)
+            {
+                Byte[] questionData = GetBytes(row["question"].ToString()); //todo: use the right conversion depending on type
+                Question question = new Question(Convert.ToInt32(row["id"]), questionData, row["answer"].ToString(), Convert.ToInt32(row["points"]), Convert.ToBoolean(row["answered"]));
+                setArray.Add(question);
+            }
+            return setArray;
+        }
+        public bool saveQuestions()
+        {
+            foreach (Question question in setArray)
+            {
+                SQLiteDatabase sqlDb = new SQLiteDatabase();
+                Dictionary<String, String> data = new Dictionary<string, string>();
+                data.Add("id", question.questionID.ToString());
+                data.Add("question", GetString(question.question));
+                data.Add("answer", question.answer);
+                data.Add("points", question.points.ToString());
+                data.Add("answered", question.answered.ToString());
+                data.Add("questionSet", this._name);
+                if (!sqlDb.InsertOrReplace("Questions", data))
+                    return false;
+            }
+            return true;
+        }
+        #region Temp
+        /// <summary>
+        ///     Convert a string to a byte array http://stackoverflow.com/questions/472906/net-string-to-byte-array-c-sharp
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        static byte[] GetBytes(string str)
+        {
+            byte[] bytes = new byte[str.Length * sizeof(char)];
+            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            return bytes;
+        }
+        /// <summary>
+        ///     Convert a byte array to a string http://stackoverflow.com/questions/472906/net-string-to-byte-array-c-sharp
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        static string GetString(byte[] bytes)
+        {
+            char[] chars = new char[bytes.Length / sizeof(char)];
+            System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
+            return new string(chars);
+        }
+        #endregion
     }
 
     public class Question
@@ -114,8 +183,9 @@ namespace Anime_Quiz.DataModel
             this._points = 0;
             this._answered = false;
         }
-        public Question(byte[] q, string a, int p, bool state)
+        public Question(int id, byte[] q, string a, int p, bool state)
         {
+            this._questionID = id;
             this._question = q;
             this._answer = a;
             this._points = p;
