@@ -116,12 +116,6 @@
     <Compile Include="DataModel\SQLiteDatabase.cs" />
     <Compile Include="DataModel\Score.cs" />
     <Compile Include="DataModel\Team.cs" />
-    <Compile Include="GameEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GameEditor.Designer.cs">
-      <DependentUpon>GameEditor.cs</DependentUpon>
-    </Compile>
     <Compile Include="GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -174,12 +168,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GameSetEditor.resx">
       <DependentUpon>GameSetEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GameEditor.ja-JP.resx">
-      <DependentUpon>GameEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GameEditor.resx">
-      <DependentUpon>GameEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GameForm.resx">
       <DependentUpon>GameForm.cs</DependentUpon>

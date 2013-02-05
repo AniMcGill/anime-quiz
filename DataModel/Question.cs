@@ -87,7 +87,8 @@ namespace Anime_Quiz.DataModel
             foreach (DataRow row in data.Rows)
             {
                 Byte[] questionData = GetBytes(row["question"].ToString()); //todo: use the right conversion depending on type
-                Question question = new Question(Convert.ToInt32(row["id"]), questionData, row["answer"].ToString(), Convert.ToInt32(row["points"]), Convert.ToBoolean(row["answered"]));
+                Question question = new Question(Convert.ToInt32(row["id"]), questionData, row["answer"].ToString(), Convert.ToInt32(row["points"]), Convert.ToBoolean(row["answered"]), name);
+                //Question question = new Question(Convert.ToInt32(row["id"]), row["answer"].ToString(), Convert.ToInt32(row["points"]), Convert.ToBoolean(row["answered"]));
                 setArray.Add(question);
             }
             return setArray;
@@ -140,9 +141,9 @@ namespace Anime_Quiz.DataModel
         private int _questionID;
         private byte[] _question;
         private string _answer;
-        //private Types _type;
         private int _points;
         private bool _answered;
+        private string _questionSet;
 
         public int questionID
         {
@@ -158,13 +159,7 @@ namespace Anime_Quiz.DataModel
         {
             get { return _answer; }
             set { _answer = value; }
-        }
-        /*
-        public Types type
-        {
-            get { return _type; }
-            set { _type = value; }
-        }*/
+        }       
         public int points
         {
             get { return _points; }
@@ -175,6 +170,11 @@ namespace Anime_Quiz.DataModel
             get { return _answered; }
             set { _answered = value; }
         }
+        public string questionSet
+        {
+            get { return _questionSet; }
+            set { _questionSet = value; }
+        }
 
         public Question()
         {
@@ -183,23 +183,14 @@ namespace Anime_Quiz.DataModel
             this._points = 0;
             this._answered = false;
         }
-        public Question(int id, byte[] q, string a, int p, bool state)
+        public Question(int id, byte[] q, string a, int p, bool state, string questionSet)
         {
             this._questionID = id;
             this._question = q;
             this._answer = a;
             this._points = p;
             this._answered = state;
+            this._questionSet = questionSet;
         }
-        /*
-        public Question(string q, string a, string  type, int p, bool state)
-        {
-            this._question = q;
-            this._answer = a;
-            this._type = type;
-            this._points = p;
-            this._answered = state;
-        }
-        */
     }
 }
