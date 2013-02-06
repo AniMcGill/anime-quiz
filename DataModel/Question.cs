@@ -93,9 +93,7 @@ namespace Anime_Quiz.DataModel
             }
             foreach (DataRow row in data.Rows)
             {
-                Byte[] questionData = GetBytes(row["question"].ToString()); //todo: use the right conversion depending on type
-                Question question = new Question(Convert.ToInt32(row["id"]), questionData, row["answer"].ToString(), Convert.ToInt32(row["points"]), Convert.ToBoolean(row["answered"]), name);
-                //Question question = new Question(Convert.ToInt32(row["id"]), row["answer"].ToString(), Convert.ToInt32(row["points"]), Convert.ToBoolean(row["answered"]));
+                Question question = new Question(Convert.ToInt32(row["id"]), row["question"].ToString(), row["answer"].ToString(), Convert.ToInt32(row["points"]), Convert.ToBoolean(row["answered"]), name);
                 setArray.Add(question);
             }
             return setArray;
@@ -107,7 +105,7 @@ namespace Anime_Quiz.DataModel
                 SQLiteDatabase sqlDb = new SQLiteDatabase();
                 Dictionary<String, String> data = new Dictionary<string, string>();
                 data.Add("id", question.questionID.ToString());
-                data.Add("question", GetString(question.question));
+                data.Add("question", question.question);
                 data.Add("answer", question.answer);
                 data.Add("points", question.points.ToString());
                 data.Add("answered", question.answered.ToString());
@@ -117,36 +115,12 @@ namespace Anime_Quiz.DataModel
             }
             return true;
         }
-        #region Temp
-        /// <summary>
-        ///     Convert a string to a byte array http://stackoverflow.com/questions/472906/net-string-to-byte-array-c-sharp
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static byte[] GetBytes(string str)
-        {
-            byte[] bytes = new byte[str.Length * sizeof(char)];
-            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-            return bytes;
-        }
-        /// <summary>
-        ///     Convert a byte array to a string http://stackoverflow.com/questions/472906/net-string-to-byte-array-c-sharp
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static string GetString(byte[] bytes)
-        {
-            char[] chars = new char[bytes.Length / sizeof(char)];
-            System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
-            return new string(chars);
-        }
-        #endregion
     }
 
     public class Question:INotifyPropertyChanged
     {
         private int _questionID;
-        private byte[] _question;
+        private string _question;
         private string _answer;
         private int _points;
         private bool _answered;
@@ -158,7 +132,7 @@ namespace Anime_Quiz.DataModel
             set { _questionID = value; }
         }
         [DisplayName("Question")]
-        public byte[] question
+        public string question
         {
             get { return _question; }
             set { _question = value; }
@@ -197,7 +171,7 @@ namespace Anime_Quiz.DataModel
             this._points = 0;
             this._answered = false;
         }
-        public Question(int id, byte[] q, string a, int p, bool state, string questionSet)
+        public Question(int id, string q, string a, int p, bool state, string questionSet)
         {
             this.childElementsValue.CollectionChanged += OnCollectionChanged;
             this._questionID = id;

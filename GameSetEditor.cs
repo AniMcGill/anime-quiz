@@ -21,28 +21,19 @@ namespace Anime_Quiz
 {
     public partial class GameSetEditor : Form
     {
-        //new gameset
+        //Data
         SQLiteDatabase sqlDB = new SQLiteDatabase();
         DataSet questionDataSet;
 
         ComboBox questionSetList;
         DataGridView questionGridView;
 
-        //QuestionSet questionSet;
-        Question blankQuestion = new Question();
-        Types selectedType;
-
-        FlowLayoutPanel gamePanel = new FlowLayoutPanel();  //to deprecate?
-
         public GameSetEditor()
         {
             InitializeComponent();
             loadQuestionSets();
-            if (Settings.Default.currentSet != null)
-            {
-                CurrentQuestionSet.setInstance(Settings.Default.currentSet);
-                loadQuestions();
-            }
+            if (CurrentQuestionSet.getInstance() != null)
+                loadQuestions(CurrentQuestionSet.getInstance().name);
         }
 
         #region Database Load
@@ -77,33 +68,10 @@ namespace Anime_Quiz
             questionGridView.Location = new Point(12, 75);
             questionGridView.Width = 1024;  //todo: autosize
             questionGridView.DataSource = questionDataSet.Tables[0];
-            questionGridView.DataError += questionGridView_DataError;
-            ///questionGridView.DataSourceChanged += questionGridView_DataSourceChanged;
+            questionGridView.CellMouseClick += questionGridView_CellMouseClick;
+            questionGridView.CellFormatting += questionGridView_CellFormatting;
             Controls.Add(questionGridView);
 
-            clrBtn.Enabled = true;
-            delBtn.Enabled = true;
-        }
-
-        //to deprecate
-        private void loadQuestions()
-        {
-            Controls.Remove(questionGridView);
-            QuestionSet instance = CurrentQuestionSet.getInstance();
-
-            ArrayList questionsArray = new ArrayList();
-            questionsArray = instance.getQuestions();
-
-            //DataTable queryData = instance.getQuestionDataTable();
-            questionGridView = new DataGridView();
-            questionGridView.Location = new Point(12, 75);
-            questionGridView.Width = 1024;  //todo: auto-size
-            //questionGridView.DataSource = queryData;
-            questionGridView.DataSource = questionsArray;
-            questionGridView.DataError += questionGridView_DataError;
-            //questionGridView.CellFormatting += questionGridView_CellFormatting;
-            Controls.Add(questionGridView);
-            
             clrBtn.Enabled = true;
             delBtn.Enabled = true;
         }
@@ -111,8 +79,18 @@ namespace Anime_Quiz
 
         private void linkQuestionToQuestionSet()
         {
-            foreach (DataRow row in questionDataSet.Tables[0].Rows)
-                row["questionSet"] = CurrentQuestionSet.getInstance().name;
+            try
+            {
+                foreach (DataRow row in questionDataSet.Tables[0].Rows)
+                    row["questionSet"] = CurrentQuestionSet.getInstance().name;
+            }
+            catch (DeletedRowInaccessibleException crap)
+            { }
+        }
+        private bool saveQuestions()
+        {
+            linkQuestionToQuestionSet();
+            return sqlDB.updateDataSet(questionDataSet, "Questions");
         }
 
         #region Buttons
@@ -138,16 +116,17 @@ namespace Anime_Quiz
         private void addBtn_Click(object sender, EventArgs e)
         {
             String newSetName = newSetTextbox.Text;
-            Types newSetType = (Types)(gameType.SelectedIndex + 1);
+            Types newSetType = (Types)gameType.SelectedIndex;
             Dictionary<String, String> data = new Dictionary<string, string>();
             data.Add("name", newSetName);
             data.Add("type", ((int)newSetType).ToString());
             if (sqlDB.Insert("QuestionSets", data))
             {
                 loadQuestionSets();
-                CurrentQuestionSet.getInstance().saveQuestions();
+                if(questionDataSet != null)
+                    saveQuestions();
                 CurrentQuestionSet.setInstance(new QuestionSet(newSetName, newSetType));
-                loadQuestions();
+                loadQuestions(CurrentQuestionSet.getInstance().name);
             }
         }
         /// <summary>
@@ -207,26 +186,14 @@ namespace Anime_Quiz
         }
         private void cancelBtn_Click(object sender, EventArgs e)
         {
-            //if(!CurrentQuestionSet.getInstance().saveQuestions())
-            linkQuestionToQuestionSet();
-            //temporary fix
-            foreach (DataRow row in questionDataSet.Tables[0].Rows)
-                row["question"] = new byte[] {1,2,3,4,5};
-            if(!sqlDB.updateDataSet(questionDataSet, "Questions"))
-            {
-                if (MessageBox.Show("There was an error saving to the database. Quit anyways?", "Save Error", MessageBoxButtons.YesNo) == DialogResult.No)
-                    return;
-            }
+            if (!saveQuestions()
+                && (MessageBox.Show("There was an error saving to the database. Quit anyways?", "Save Error", MessageBoxButtons.YesNo) == DialogResult.No))
+                return;
             this.Close();
         }
         #endregion
         
         #region EventHandlers
-        
-        void questionGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
 
         /// <summary>
         ///     Keeps track of the selected QuestionSet and load the Questions from it.
@@ -242,8 +209,43 @@ namespace Anime_Quiz
             CurrentQuestionSet.setInstance(new QuestionSet(questionSetName, questionSetType));
 
             // Load the Questions
-            //loadQuestions();
             loadQuestions(questionSetName);
+        }
+
+        void questionGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (questionGridView.Columns[e.ColumnIndex] == questionGridView.Columns["Question"]
+                && CurrentQuestionSet.getInstance().type != Types.Question)
+            {
+                if(questionGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString() == String.Empty)
+                    openFilePicker(e);
+                //else show image
+            }
+         }
+        void openFilePicker(DataGridViewCellMouseEventArgs e)
+        {
+            OpenFileDialog filePicker = new OpenFileDialog();
+            switch (CurrentQuestionSet.getInstance().type)
+            {
+                case Types.Music:
+                    if (Settings.Default.defaultMusicFolder != String.Empty)
+                        filePicker.InitialDirectory = Settings.Default.defaultMusicFolder;
+                    filePicker.Filter = "Music Formats|" +
+                        "*.mp3;*.ram;*.rm;*.wav;*.wma;*.mid;*.mp4|" +
+                        "mp3 (*.mp3)|*.mp3|ram (*.ram)|*.ram|rm (*.rm)|*.rm|" +
+                        "wav (*.wav)|*.wav|wma (*.wma)|*.wma|mid (*.mid)|*.mid|" +
+                        "mp4 (*.mp4)|*.mp4";
+                    break;
+                case Types.Screenshot:
+                    if (Settings.Default.defaultScreenshotFolder != String.Empty)
+                        filePicker.InitialDirectory = Settings.Default.defaultScreenshotFolder;
+                    filePicker.Filter = "JPG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|BMP files (*.bmp)|*.bmp";
+                    break;
+            }
+            if (filePicker.ShowDialog() == DialogResult.OK)
+            {
+                questionGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = filePicker.FileName;
+            }
         }
                 
         /// <summary>
@@ -260,29 +262,31 @@ namespace Anime_Quiz
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
                 e.Handled = true;
-        }    
-
-        private void GameEditor_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Settings.Default.saveState = true;
         }
-        /*
         /// <summary>
-        ///     Format the cell for the question column, which is of type blob
+        ///     Change the format of the cells that shouldn't be edited to gray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void questionGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if ((sender as DataGridView).Columns[e.ColumnIndex].Name == "question")
+            if ((sender as DataGridView).Columns[e.ColumnIndex].Name == "id"
+                || (sender as DataGridView).Columns[e.ColumnIndex].Name == "questionSet")
             {
                 if (e.Value != null)
                 {
-                    e.Value = e.Value.ToString();
+                    e.CellStyle.BackColor = Color.Gray;
                 }
             }
-        }*/
-
+        }
+        
+        //to deprecate
+        private void GameEditor_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Settings.Default.saveState = true;
+        }
+        
+        
         void soundPicker_Click(object sender, EventArgs e)
         {
             OpenFileDialog soundFile = new OpenFileDialog();

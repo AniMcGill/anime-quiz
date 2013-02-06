@@ -27,6 +27,10 @@ namespace Anime_Quiz
         public GameBoard()
         {
             InitializeComponent();
+            if (Settings.Default.currentSet != null)
+            {
+                CurrentQuestionSet.setInstance(Settings.Default.currentSet);
+            }
             //Localization test
             //Thread.CurrentThread.CurrentUICulture = new CultureInfo("ja-JP");
             Settings.Default.saveState = true;
@@ -39,16 +43,7 @@ namespace Anime_Quiz
         }
 
         #region Behaviors
-        //If we can't display recent files, remove this method and its references altogether
-        /*private void updateRecentFiles()
-        {
-            //Add the file to the list of recent files
-            if (Settings.Default.recentFiles.Contains(Settings.Default.currentFile))
-                Settings.Default.recentFiles.Remove(Settings.Default.currentFile);
-            //Remove the oldest file if the list is full
-            else if (Settings.Default.recentFiles.Count == 10) Settings.Default.recentFiles.RemoveAt(0);
-            Settings.Default.recentFiles.Add(Settings.Default.currentFile);
-        }*/
+
         private bool isSafeOverwrite(string message)
         {
             if (!Settings.Default.saveState)
