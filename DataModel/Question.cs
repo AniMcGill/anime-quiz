@@ -85,7 +85,10 @@ namespace Anime_Quiz.DataModel
         public ArrayList getQuestions()
         {
             DataTable data = getQuestionDataTable();
-
+            if (data == null)
+            {
+                return null;
+            }
             foreach (DataRow row in data.Rows)
             {
                 Byte[] questionData = GetBytes(row["question"].ToString()); //todo: use the right conversion depending on type
