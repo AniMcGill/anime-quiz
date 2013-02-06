@@ -23,7 +23,7 @@ namespace Anime_Quiz
     {
         //new gameset
         SQLiteDatabase sqlDB = new SQLiteDatabase();
-        //DataSet questionDataSet;
+        DataSet questionDataSet;
 
         ComboBox questionSetList;
         DataGridView questionGridView;
@@ -68,22 +68,24 @@ namespace Anime_Quiz
             }
             Controls.Add(questionSetList);
         }
-        /*
+        
         private void loadQuestions(string questionSet)
         {
             Controls.Remove(questionGridView);
             questionDataSet = sqlDB.getDataSet(String.Format("Select * from Questions where questionSet = '{0}'", questionSet));
             questionGridView = new DataGridView();
             questionGridView.Location = new Point(12, 75);
-            questionGridView.Width = 1024;
+            questionGridView.Width = 1024;  //todo: autosize
             questionGridView.DataSource = questionDataSet.Tables[0];
             questionGridView.DataError += questionGridView_DataError;
-            questionGridView.DataChanged += questionGridView_DataChanged;
+            ///questionGridView.DataSourceChanged += questionGridView_DataSourceChanged;
             Controls.Add(questionGridView);
 
             clrBtn.Enabled = true;
             delBtn.Enabled = true;
-        }*/
+        }
+
+        //to deprecate
         private void loadQuestions()
         {
             Controls.Remove(questionGridView);
@@ -106,6 +108,12 @@ namespace Anime_Quiz
             delBtn.Enabled = true;
         }
         #endregion
+
+        private void linkQuestionToQuestionSet()
+        {
+            foreach (DataRow row in questionDataSet.Tables[0].Rows)
+                row["questionSet"] = CurrentQuestionSet.getInstance().name;
+        }
 
         #region Buttons
         /// <summary>
@@ -187,14 +195,24 @@ namespace Anime_Quiz
                 MessageBox.Show(crap.Message);
             }
         }
-
+        /// <summary>
+        ///     Unchecks the Answered flag for each Question in the QuestionSet.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void uncheckBtn_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            foreach (DataRow row in questionDataSet.Tables[0].Rows)
+                row["answered"] = false;
         }
         private void cancelBtn_Click(object sender, EventArgs e)
         {
-            if(!CurrentQuestionSet.getInstance().saveQuestions())
+            //if(!CurrentQuestionSet.getInstance().saveQuestions())
+            linkQuestionToQuestionSet();
+            //temporary fix
+            foreach (DataRow row in questionDataSet.Tables[0].Rows)
+                row["question"] = new byte[] {1,2,3,4,5};
+            if(!sqlDB.updateDataSet(questionDataSet, "Questions"))
             {
                 if (MessageBox.Show("There was an error saving to the database. Quit anyways?", "Save Error", MessageBoxButtons.YesNo) == DialogResult.No)
                     return;
@@ -224,8 +242,8 @@ namespace Anime_Quiz
             CurrentQuestionSet.setInstance(new QuestionSet(questionSetName, questionSetType));
 
             // Load the Questions
-            loadQuestions();
-            //loadQuestions(questionSetName);
+            //loadQuestions();
+            loadQuestions(questionSetName);
         }
                 
         /// <summary>

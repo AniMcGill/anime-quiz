@@ -8,6 +8,8 @@ using System.Collections;
 using System.Drawing;
 using System.Data;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace Anime_Quiz.DataModel
 {
@@ -121,7 +123,7 @@ namespace Anime_Quiz.DataModel
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        static byte[] GetBytes(string str)
+        public static byte[] GetBytes(string str)
         {
             byte[] bytes = new byte[str.Length * sizeof(char)];
             System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
@@ -132,7 +134,7 @@ namespace Anime_Quiz.DataModel
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        static string GetString(byte[] bytes)
+        public static string GetString(byte[] bytes)
         {
             char[] chars = new char[bytes.Length / sizeof(char)];
             System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
@@ -141,7 +143,7 @@ namespace Anime_Quiz.DataModel
         #endregion
     }
 
-    public class Question
+    public class Question:INotifyPropertyChanged
     {
         private int _questionID;
         private byte[] _question;
@@ -186,6 +188,8 @@ namespace Anime_Quiz.DataModel
             set { _questionSet = value; }
         }
 
+
+        public event PropertyChangedEventHandler PropertyChanged;
         public Question()
         {
             this._question = null;
@@ -195,12 +199,40 @@ namespace Anime_Quiz.DataModel
         }
         public Question(int id, byte[] q, string a, int p, bool state, string questionSet)
         {
+            this.childElementsValue.CollectionChanged += OnCollectionChanged;
             this._questionID = id;
             this._question = q;
             this._answer = a;
             this._points = p;
             this._answered = state;
             this._questionSet = questionSet;
+        }
+
+        void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    foreach (Question item in e.NewItems)
+                    {
+                        ((INotifyPropertyChanged)item).PropertyChanged += new PropertyChangedEventHandler(OnPropertyChanged);
+                    }
+                    break;
+            }
+        }
+
+        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, e);
+            }
+        }
+        private ObservableCollection<Question> childElementsValue = new ObservableCollection<Question>();
+        public ObservableCollection<Question> ChildElements
+        {
+            get { return childElementsValue; }
+            set { childElementsValue = value; }
         }
     }
 }

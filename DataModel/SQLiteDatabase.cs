@@ -81,6 +81,7 @@ namespace Anime_Quiz.DataModel
         /// <returns>true if the operation was successful; false otherwise</returns>
         public bool updateDataSet(DataSet dataSet, string tableName)
         {
+            //TODO: might be missing update command
             using (_sqlConnection = new SQLiteConnection(dbConnection))
             {
                 using (_sqlAdapter = new SQLiteDataAdapter("select * from " + tableName, _sqlConnection))
