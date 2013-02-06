@@ -23,6 +23,7 @@ namespace Anime_Quiz
     {
         //new gameset
         SQLiteDatabase sqlDB = new SQLiteDatabase();
+        //DataSet questionDataSet;
 
         ComboBox questionSetList;
         DataGridView questionGridView;
@@ -67,6 +68,22 @@ namespace Anime_Quiz
             }
             Controls.Add(questionSetList);
         }
+        /*
+        private void loadQuestions(string questionSet)
+        {
+            Controls.Remove(questionGridView);
+            questionDataSet = sqlDB.getDataSet(String.Format("Select * from Questions where questionSet = '{0}'", questionSet));
+            questionGridView = new DataGridView();
+            questionGridView.Location = new Point(12, 75);
+            questionGridView.Width = 1024;
+            questionGridView.DataSource = questionDataSet.Tables[0];
+            questionGridView.DataError += questionGridView_DataError;
+            questionGridView.DataChanged += questionGridView_DataChanged;
+            Controls.Add(questionGridView);
+
+            clrBtn.Enabled = true;
+            delBtn.Enabled = true;
+        }*/
         private void loadQuestions()
         {
             Controls.Remove(questionGridView);
@@ -74,13 +91,14 @@ namespace Anime_Quiz
 
             ArrayList questionsArray = new ArrayList();
             questionsArray = instance.getQuestions();
-            
+
             //DataTable queryData = instance.getQuestionDataTable();
             questionGridView = new DataGridView();
             questionGridView.Location = new Point(12, 75);
             questionGridView.Width = 1024;  //todo: auto-size
             //questionGridView.DataSource = queryData;
             questionGridView.DataSource = questionsArray;
+            questionGridView.DataError += questionGridView_DataError;
             //questionGridView.CellFormatting += questionGridView_CellFormatting;
             Controls.Add(questionGridView);
             
@@ -186,6 +204,11 @@ namespace Anime_Quiz
         #endregion
         
         #region EventHandlers
+        
+        void questionGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
 
         /// <summary>
         ///     Keeps track of the selected QuestionSet and load the Questions from it.
@@ -202,6 +225,7 @@ namespace Anime_Quiz
 
             // Load the Questions
             loadQuestions();
+            //loadQuestions(questionSetName);
         }
                 
         /// <summary>

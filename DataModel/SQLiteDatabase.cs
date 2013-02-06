@@ -14,6 +14,7 @@ namespace Anime_Quiz.DataModel
         String dbConnection;
         private SQLiteConnection _sqlConnection;
         private SQLiteCommand _sqlCommand;
+        SQLiteDataAdapter _sqlAdapter;
 
         /// <summary>
         ///     Default Constructor for SQLiteDatabase Class.
@@ -52,6 +53,56 @@ namespace Anime_Quiz.DataModel
             _sqlCommand = new SQLiteCommand(_sqlConnection);
             _sqlCommand.CommandText = sqlCommand;
         }
+
+        /// <summary>
+        ///     Gets the DataSet from the database command.
+        /// </summary>
+        /// <param name="command">The SQL command to execute.</param>
+        /// <returns>A DataSet</returns>
+        public DataSet getDataSet(string command)
+        {
+            using (_sqlConnection = new SQLiteConnection(dbConnection))
+            {
+                _sqlConnection.Open();
+                DataSet dataSet = new DataSet();
+                using (_sqlAdapter = new SQLiteDataAdapter(command, _sqlConnection))
+                {
+                    _sqlAdapter.Fill(dataSet);
+                    return dataSet;
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Synchronizes the database with the DataSet
+        /// </summary>
+        /// <param name="dataSet">The DataSet to synchronize</param>
+        /// <param name="tableName">The database table to update</param>
+        /// <returns>true if the operation was successful; false otherwise</returns>
+        public bool updateDataSet(DataSet dataSet, string tableName)
+        {
+            using (_sqlConnection = new SQLiteConnection(dbConnection))
+            {
+                using (_sqlAdapter = new SQLiteDataAdapter("select * from " + tableName, _sqlConnection))
+                {
+                    using (new SQLiteCommandBuilder(_sqlAdapter))
+                    {
+                        try
+                        {
+                            _sqlConnection.Open();
+                            _sqlAdapter.Update(dataSet);
+                            return true;
+                        }
+                        catch (Exception crap)
+                        {
+                            MessageBox.Show(crap.Message);
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
         /// <summary>
         ///     Allows the programmer to run a query against the Database.
         /// </summary>

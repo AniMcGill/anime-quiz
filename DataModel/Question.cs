@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using System.Collections;
 using System.Drawing;
 using System.Data;
+using System.ComponentModel;
 
 namespace Anime_Quiz.DataModel
 {
@@ -84,6 +85,7 @@ namespace Anime_Quiz.DataModel
         public ArrayList getQuestions()
         {
             DataTable data = getQuestionDataTable();
+
             foreach (DataRow row in data.Rows)
             {
                 Byte[] questionData = GetBytes(row["question"].ToString()); //todo: use the right conversion depending on type
@@ -144,32 +146,37 @@ namespace Anime_Quiz.DataModel
         private int _points;
         private bool _answered;
         private string _questionSet;
-
+        [DisplayName("Question ID")]
         public int questionID
         {
             get { return _questionID; }
             set { _questionID = value; }
         }
+        [DisplayName("Question")]
         public byte[] question
         {
             get { return _question; }
             set { _question = value; }
         }
+        [DisplayName("Answer")]
         public string answer
         {
             get { return _answer; }
             set { _answer = value; }
         }       
+        [DisplayName("Points")]
         public int points
         {
             get { return _points; }
             set { _points = value; }
         }
+        [DisplayName("Answered")]
         public bool answered
         {
             get { return _answered; }
             set { _answered = value; }
         }
+        [DisplayName("QuestionSet")]
         public string questionSet
         {
             get { return _questionSet; }
