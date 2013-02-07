@@ -1,6 +1,6 @@
 ﻿namespace Anime_Quiz
 {
-    partial class GameSetEditor
+    partial class QuestionSetEditor
     {
         /// <summary>
         /// Required designer variable.
@@ -148,7 +148,7 @@
             this.renameBtn.UseVisualStyleBackColor = true;
             this.renameBtn.Click += new System.EventHandler(this.renameBtn_Click);
             // 
-            // GameSetEditor
+            // QuestionSetEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -165,10 +165,10 @@
             this.Controls.Add(this.clrBtn);
             this.Controls.Add(this.cancelBtn);
             this.Controls.Add(this.gameType);
-            this.Name = "GameSetEditor";
+            this.Name = "QuestionSetEditor";
             this.Text = "Game Editor";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GameEditor_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.QuestionSetEditor_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

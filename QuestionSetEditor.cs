@@ -16,10 +16,12 @@ using System.Reflection;
 //using System.Globalization;
 using System.Data.SQLite;
 using Microsoft.VisualBasic;
+using WMPLib;
+using System.Threading.Tasks;
 
 namespace Anime_Quiz
 {
-    public partial class GameSetEditor : Form
+    public partial class QuestionSetEditor : Form
     {
         //Data
         SQLiteDatabase sqlDB = new SQLiteDatabase();
@@ -27,8 +29,9 @@ namespace Anime_Quiz
 
         ComboBox questionSetList;
         DataGridView questionGridView;
+        FlowLayoutPanel mediaPanel;
 
-        public GameSetEditor()
+        public QuestionSetEditor()
         {
             InitializeComponent();
             loadQuestionSets();
@@ -59,21 +62,34 @@ namespace Anime_Quiz
             }
             Controls.Add(questionSetList);
         }
-        
+        /// <summary>
+        ///     Load the Questions associated with the given QuestionSet
+        /// </summary>
+        /// <param name="questionSet">The QuestionSet from which to load the Questions.</param>
         private void loadQuestions(string questionSet)
         {
             Controls.Remove(questionGridView);
             questionDataSet = sqlDB.getDataSet(String.Format("Select * from Questions where questionSet = '{0}'", questionSet));
             questionGridView = new DataGridView();
             questionGridView.Location = new Point(12, 75);
-            questionGridView.Width = 1024;  //todo: autosize
+            questionGridView.AutoSize = true;
+            questionGridView.MaximumSize = new Size((int)(0.70 * this.Width), (int)(0.8 * this.Height));
             questionGridView.DataSource = questionDataSet.Tables[0];
             questionGridView.CellMouseClick += questionGridView_CellMouseClick;
             questionGridView.CellFormatting += questionGridView_CellFormatting;
             Controls.Add(questionGridView);
-
+            
             clrBtn.Enabled = true;
             delBtn.Enabled = true;
+        }
+        private void loadMediaPanel()
+        {
+            Controls.Remove(mediaPanel);
+            mediaPanel = new FlowLayoutPanel();
+            mediaPanel.Location = new Point(this.Width - (int)(0.25 * this.Width), 75);
+            mediaPanel.AutoSize = true;
+            mediaPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            Controls.Add(mediaPanel);
         }
         #endregion
 
@@ -194,7 +210,6 @@ namespace Anime_Quiz
         #endregion
         
         #region EventHandlers
-
         /// <summary>
         ///     Keeps track of the selected QuestionSet and load the Questions from it.
         /// </summary>
@@ -211,17 +226,27 @@ namespace Anime_Quiz
             // Load the Questions
             loadQuestions(questionSetName);
         }
-
+        /// <summary>
+        ///     When a question cell has been clicked, show file picker dialog if it is a music or screenshot type of QuestionSet.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void questionGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (questionGridView.Columns[e.ColumnIndex] == questionGridView.Columns["Question"]
                 && CurrentQuestionSet.getInstance().type != Types.Question)
             {
-                if(questionGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString() == String.Empty)
+                String filename = questionGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                if(filename == String.Empty)
                     openFilePicker(e);
-                //else show image
+                else                  
+                    displayMedia(filename);
             }
          }
+        /// <summary>
+        ///     Prompts the user for a file and enter save the file path.
+        /// </summary>
+        /// <param name="e"></param>
         void openFilePicker(DataGridViewCellMouseEventArgs e)
         {
             OpenFileDialog filePicker = new OpenFileDialog();
@@ -243,8 +268,30 @@ namespace Anime_Quiz
                     break;
             }
             if (filePicker.ShowDialog() == DialogResult.OK)
-            {
                 questionGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = filePicker.FileName;
+        }
+        /// <summary>
+        ///     Display a preview of the relevant media (picture or music).
+        /// </summary>
+        /// <param name="filename">The path to the media file to load.</param>
+        void displayMedia(string filename)
+        {
+            loadMediaPanel();
+            switch (CurrentQuestionSet.getInstance().type)
+            {
+                case Types.Music:
+                    MusicPlayer musicPlayer = new MusicPlayer(filename, mediaPanel);
+                    break;
+                case Types.Screenshot: 
+                    int pictureWidth = (int)(0.2 * (this.Width - 12));
+                    int pictureHeight = (int)(3 * pictureWidth / 4);
+                    PictureBox pictureBox = new PictureBox();
+                    pictureBox.Size = new Size(pictureWidth, pictureHeight);
+                    Image image = Image.FromFile(filename);
+                    Bitmap resizedImage = new Bitmap(image, new Size(pictureWidth, pictureHeight));
+                    pictureBox.Image = resizedImage;
+                    mediaPanel.Controls.Add(pictureBox);
+                    break;
             }
         }
                 
@@ -257,12 +304,6 @@ namespace Anime_Quiz
         {
             addBtn.Enabled = true;
         }
-        
-        private void num_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
-                e.Handled = true;
-        }
         /// <summary>
         ///     Change the format of the cells that shouldn't be edited to gray
         /// </summary>
@@ -270,59 +311,23 @@ namespace Anime_Quiz
         /// <param name="e"></param>
         void questionGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if ((sender as DataGridView).Columns[e.ColumnIndex].Name == "id"
-                || (sender as DataGridView).Columns[e.ColumnIndex].Name == "questionSet")
+            try
             {
-                if (e.Value != null)
+                if ((sender as DataGridView).Columns[e.ColumnIndex].Name == "id"
+                    || (sender as DataGridView).Columns[e.ColumnIndex].Name == "questionSet")
                 {
-                    e.CellStyle.BackColor = Color.Gray;
+                    if (e.Value != null)
+                        e.CellStyle.BackColor = Color.Gray;
                 }
             }
+            catch (ArgumentOutOfRangeException crap)
+            { }
         }
         
-        //to deprecate
-        private void GameEditor_FormClosing(object sender, FormClosingEventArgs e)
+        private void QuestionSetEditor_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Settings.Default.saveState = true;
-        }
-        
-        
-        void soundPicker_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog soundFile = new OpenFileDialog();
-            //If a default directory has been defined for the soundPicker, set it
-            if (Settings.Default.defaultMusicFolder != String.Empty)
-                soundFile.InitialDirectory = Settings.Default.defaultMusicFolder;
-            //soundFile.Filter = "MP3 files (*.mp3)|*.mp3|MP4 files (*.mp4)|*.mp4|WAV files (*.wav)|*.wav|WMA files (*.wma)|*.wma";
-            soundFile.Filter = "Music Formats|" +
-                    "*.mp3;*.ram;*.rm;*.wav;*.wma;*.mid;*.mp4|" +
-                    "mp3 (*.mp3)|*.mp3|ram (*.ram)|*.ram|rm (*.rm)|*.rm|" +
-                    "wav (*.wav)|*.wav|wma (*.wma)|*.wma|mid (*.mid)|*.mid|" +
-                    "mp4 (*.mp4)|*.mp4";
-            if (soundFile.ShowDialog() == DialogResult.OK)
-            {
-                string filename = soundFile.FileName;
-                Control soundButton = (Control)sender;
-                Label soundPath = (Label)soundButton.Parent.Controls[1];
-                soundPath.Text = filename;
-            }
-        }
-        void imageChooser_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog imageFile = new OpenFileDialog();
-            //If a default folder has been defined in Settings, start the dialog in that folder
-            if (Settings.Default.defaultScreenshotFolder != String.Empty)
-                imageFile.InitialDirectory = Settings.Default.defaultScreenshotFolder;
-            imageFile.Filter = "JPG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|BMP files (*.bmp)|*.bmp";
-            if (imageFile.ShowDialog() == DialogResult.OK)
-            {
-                string filename = imageFile.FileName;
-                Control imageButton = (Control)sender;
-                Label imagePath = (Label)imageButton.Parent.Controls[1];
-                imagePath.Text = filename;
-                Image image = Image.FromFile(filename);
-                imagePath.Image = image.GetThumbnailImage(200, 40, null, new System.IntPtr());
-            }
+            e.Cancel = !saveQuestions();
+                //e.Cancel = MessageBox.Show("There was an error saving to the database. Quit anyways?", "Save Error", MessageBoxButtons.YesNo) == DialogResult.No;
         }
         #endregion  
     }

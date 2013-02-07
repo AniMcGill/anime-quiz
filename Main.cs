@@ -1,16 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Serialization;
-using Anime_Quiz.DataModel;
 using Anime_Quiz.Properties;
 //using System.Globalization;
 //using System.Threading;
@@ -27,13 +16,8 @@ namespace Anime_Quiz
         public GameBoard()
         {
             InitializeComponent();
-            if (Settings.Default.currentSet != null)
-            {
-                CurrentQuestionSet.setInstance(Settings.Default.currentSet);
-            }
             //Localization test
             //Thread.CurrentThread.CurrentUICulture = new CultureInfo("ja-JP");
-            Settings.Default.saveState = true;
             
             gameForm.MdiParent = this;
             gameForm.Show();
@@ -42,51 +26,34 @@ namespace Anime_Quiz
             //scoreForm.Show();
         }
 
-        #region Behaviors
-
-        private bool isSafeOverwrite(string message)
-        {
-            if (!Settings.Default.saveState)
-            {
-                DialogResult confirm = new DialogResult();
-                confirm = MessageBox.Show(message, "Unsaved changes", MessageBoxButtons.YesNoCancel);
-                if (confirm == DialogResult.Cancel) return false;
-                else if (confirm == DialogResult.Yes) gameForm.saveBehavior();
-            }
-            return true;
-        }
+        #region Child Forms
 
         public static void openTeamEditor()
         {
             TeamEditor teamEditor = new TeamEditor();
             teamEditor.Show();
         }
+        public static void openQuestionSetEditor()
+        {
+            QuestionSetEditor questionSetEditor = new QuestionSetEditor();
+            //Set the form in a new Window (on dual screens, it will be on the monitor 1
+            questionSetEditor.ShowDialog();
+        }
         #endregion
 
         #region FileMenu
-        private void createGameToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void createQuestionToolStripMenuItem_Click_(object sender, EventArgs e)
         {
-            //Save in progress game and open editor
-            if (isSafeOverwrite("There is a game in progress. Do you want to save it before proceeding?"))
-            {
-                GameSetEditor newGame = new GameSetEditor();
-                //Set the form in a new Window (on dual screens, it will be on the monitor 1
-                newGame.ShowDialog();
-                //Settings.Default.saveState = true;
-                //Once we are done editing, if there is a currentFile, load it.
-                //Otherwise clear the game board.
-                if (Settings.Default.currentFile != String.Empty && gameForm.loadFileBehavior(Settings.Default.currentFile))
-                    gameForm.loadGameBehavior();
-                else gameForm.clearGamePanel();
-            }
+            openQuestionSetEditor();
+            //Once we are done editing, if there is a currentFile, load it.
+            //Otherwise clear the game board.
+            //if (Settings.Default.currentFile != String.Empty && gameForm.loadFileBehavior(Settings.Default.currentFile))
+            //    gameForm.loadGameBehavior();
+            //else gameForm.clearGamePanel();
         }
-        private void loadGameToolStripMenuItem_Click(object sender, EventArgs e)
+        private void createGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog gameLoad = new OpenFileDialog();
-            if (Settings.Default.defaultFolder != String.Empty) gameLoad.InitialDirectory = Settings.Default.defaultFolder;
-            gameLoad.Filter = "XML files|*xml";
-            if (gameLoad.ShowDialog() == DialogResult.OK && gameForm.loadFileBehavior(gameLoad.FileName))
-                gameForm.loadGameBehavior();
+            //todo
         }
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -141,11 +108,6 @@ namespace Anime_Quiz
 
         private void GameBoard_Load(object sender, EventArgs e)
         {
-
-
         }
-
-
-
     }
 }

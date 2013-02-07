@@ -2,15 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Anime_Quiz.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="currentFile" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="saveState" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="recentFiles" Type="System.Collections.ArrayList" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="tempQuestion" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>

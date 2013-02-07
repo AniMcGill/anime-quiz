@@ -30,16 +30,15 @@
         {
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.menuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createQuestionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.recentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.teamConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fullToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.teamConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,43 +60,43 @@
             // menuToolStripMenuItem
             // 
             this.menuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createQuestionsToolStripMenuItem,
             this.createGameToolStripMenuItem,
-            this.loadGameToolStripMenuItem,
-            this.recentToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.menuToolStripMenuItem.Name = "menuToolStripMenuItem";
             this.menuToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.menuToolStripMenuItem.Text = "Menu";
             // 
+            // createQuestionsToolStripMenuItem
+            // 
+            this.createQuestionsToolStripMenuItem.Name = "createQuestionsToolStripMenuItem";
+            this.createQuestionsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.createQuestionsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.createQuestionsToolStripMenuItem.Text = "&Create/Edit Questions";
+            this.createQuestionsToolStripMenuItem.Click += new System.EventHandler(this.createQuestionToolStripMenuItem_Click_);
+            // 
             // createGameToolStripMenuItem
             // 
             this.createGameToolStripMenuItem.Name = "createGameToolStripMenuItem";
-            this.createGameToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.createGameToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.createGameToolStripMenuItem.Text = "&Create/Edit Game";
-            this.createGameToolStripMenuItem.Click += new System.EventHandler(this.createGameToolStripMenuItem_Click_1);
-            // 
-            // loadGameToolStripMenuItem
-            // 
-            this.loadGameToolStripMenuItem.Name = "loadGameToolStripMenuItem";
-            this.loadGameToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
-            this.loadGameToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.loadGameToolStripMenuItem.Text = "&Load Game";
-            this.loadGameToolStripMenuItem.Click += new System.EventHandler(this.loadGameToolStripMenuItem_Click);
-            // 
-            // recentToolStripMenuItem
-            // 
-            this.recentToolStripMenuItem.Name = "recentToolStripMenuItem";
-            this.recentToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.recentToolStripMenuItem.Text = "&Recent";
+            this.createGameToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+            this.createGameToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.createGameToolStripMenuItem.Text = "Create/Edit &Game";
+            this.createGameToolStripMenuItem.Click += new System.EventHandler(this.createGameToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // teamConfigToolStripMenuItem
+            // 
+            this.teamConfigToolStripMenuItem.Name = "teamConfigToolStripMenuItem";
+            this.teamConfigToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.teamConfigToolStripMenuItem.Text = "Teams";
+            this.teamConfigToolStripMenuItem.Click += new System.EventHandler(this.teamConfigToolStripMenuItem_Click);
             // 
             // viewToolStripMenuItem
             // 
@@ -138,13 +137,6 @@
             this.helpToolStripMenuItem.Text = "Help";
             this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
             // 
-            // teamConfigToolStripMenuItem
-            // 
-            this.teamConfigToolStripMenuItem.Name = "teamConfigToolStripMenuItem";
-            this.teamConfigToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
-            this.teamConfigToolStripMenuItem.Text = "Teams";
-            this.teamConfigToolStripMenuItem.Click += new System.EventHandler(this.teamConfigToolStripMenuItem_Click);
-            // 
             // GameBoard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -174,10 +166,9 @@
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fullToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem windowedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem createQuestionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createGameToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem loadGameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem recentToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem teamConfigToolStripMenuItem;
     }

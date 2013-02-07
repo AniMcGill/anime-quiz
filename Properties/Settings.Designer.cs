@@ -26,41 +26,6 @@ namespace Anime_Quiz.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string currentFile {
-            get {
-                return ((string)(this["currentFile"]));
-            }
-            set {
-                this["currentFile"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool saveState {
-            get {
-                return ((bool)(this["saveState"]));
-            }
-            set {
-                this["saveState"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.ArrayList recentFiles {
-            get {
-                return ((global::System.Collections.ArrayList)(this["recentFiles"]));
-            }
-            set {
-                this["recentFiles"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string tempQuestion {
             get {
                 return ((string)(this["tempQuestion"]));
@@ -191,10 +156,9 @@ namespace Anime_Quiz.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public Anime_Quiz.DataModel.QuestionSet currentSet {
+        public global::Anime_Quiz.DataModel.QuestionSet currentSet {
             get {
-                return ((Anime_Quiz.DataModel.QuestionSet)(this["currentSet"]));
+                return ((global::Anime_Quiz.DataModel.QuestionSet)(this["currentSet"]));
             }
             set {
                 this["currentSet"] = value;

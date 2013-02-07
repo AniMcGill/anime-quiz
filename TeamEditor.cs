@@ -19,7 +19,6 @@ namespace Anime_Quiz
         public TeamEditor()
         {
             InitializeComponent();
-            Settings.Default.saveState = false;
             if (Settings.Default.scoreSet != null)
             {
                 scoreSet = Settings.Default.scoreSet;
@@ -59,7 +58,6 @@ namespace Anime_Quiz
                 }
             }
             Settings.Default.scoreSet = scoreSet;
-            Settings.Default.saveState = true;
             return true;
         }
 
@@ -73,25 +71,9 @@ namespace Anime_Quiz
             Settings.Default.scoreSet = null;
         }
 
-        private bool checkSaveState()
-        {
-            if (!Settings.Default.saveState)
-            {
-                DialogResult result = new DialogResult();
-                result = MessageBox.Show("There are unsaved changes, do you want to save first?",
-                    "Unsaved Changes", MessageBoxButtons.YesNoCancel);
-                if (result == DialogResult.No ||
-                    (result == DialogResult.Yes && saveTeams()))
-                    Settings.Default.saveState = true;
-                else if (result == DialogResult.Cancel)
-                    return false;
-            }
-            return true;
-        }
-
         private void closeButton_Click(object sender, EventArgs e)
         {
-            if (checkSaveState())
+            if (true)
                 this.Close();
         }
 
@@ -103,7 +85,7 @@ namespace Anime_Quiz
 
         private void clearButton_Click(object sender, EventArgs e)
         {
-            if (checkSaveState())
+            if (true)
                 clearTextBoxes();
         }
 
