@@ -358,6 +358,11 @@ namespace Anime_Quiz
                 e.Cancel = true;
             base.OnFormClosing(e);
         }
+
+        private void QuestionSetEditor_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            //find a way to notify for a reload?
+        }
         #endregion
 
         #region Easter Eggs

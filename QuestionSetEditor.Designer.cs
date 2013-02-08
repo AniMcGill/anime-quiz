@@ -168,6 +168,7 @@
             this.Name = "QuestionSetEditor";
             this.Text = "Game Editor";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.QuestionSetEditor_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 

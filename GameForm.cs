@@ -18,7 +18,9 @@ namespace Anime_Quiz
     public partial class GameForm : Form
     {
         //Data
-        QuestionSet questionSet;
+        SQLiteDatabase sqlDB = new SQLiteDatabase();
+        DataSet questionDataSet;
+
         FlowLayoutPanel gamePanel = new FlowLayoutPanel();
 
         //Constants
@@ -30,14 +32,20 @@ namespace Anime_Quiz
         {
             InitializeComponent();
 
-            //If there is a currentFile, load it. This doesn't work from closing GameEditor
+            //If there is an instance of CurrentQuestionSet, load it. Otherwise prompt for a list to load (TODO)
             if (Settings.Default.reloadPrevious && CurrentQuestionSet.getInstance() != null)
-                loadGameBehavior();
+                loadGamePanel();
+            else
+            {
+                //TODO
+            }
         }
         
-        #region Behaviors
-        public void loadGameBehavior()
+        #region Controls
+        public void loadGamePanel()
         {
+            Controls.Remove(gamePanel);
+
             gamePanel.Location = new Point(12, 75);
             gamePanel.AutoScroll = true;
             gamePanel.Width = ClientRectangle.Width - 20;
@@ -45,27 +53,28 @@ namespace Anime_Quiz
             Controls.Add(gamePanel);
 
             //Load the actual question labels
-            loadLabelBehavior();
+            loadQuestionLabel();
             
             // Open the team editor if no team has been configured.
+            /*
             if (Settings.Default.scoreSet == null && Settings.Default.useScoreSystem)
             {
                 GameBoard.openTeamEditor();
-            }
+            }*/
         }
-
-        void loadLabelBehavior()
+        /// <summary>
+        ///     Add a Button for each unanswered Question.
+        /// </summary>
+        void loadQuestionLabel()
         {
-            //Clear the gamePanel
-            clearGamePanel();
-            //Reload the gamePanel without answered questions
-            for (int i = 0; i < questionSet.Count; i++)
+            questionDataSet = sqlDB.getDataSet(String.Format("select * from Questions where questionSet = '{0}'", CurrentQuestionSet.getInstance().name));
+            foreach(DataRow row in questionDataSet.Tables[0].Rows)
             {
-                if (!questionSet[i].answered)
+                if(!Convert.ToBoolean(row["answered"]))
                 {
                     Button pointBtn = new Button();
-                    pointBtn.Name = i.ToString();
-                    pointBtn.Text = questionSet[i].points.ToString();
+                    pointBtn.Name = row["id"].ToString();
+                    pointBtn.Text = row["points"].ToString();
                     pointBtn.Font = new Font("Microsoft Sans Serif", 20);
                     pointBtn.Width = 150;
                     pointBtn.Height = 75;
@@ -76,7 +85,10 @@ namespace Anime_Quiz
                 }
             }
         }
-        void openQuestion(int index)
+        #endregion
+
+        #region Forms
+        void openQuestion(int id)
         {
             //Load the question and questionType into temporary variables to pass to QuestionForm
             //Settings.Default.tempQuestion = questionSet[index].question;
@@ -87,45 +99,33 @@ namespace Anime_Quiz
             //Open the Question in a new form
             QuestionForm questionForm = new QuestionForm();
 
-            questionForm.answer = questionSet[index].answer;
-            questionForm.answered = questionSet[index].answered;
+            //questionForm.answer = questionSet[index].answer;
+            //questionForm.answered = questionSet[index].answered;
             questionForm.MdiParent = this.MdiParent;
-            questionForm.FormClosed += new FormClosedEventHandler((sender,args) => questionForm_FormClosed(sender, args, questionForm.answered, index));
+            //questionForm.FormClosed += new FormClosedEventHandler((sender,args) => questionForm_FormClosed(sender, args, questionForm.answered, id));
             questionForm.Show();
         }
+        #endregion
 
-        void questionForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
 
+
+        //to deprecate
         public void clearGamePanel()
         {
             while (gamePanel.Controls.Count > 0) gamePanel.Controls.Clear();
         }
-
-        //If we can't display recent files, remove this method and its references altogether
-        /*private void updateRecentFiles()
-        {
-            //Add the file to the list of recent files
-            if (Settings.Default.recentFiles.Contains(Settings.Default.currentFile))
-                Settings.Default.recentFiles.Remove(Settings.Default.currentFile);
-            //Remove the oldest file if the list is full
-            else if (Settings.Default.recentFiles.Count == 10) Settings.Default.recentFiles.RemoveAt(0);
-            Settings.Default.recentFiles.Add(Settings.Default.currentFile);
-        }*/
-        #endregion
         
         #region EventHandlers
 
         void questionForm_FormClosed(object sender, FormClosedEventArgs e, bool answered, int index)
         {
             //After the question has been answered, get information
-            questionSet[index].answered = answered;
+            //questionSet[index].answered = answered;
+            
             //Autosave
             //saveBehavior();
             //Reload the form
-            loadLabelBehavior();
+            loadQuestionLabel();
         }
         void pointLabel_Click(object sender, EventArgs e)
         {
@@ -138,6 +138,11 @@ namespace Anime_Quiz
             Button caller = (Button)sender;
             openQuestion(Convert.ToInt32(caller.Name));
         }
+        /*
+        void questionForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }*/
         
         #endregion
 
