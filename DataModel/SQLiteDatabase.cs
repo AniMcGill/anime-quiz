@@ -81,7 +81,6 @@ namespace Anime_Quiz.DataModel
         /// <returns>true if the operation was successful; false otherwise</returns>
         public bool updateDataSet(DataSet dataSet, string tableName)
         {
-            //TODO: might be missing update command
             using (_sqlConnection = new SQLiteConnection(dbConnection))
             {
                 using (_sqlAdapter = new SQLiteDataAdapter("select * from " + tableName, _sqlConnection))
@@ -302,6 +301,23 @@ namespace Anime_Quiz.DataModel
             try
             {
                 this.executeNonQuery(String.Format("delete from {0};", table));
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        ///     Deletes questions from the given QuestionSet
+        /// </summary>
+        /// <param name="questionSet">The QuestionSet to clear</param>
+        /// <returns>true if the operation is successful; false otherwise.</returns>
+        public bool ClearQuestionsFromSet(String questionSet)
+        {
+            try
+            {
+                this.executeNonQuery(String.Format("delete from Questions where questionSet = '{0}'", questionSet));
                 return true;
             }
             catch

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.gameType = new System.Windows.Forms.ComboBox();
-            this.cancelBtn = new System.Windows.Forms.Button();
+            this.closeBtn = new System.Windows.Forms.Button();
             this.gameSave = new System.Windows.Forms.SaveFileDialog();
             this.gameLoad = new System.Windows.Forms.OpenFileDialog();
             this.clrBtn = new System.Windows.Forms.Button();
@@ -55,16 +55,16 @@
             this.gameType.Text = "Choose a game type";
             this.gameType.SelectedIndexChanged += new System.EventHandler(this.gameType_SelectedIndexChanged);
             // 
-            // cancelBtn
+            // closeBtn
             // 
-            this.cancelBtn.Location = new System.Drawing.Point(915, 10);
-            this.cancelBtn.Margin = new System.Windows.Forms.Padding(20);
-            this.cancelBtn.Name = "cancelBtn";
-            this.cancelBtn.Size = new System.Drawing.Size(75, 23);
-            this.cancelBtn.TabIndex = 9;
-            this.cancelBtn.Text = "Close";
-            this.cancelBtn.UseVisualStyleBackColor = true;
-            this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
+            this.closeBtn.Location = new System.Drawing.Point(915, 10);
+            this.closeBtn.Margin = new System.Windows.Forms.Padding(20);
+            this.closeBtn.Name = "closeBtn";
+            this.closeBtn.Size = new System.Drawing.Size(75, 23);
+            this.closeBtn.TabIndex = 9;
+            this.closeBtn.Text = "Close";
+            this.closeBtn.UseVisualStyleBackColor = true;
+            this.closeBtn.Click += new System.EventHandler(this.closeBtn_Click);
             // 
             // gameSave
             // 
@@ -163,12 +163,11 @@
             this.Controls.Add(this.newSetLabel);
             this.Controls.Add(this.uncheckBtn);
             this.Controls.Add(this.clrBtn);
-            this.Controls.Add(this.cancelBtn);
+            this.Controls.Add(this.closeBtn);
             this.Controls.Add(this.gameType);
             this.Name = "QuestionSetEditor";
             this.Text = "Game Editor";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.QuestionSetEditor_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -177,7 +176,7 @@
         #endregion
 
         private System.Windows.Forms.ComboBox gameType;
-        private System.Windows.Forms.Button cancelBtn;
+        private System.Windows.Forms.Button closeBtn;
         private System.Windows.Forms.SaveFileDialog gameSave;
         private System.Windows.Forms.OpenFileDialog gameLoad;
         private System.Windows.Forms.Button clrBtn;

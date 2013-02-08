@@ -1,23 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
+using System.Reflection;
 using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Serialization;
 using Anime_Quiz.DataModel;
 using Anime_Quiz.Properties;
-using System.Collections;
-using System.Reflection;
 //using System.Globalization;
-using System.Data.SQLite;
 using Microsoft.VisualBasic;
-using WMPLib;
-using System.Threading.Tasks;
 
 namespace Anime_Quiz
 {
@@ -34,9 +25,7 @@ namespace Anime_Quiz
         public QuestionSetEditor()
         {
             InitializeComponent();
-            loadQuestionSets();
-            if (CurrentQuestionSet.getInstance() != null)
-                loadQuestions(CurrentQuestionSet.getInstance().name);
+            reloadQuestionsAndSets();
         }
 
         #region Database Load
@@ -81,7 +70,21 @@ namespace Anime_Quiz
             
             clrBtn.Enabled = true;
             delBtn.Enabled = true;
+
+            loadMediaPanel();
         }
+        /// <summary>
+        ///     Loads the QuestionSets and if there is an instance of CurrentQuestionSet, loads the Questions.
+        /// </summary>
+        private void reloadQuestionsAndSets()
+        {
+            loadQuestionSets();
+            if (CurrentQuestionSet.getInstance() != null)
+                loadQuestions(CurrentQuestionSet.getInstance().name);
+        }
+        #endregion
+
+        #region Controls
         private void loadMediaPanel()
         {
             Controls.Remove(mediaPanel);
@@ -90,6 +93,16 @@ namespace Anime_Quiz
             mediaPanel.AutoSize = true;
             mediaPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             Controls.Add(mediaPanel);
+        }
+        private void addPictureBox(Image image)
+        {
+            int pictureWidth = (int)(0.2 * (this.Width - 12));
+            int pictureHeight = (int)(3 * pictureWidth / 4);
+            PictureBox pictureBox = new PictureBox();
+            pictureBox.Size = new Size(pictureWidth, pictureHeight);
+            Bitmap resizedImage = new Bitmap(image, new Size(pictureWidth, pictureHeight));
+            pictureBox.Image = resizedImage;
+            mediaPanel.Controls.Add(pictureBox);
         }
         #endregion
 
@@ -103,10 +116,19 @@ namespace Anime_Quiz
             catch (DeletedRowInaccessibleException crap)
             { }
         }
+        /// <summary>
+        ///     Saves the questions to the database. For the time being, malformed questions will be ignored.
+        /// </summary>
+        /// <returns></returns>
         private bool saveQuestions()
         {
-            linkQuestionToQuestionSet();
-            return sqlDB.updateDataSet(questionDataSet, "Questions");
+            if (CurrentQuestionSet.getInstance() != null
+                && questionDataSet != null)
+            {
+                linkQuestionToQuestionSet();
+                return sqlDB.updateDataSet(questionDataSet, "Questions");
+            }
+            return false;
         }
 
         #region Buttons
@@ -119,9 +141,9 @@ namespace Anime_Quiz
         {
             if (MessageBox.Show("Are you sure you want to clear this QuestionSet? This cannot be undone.", "Confirm deletion", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                sqlDB.ClearTable(CurrentQuestionSet.getInstance().name);
+                sqlDB.ClearQuestionsFromSet(CurrentQuestionSet.getInstance().name);
                 clrBtn.Enabled = false;
-                loadQuestionSets();
+                reloadQuestionsAndSets();
             }
         }
         /// <summary>
@@ -138,11 +160,9 @@ namespace Anime_Quiz
             data.Add("type", ((int)newSetType).ToString());
             if (sqlDB.Insert("QuestionSets", data))
             {
-                loadQuestionSets();
-                if(questionDataSet != null)
-                    saveQuestions();
+                saveQuestions();
                 CurrentQuestionSet.setInstance(new QuestionSet(newSetName, newSetType));
-                loadQuestions(CurrentQuestionSet.getInstance().name);
+                reloadQuestionsAndSets();
             }
         }
         /// <summary>
@@ -159,6 +179,7 @@ namespace Anime_Quiz
                     CurrentQuestionSet.setInstance(null);   //set the instance to null?
                     delBtn.Enabled = false;
                     loadQuestionSets();
+                    Controls.Remove(questionGridView);
                 }
                 else
                     MessageBox.Show("There was a problem completing the operation", "Error", MessageBoxButtons.OK);
@@ -180,7 +201,7 @@ namespace Anime_Quiz
                     CurrentQuestionSet.getInstance().name = questionSetName;
                     if (!sqlDB.renameQuestionSet(oldName,questionSetName))
                         throw new Exception("There was an error renaming the QuestionSet.");
-                    loadQuestionSets();
+                    reloadQuestionsAndSets();
                 }
                 else
                     throw new ArgumentNullException("Name cannot be blank.");
@@ -200,11 +221,13 @@ namespace Anime_Quiz
             foreach (DataRow row in questionDataSet.Tables[0].Rows)
                 row["answered"] = false;
         }
-        private void cancelBtn_Click(object sender, EventArgs e)
+        /// <summary>
+        ///     Closes the form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void closeBtn_Click(object sender, EventArgs e)
         {
-            if (!saveQuestions()
-                && (MessageBox.Show("There was an error saving to the database. Quit anyways?", "Save Error", MessageBoxButtons.YesNo) == DialogResult.No))
-                return;
             this.Close();
         }
         #endregion
@@ -217,6 +240,8 @@ namespace Anime_Quiz
         /// <param name="e"></param>
         void questionSetList_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Save the currently loaded Questions, if any
+            saveQuestions();
             // Save the current selection
             ComboBox senderComboBox = sender as ComboBox;
             String questionSetName = senderComboBox.SelectedItem.ToString();
@@ -225,6 +250,9 @@ namespace Anime_Quiz
 
             // Load the Questions
             loadQuestions(questionSetName);
+
+            // Load an EasterEgg
+            loadPlaceholderMedia();
         }
         /// <summary>
         ///     When a question cell has been clicked, show file picker dialog if it is a music or screenshot type of QuestionSet.
@@ -283,14 +311,8 @@ namespace Anime_Quiz
                     MusicPlayer musicPlayer = new MusicPlayer(filename, mediaPanel);
                     break;
                 case Types.Screenshot: 
-                    int pictureWidth = (int)(0.2 * (this.Width - 12));
-                    int pictureHeight = (int)(3 * pictureWidth / 4);
-                    PictureBox pictureBox = new PictureBox();
-                    pictureBox.Size = new Size(pictureWidth, pictureHeight);
                     Image image = Image.FromFile(filename);
-                    Bitmap resizedImage = new Bitmap(image, new Size(pictureWidth, pictureHeight));
-                    pictureBox.Image = resizedImage;
-                    mediaPanel.Controls.Add(pictureBox);
+                    addPictureBox(image);
                     break;
             }
         }
@@ -323,12 +345,37 @@ namespace Anime_Quiz
             catch (ArgumentOutOfRangeException crap)
             { }
         }
-        
-        private void QuestionSetEditor_FormClosing(object sender, FormClosingEventArgs e)
+        /// <summary>
+        ///     Override the FormClosing event handler to handle database errors.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            e.Cancel = !saveQuestions();
-                //e.Cancel = MessageBox.Show("There was an error saving to the database. Quit anyways?", "Save Error", MessageBoxButtons.YesNo) == DialogResult.No;
+            if (CurrentQuestionSet.getInstance() != null
+                && !saveQuestions()
+                && MessageBox.Show("There was an error saving to the database. Close anyways?", "Database error", MessageBoxButtons.YesNo) == DialogResult.No
+                && !e.Cancel)
+                e.Cancel = true;
+            base.OnFormClosing(e);
         }
-        #endregion  
+        #endregion
+
+        #region Easter Eggs
+        private void loadPlaceholderMedia()
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            switch (CurrentQuestionSet.getInstance().type)
+            {
+                case Types.Music:
+                    break;
+                case Types.Screenshot:
+                    Stream imageStream = assembly.GetManifestResourceStream("Anime_Quiz.Data.maedax.png");
+                    Image image = Image.FromStream(imageStream);
+                    loadMediaPanel();
+                    addPictureBox(image);
+                    break;
+            }
+        }
+        #endregion
     }
 }
