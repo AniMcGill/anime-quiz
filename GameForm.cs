@@ -44,8 +44,7 @@ namespace Anime_Quiz
         #region Controls
         public void loadGamePanel()
         {
-            Controls.Remove(gamePanel);
-
+            clearGamePanel();
             gamePanel.Location = new Point(12, 75);
             gamePanel.AutoScroll = true;
             gamePanel.Width = ClientRectangle.Width - 20;
@@ -54,13 +53,6 @@ namespace Anime_Quiz
 
             //Load the actual question labels
             loadQuestionLabel();
-            
-            // Open the team editor if no team has been configured.
-            /*
-            if (Settings.Default.scoreSet == null && Settings.Default.useScoreSystem)
-            {
-                GameBoard.openTeamEditor();
-            }*/
         }
         /// <summary>
         ///     Add a Button for each unanswered Question.
@@ -85,70 +77,44 @@ namespace Anime_Quiz
                 }
             }
         }
-        #endregion
-
-        #region Forms
-        void openQuestion(int id)
-        {
-            //Load the question and questionType into temporary variables to pass to QuestionForm
-            //Settings.Default.tempQuestion = questionSet[index].question;
-            //Settings.Default.tempType = questionSet[index].type;
-
-            //TODO: temporarily store the current question or questionID
-
-            //Open the Question in a new form
-            QuestionForm questionForm = new QuestionForm();
-
-            //questionForm.answer = questionSet[index].answer;
-            //questionForm.answered = questionSet[index].answered;
-            questionForm.MdiParent = this.MdiParent;
-            //questionForm.FormClosed += new FormClosedEventHandler((sender,args) => questionForm_FormClosed(sender, args, questionForm.answered, id));
-            questionForm.Show();
-        }
-        #endregion
-
-
-
-        //to deprecate
+        /// <summary>
+        ///     Clears the contents of the gamePanel control
+        /// </summary>
         public void clearGamePanel()
         {
             while (gamePanel.Controls.Count > 0) gamePanel.Controls.Clear();
         }
-        
-        #region EventHandlers
+        #endregion
 
-        void questionForm_FormClosed(object sender, FormClosedEventArgs e, bool answered, int index)
+        #region Forms
+        /// <summary>
+        ///     Open a QuestionForm with the selected Question
+        /// </summary>
+        /// <param name="id"></param>
+        void openQuestion(int id)
         {
-            //After the question has been answered, get information
-            //questionSet[index].answered = answered;
-            
-            //Autosave
-            //saveBehavior();
-            //Reload the form
-            loadQuestionLabel();
+            QuestionForm questionForm = new QuestionForm(id);
+            questionForm.MdiParent = this.MdiParent;
+            questionForm.FormClosed += questionForm_FormClosed;
+            questionForm.Show();
         }
-        void pointLabel_Click(object sender, EventArgs e)
+        #endregion
+
+        #region EventHandlers
+        void questionForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Label caller = (Label)sender;
-            int index = Convert.ToInt32(caller.Name);
-            openQuestion(index);
+            loadGamePanel();
         }
         void pointBtn_Click(object sender, EventArgs e)
         {
             Button caller = (Button)sender;
             openQuestion(Convert.ToInt32(caller.Name));
-        }
-        /*
-        void questionForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }*/
-        
+        }      
         #endregion
 
         private void GameForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            
+            //nothing to do here for now
         }
     }
 }

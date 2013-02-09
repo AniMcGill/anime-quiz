@@ -26,30 +26,6 @@ namespace Anime_Quiz.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string tempQuestion {
-            get {
-                return ((string)(this["tempQuestion"]));
-            }
-            set {
-                this["tempQuestion"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string tempType {
-            get {
-                return ((string)(this["tempType"]));
-            }
-            set {
-                this["tempType"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string defaultFolder {
             get {
                 return ((string)(this["defaultFolder"]));

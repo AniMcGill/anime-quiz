@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Media;
 using System.Reflection;
 using System.Windows.Forms;
 using Anime_Quiz.DataModel;
@@ -21,6 +22,7 @@ namespace Anime_Quiz
         ComboBox questionSetList;
         DataGridView questionGridView;
         FlowLayoutPanel mediaPanel;
+        MusicPlayer musicPlayer;
 
         public QuestionSetEditor()
         {
@@ -308,7 +310,9 @@ namespace Anime_Quiz
             switch (CurrentQuestionSet.getInstance().type)
             {
                 case Types.Music:
-                    MusicPlayer musicPlayer = new MusicPlayer(filename, mediaPanel);
+                    if (musicPlayer != null)
+                        musicPlayer.dispose(mediaPanel);
+                    musicPlayer = new MusicPlayer(filename, mediaPanel);
                     break;
                 case Types.Screenshot: 
                     Image image = Image.FromFile(filename);
@@ -358,20 +362,21 @@ namespace Anime_Quiz
                 e.Cancel = true;
             base.OnFormClosing(e);
         }
-
-        private void QuestionSetEditor_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            //find a way to notify for a reload?
-        }
         #endregion
 
         #region Easter Eggs
+        /// <summary>
+        ///     Loads placeholder media files. Audio solution inspired from:
+        ///     http://social.msdn.microsoft.com/Forums/en/csharpgeneral/thread/63e7575e-9265-47bb-a9d9-d96d632b461c
+        /// </summary>
         private void loadPlaceholderMedia()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
             switch (CurrentQuestionSet.getInstance().type)
             {
                 case Types.Music:
+                    SoundPlayer soundPlayer = new SoundPlayer(Anime_Quiz.Properties.Resources.Muda);
+                    soundPlayer.Play();
                     break;
                 case Types.Screenshot:
                     Stream imageStream = assembly.GetManifestResourceStream("Anime_Quiz.Data.maedax.png");

@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Anime_Quiz.Properties;
 
@@ -47,27 +41,6 @@ namespace Anime_Quiz
             
         }
         #endregion
-        //Deprecated methods
-        /*private void defaultFolderCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            CheckBox caller = sender as CheckBox;
-            if (caller.Checked && Settings.Default.defaultFolder == String.Empty)
-            {
-                if (defaultFolderBrowserDialog.ShowDialog() == DialogResult.OK) 
-                    defaultFolderBox.Text = defaultFolderBrowserDialog.SelectedPath;
-            }
-            else defaultFolderBox.Text = String.Empty;
-        }
-        private void reloadCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            CheckBox caller = sender as CheckBox;
-            Settings.Default.reloadPrevious = caller.Checked;
-        }
-        private void autostartMusicBtn_Click(object sender, EventArgs e)
-        {
-            CheckBox caller = sender as CheckBox;
-            Settings.Default.autostartSong = caller.Checked;
-        }*/
 
         private void num_KeyPress(object sender, KeyPressEventArgs e)
         {

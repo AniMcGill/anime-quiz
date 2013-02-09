@@ -2,11 +2,7 @@
 ######################
 publish/
 obj/
-bin/Debug/
-bin/Release/Data/
-bin/Release/app.publish/
-bin/Release/ja-JP/
-bin/Release/*.bat
+bin/
 
 # Files #
 ############

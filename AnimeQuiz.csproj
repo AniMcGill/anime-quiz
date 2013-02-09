@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Anime_Quiz</RootNamespace>
-    <AssemblyName>Anime Quiz</AssemblyName>
+    <AssemblyName>AnimeQuiz</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -232,9 +232,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
       <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -281,6 +281,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Muda.wav" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -298,6 +299,6 @@
   -->
   <Target Name="AfterBuild" />
   <PropertyGroup>
-    <PostBuildEvent>copy "Anime Quiz.exe" "Anime Quiz v0.7.1-beta.exe"</PostBuildEvent>
+    <PostBuildEvent>copy "AnimeQuiz.exe" "Anime Quiz v1.0-beta.exe"</PostBuildEvent>
   </PropertyGroup>
 </Project>

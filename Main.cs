@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using Anime_Quiz.Properties;
-//using System.Globalization;
-//using System.Threading;
 
 
 namespace Anime_Quiz
@@ -10,14 +8,12 @@ namespace Anime_Quiz
     public partial class GameBoard : Form
     {
         //Forms
-        GameForm gameForm = new GameForm();
+        static GameForm gameForm = new GameForm();
         ScoreForm scoreForm = new ScoreForm();
 
         public GameBoard()
         {
             InitializeComponent();
-            //Localization test
-            //Thread.CurrentThread.CurrentUICulture = new CultureInfo("ja-JP");
             
             gameForm.MdiParent = this;
             gameForm.Show();
@@ -36,8 +32,16 @@ namespace Anime_Quiz
         public static void openQuestionSetEditor()
         {
             QuestionSetEditor questionSetEditor = new QuestionSetEditor();
+            questionSetEditor.FormClosed += questionSetEditor_FormClosed;
             //Set the form in a new Window (on dual screens, it will be on the monitor 1
             questionSetEditor.ShowDialog();
+        }
+        #endregion
+
+        #region Event Handlers
+        static void questionSetEditor_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            gameForm.loadGamePanel();
         }
         #endregion
 
@@ -45,11 +49,6 @@ namespace Anime_Quiz
         private void createQuestionToolStripMenuItem_Click_(object sender, EventArgs e)
         {
             openQuestionSetEditor();
-            //Once we are done editing, if there is a currentFile, load it.
-            //Otherwise clear the game board.
-            //if (Settings.Default.currentFile != String.Empty && gameForm.loadFileBehavior(Settings.Default.currentFile))
-            //    gameForm.loadGameBehavior();
-            //else gameForm.clearGamePanel();
         }
         private void createGameToolStripMenuItem_Click(object sender, EventArgs e)
         {

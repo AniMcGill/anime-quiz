@@ -151,5 +151,11 @@ namespace Anime_Quiz.DataModel
             playTimer.Dispose();
         }
         #endregion
+
+        public void dispose(Control parentControl)
+        {
+            WMP.close();
+            parentControl.Controls.Remove(audioButtons);
+        }
     }
 }

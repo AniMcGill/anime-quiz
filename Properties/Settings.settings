@@ -2,12 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Anime_Quiz.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="tempQuestion" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="tempType" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="defaultFolder" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
