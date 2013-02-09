@@ -52,7 +52,8 @@ namespace Anime_Quiz
             Controls.Add(gamePanel);
 
             //Load the actual question labels
-            loadQuestionLabel();
+            if(CurrentQuestionSet.getInstance() != null)
+                loadQuestionLabel();
         }
         /// <summary>
         ///     Add a Button for each unanswered Question.
