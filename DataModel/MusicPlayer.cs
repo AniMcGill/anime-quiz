@@ -105,7 +105,7 @@ namespace Anime_Quiz.DataModel
         void pauseBtn_Click(object sender, EventArgs e)
         {
             if (WMP.playState.Equals(WMPPlayState.wmppsPaused)) WMP.controls.play();
-            else
+            else if (WMP.playState.Equals(WMPPlayState.wmppsPlaying))
             {
                 WMP.controls.pause();
                 playTimer.Dispose();
