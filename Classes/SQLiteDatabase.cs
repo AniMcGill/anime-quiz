@@ -4,7 +4,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.Windows.Forms;
 
-namespace Anime_Quiz.DataModel
+namespace Anime_Quiz.Classes
 {
     // See http://www.dreamincode.net/forums/topic/157830-using-sqlite-with-c%23/
     class SQLiteDatabase

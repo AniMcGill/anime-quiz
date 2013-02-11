@@ -2,7 +2,7 @@
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-using Anime_Quiz.DataModel;
+using Anime_Quiz.Classes;
 
 namespace Anime_Quiz
 {

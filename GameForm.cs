@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Serialization;
-using Anime_Quiz.DataModel;
+using Anime_Quiz.Classes;
 using Anime_Quiz.Properties;
 
 namespace Anime_Quiz

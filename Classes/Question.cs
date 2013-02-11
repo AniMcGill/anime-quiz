@@ -11,7 +11,7 @@ using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 
-namespace Anime_Quiz.DataModel
+namespace Anime_Quiz.Classes
 {
     public enum Types { Question, Music, Screenshot };
 

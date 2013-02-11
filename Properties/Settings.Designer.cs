@@ -109,9 +109,9 @@ namespace Anime_Quiz.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public Anime_Quiz.DataModel.ScoreSet[] scoreSet {
+        public Anime_Quiz.Classes.ScoreSet[] scoreSet {
             get {
-                return ((Anime_Quiz.DataModel.ScoreSet[])(this["scoreSet"]));
+                return ((Anime_Quiz.Classes.ScoreSet[])(this["scoreSet"]));
             }
             set {
                 this["scoreSet"] = value;
@@ -132,9 +132,9 @@ namespace Anime_Quiz.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::Anime_Quiz.DataModel.QuestionSet currentSet {
+        public global::Anime_Quiz.Classes.QuestionSet currentSet {
             get {
-                return ((global::Anime_Quiz.DataModel.QuestionSet)(this["currentSet"]));
+                return ((global::Anime_Quiz.Classes.QuestionSet)(this["currentSet"]));
             }
             set {
                 this["currentSet"] = value;

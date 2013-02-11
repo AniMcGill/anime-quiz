@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Anime_Quiz.DataModel
+namespace Anime_Quiz.Classes
 {
     public class ScoreSet : ICollection
     {

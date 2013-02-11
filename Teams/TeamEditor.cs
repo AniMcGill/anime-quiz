@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Anime_Quiz.DataModel;
+using Anime_Quiz.Classes;
 using Anime_Quiz.Properties;
 
 namespace Anime_Quiz

@@ -108,8 +108,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataModel\CurrentQuestionSet.cs" />
-    <Compile Include="DataModel\MusicPlayer.cs" />
+    <Compile Include="Classes\CurrentQuestionSet.cs" />
+    <Compile Include="Classes\MusicPlayer.cs" />
+    <Compile Include="Classes\SoundMessageBox.cs" />
     <Compile Include="QuestionSetEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,9 +120,9 @@
     <Compile Include="CueTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataModel\SQLiteDatabase.cs" />
-    <Compile Include="DataModel\Score.cs" />
-    <Compile Include="DataModel\Team.cs" />
+    <Compile Include="Classes\SQLiteDatabase.cs" />
+    <Compile Include="Classes\Score.cs" />
+    <Compile Include="Classes\Team.cs" />
     <Compile Include="GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -129,10 +130,10 @@
       <DependentUpon>GameForm.cs</DependentUpon>
     </Compile>
     <Compile Include="GlobalVars.cs" />
-    <Compile Include="Help.cs">
+    <Compile Include="Menu\Help.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Help.Designer.cs">
+    <Compile Include="Menu\Help.Designer.cs">
       <DependentUpon>Help.cs</DependentUpon>
     </Compile>
     <Compile Include="Main.cs">
@@ -141,7 +142,7 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="DataModel\Question.cs" />
+    <Compile Include="Classes\Question.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionForm.cs">
@@ -150,23 +151,23 @@
     <Compile Include="QuestionForm.Designer.cs">
       <DependentUpon>QuestionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ScoreForm.cs">
+    <Compile Include="Scoring\ScoreForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ScoreForm.Designer.cs">
+    <Compile Include="Scoring\ScoreForm.Designer.cs">
       <DependentUpon>ScoreForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
-    <Compile Include="SettingsForm.cs">
+    <Compile Include="Menu\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingsForm.Designer.cs">
+    <Compile Include="Menu\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TeamEditor.cs">
+    <Compile Include="Teams\TeamEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TeamEditor.Designer.cs">
+    <Compile Include="Teams\TeamEditor.Designer.cs">
       <DependentUpon>TeamEditor.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="QuestionSetEditor.ja-JP.resx">
@@ -178,7 +179,7 @@
     <EmbeddedResource Include="GameForm.resx">
       <DependentUpon>GameForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Help.resx">
+    <EmbeddedResource Include="Menu\Help.resx">
       <DependentUpon>Help.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.ja-JP.resx">
@@ -203,16 +204,16 @@
     <EmbeddedResource Include="QuestionForm.resx">
       <DependentUpon>QuestionForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ScoreForm.resx">
+    <EmbeddedResource Include="Scoring\ScoreForm.resx">
       <DependentUpon>ScoreForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingsForm.ja-JP.resx">
+    <EmbeddedResource Include="Menu\SettingsForm.ja-JP.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingsForm.resx">
+    <EmbeddedResource Include="Menu\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TeamEditor.resx">
+    <EmbeddedResource Include="Teams\TeamEditor.resx">
       <DependentUpon>TeamEditor.cs</DependentUpon>
     </EmbeddedResource>
     <Content Include="animequiz.s3db">

@@ -6,7 +6,7 @@ using System.Text;
  * This might not be needed as we can simply use Score
  * 
  **/
-namespace Anime_Quiz.DataModel
+namespace Anime_Quiz.Classes
 {
     class Team
     {

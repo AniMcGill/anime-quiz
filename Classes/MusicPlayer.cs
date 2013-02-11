@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using Anime_Quiz.Properties;
 using WMPLib;
 
-namespace Anime_Quiz.DataModel
+namespace Anime_Quiz.Classes
 {
     class MusicPlayer
     {
@@ -126,7 +126,7 @@ namespace Anime_Quiz.DataModel
 
         void WMP_MediaError(object pMediaObject)
         {
-            MessageBox.Show("Error: cannot open or play music file");
+            SoundMessageBox.Show("Error: cannot open or play music file", Anime_Quiz.Properties.Resources.Muda);
         }
         #endregion
 

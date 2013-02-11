@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Anime_Quiz.DataModel;
+using Anime_Quiz.Classes;
 using Anime_Quiz.Properties;
 //using System.Globalization;
 //using System.Threading;

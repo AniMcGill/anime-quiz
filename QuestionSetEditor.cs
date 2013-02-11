@@ -6,7 +6,7 @@ using System.IO;
 using System.Media;
 using System.Reflection;
 using System.Windows.Forms;
-using Anime_Quiz.DataModel;
+using Anime_Quiz.Classes;
 using Anime_Quiz.Properties;
 //using System.Globalization;
 using Microsoft.VisualBasic;
@@ -174,7 +174,8 @@ namespace Anime_Quiz
         /// <param name="e"></param>
         private void delBtn_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to delete the entire QuestionSet? This cannot be undone.", "Confirm deletion", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("Are you sure you want to delete the entire QuestionSet? This cannot be undone.", "Confirm deletion", 
+                MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 if (sqlDB.Delete("QuestionSets", String.Format("name = '{0}'", CurrentQuestionSet.getInstance().name)))
                 {
@@ -184,7 +185,8 @@ namespace Anime_Quiz
                     Controls.Remove(questionGridView);
                 }
                 else
-                    MessageBox.Show("There was a problem completing the operation", "Error", MessageBoxButtons.OK);
+                    SoundMessageBox.Show("There was a problem completing the operation", "Error", 
+                        MessageBoxButtons.OK, Anime_Quiz.Properties.Resources.Muda);
             }
         }
         /// <summary>
@@ -210,7 +212,7 @@ namespace Anime_Quiz
             }
             catch (Exception crap)
             {
-                MessageBox.Show(crap.Message);
+                SoundMessageBox.Show(crap.Message, Anime_Quiz.Properties.Resources.Muda);
             }
         }
         /// <summary>
@@ -357,7 +359,7 @@ namespace Anime_Quiz
         {
             if (CurrentQuestionSet.getInstance() != null
                 && !saveQuestions()
-                && MessageBox.Show("There was an error saving to the database. Close anyways?", "Database error", MessageBoxButtons.YesNo) == DialogResult.No
+                && SoundMessageBox.Show("There was an error saving to the database. Close anyways?", "Database error", MessageBoxButtons.YesNo, Anime_Quiz.Properties.Resources.Muda) == DialogResult.No
                 && !e.Cancel)
                 e.Cancel = true;
             base.OnFormClosing(e);
