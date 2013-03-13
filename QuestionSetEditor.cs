@@ -43,7 +43,7 @@ namespace Anime_Quiz
             questionSetList = new ComboBox();
             questionSetList.Location = new Point(12,12);
             questionSetList.Size = new Size(163, 21);
-            questionSetList.Text = "Select a game to load";
+            questionSetList.Text = "Select a question set to load";
             questionSetList.TabIndex = 1;
             questionSetList.SelectedIndexChanged += questionSetList_SelectedIndexChanged;
 
@@ -52,6 +52,10 @@ namespace Anime_Quiz
                 questionSetList.Items.Add(row["name"]);
             }
             Controls.Add(questionSetList);
+
+            clrBtn.Enabled = false;
+            delBtn.Enabled = false;
+            renameBtn.Enabled = false;
         }
         /// <summary>
         ///     Load the Questions associated with the given QuestionSet
@@ -72,6 +76,7 @@ namespace Anime_Quiz
             
             clrBtn.Enabled = true;
             delBtn.Enabled = true;
+            renameBtn.Enabled = true;
 
             loadMediaPanel();
         }
@@ -144,7 +149,6 @@ namespace Anime_Quiz
             if (MessageBox.Show("Are you sure you want to clear this QuestionSet? This cannot be undone.", "Confirm deletion", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 sqlDB.ClearQuestionsFromSet(CurrentQuestionSet.getInstance().name);
-                clrBtn.Enabled = false;
                 reloadQuestionsAndSets();
             }
         }
@@ -180,7 +184,6 @@ namespace Anime_Quiz
                 if (sqlDB.Delete("QuestionSets", String.Format("name = '{0}'", CurrentQuestionSet.getInstance().name)))
                 {
                     CurrentQuestionSet.setInstance(null);   //set the instance to null?
-                    delBtn.Enabled = false;
                     loadQuestionSets();
                     Controls.Remove(questionGridView);
                 }

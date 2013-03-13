@@ -306,6 +306,43 @@ namespace Anime_Quiz.Classes
                 return false;
             }
         }
+
+        /// <summary>
+        ///     Deletes the game.
+        /// </summary>
+        /// <param name="gameId">The name of the game we want to delete</param>
+        /// <returns>true if the operation is successful; false otherwise</returns>
+        public bool DeleteGame(String gameId)
+        {
+            try
+            {
+                this.executeNonQuery(String.Format("delete from Games where name = '{0}'", gameId));
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        ///     Creates a blank game.
+        /// </summary>
+        /// <param name="gameId">The name to assign to the game</param>
+        /// <returns>true if the operation is successful; false otherwise</returns>
+        public bool CreateBlankGame(String gameId)
+        {
+            try
+            {
+                this.executeNonQuery(String.Format("insert into Games (name) values ('{0}')", gameId));
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         /// <summary>
         ///     Deletes questions from the given QuestionSet
         /// </summary>

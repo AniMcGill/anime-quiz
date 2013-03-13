@@ -9,7 +9,7 @@ namespace Anime_Quiz
     {
         //Forms
         static GameForm gameForm = new GameForm();
-        ScoreForm scoreForm = new ScoreForm();
+        public static ScoreForm scoreForm = new ScoreForm();
 
         public GameBoard()
         {
@@ -36,6 +36,11 @@ namespace Anime_Quiz
             //Set the form in a new Window (on dual screens, it will be on the monitor 1
             questionSetEditor.ShowDialog();
         }
+        public static void openGameEditor()
+        {
+            GameEditor gameEditor = new GameEditor();
+            gameEditor.Show();
+        }
         #endregion
 
         #region Event Handlers
@@ -52,7 +57,7 @@ namespace Anime_Quiz
         }
         private void createGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //todo
+            openGameEditor();
         }
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {

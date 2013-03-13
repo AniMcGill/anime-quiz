@@ -108,9 +108,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\CurrentGame.cs" />
     <Compile Include="Classes\CurrentQuestionSet.cs" />
     <Compile Include="Classes\MusicPlayer.cs" />
     <Compile Include="Classes\SoundMessageBox.cs" />
+    <Compile Include="GameEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameEditor.Designer.cs">
+      <DependentUpon>GameEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="QuestionSetEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -151,6 +158,12 @@
     <Compile Include="QuestionForm.Designer.cs">
       <DependentUpon>QuestionForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="QuestionSetSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="QuestionSetSelector.Designer.cs">
+      <DependentUpon>QuestionSetSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scoring\ScoreForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -170,6 +183,12 @@
     <Compile Include="Teams\TeamEditor.Designer.cs">
       <DependentUpon>TeamEditor.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="GameEditor.ja-JP.resx">
+      <DependentUpon>GameEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameEditor.resx">
+      <DependentUpon>GameEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="QuestionSetEditor.ja-JP.resx">
       <DependentUpon>QuestionSetEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -203,6 +222,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="QuestionForm.resx">
       <DependentUpon>QuestionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="QuestionSetSelector.resx">
+      <DependentUpon>QuestionSetSelector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scoring\ScoreForm.resx">
       <DependentUpon>ScoreForm.cs</DependentUpon>

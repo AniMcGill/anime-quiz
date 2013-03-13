@@ -69,6 +69,8 @@
             this.TopMost = true;
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.QuestionForm_FormClosing);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.QuestionForm_KeyDown);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.QuestionForm_KeyPress);
             this.ResumeLayout(false);
 
         }

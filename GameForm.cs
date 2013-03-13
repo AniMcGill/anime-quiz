@@ -28,9 +28,7 @@ namespace Anime_Quiz
             if (Settings.Default.reloadPrevious && CurrentQuestionSet.getInstance() != null)
                 loadGamePanel();
             else
-            {
-                //TODO
-            }
+                openQuestionSetSelector();
         }
         
         #region Controls
@@ -88,13 +86,26 @@ namespace Anime_Quiz
         {
             QuestionForm questionForm = new QuestionForm(id);
             questionForm.MdiParent = this.MdiParent;
-            questionForm.FormClosed += questionForm_FormClosed;
+            questionForm.FormClosed += subFormClosed;
             questionForm.Show();
+        }
+        /// <summary>
+        ///     Open a custom dialog to select a Question Set to load
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void openQuestionSetSelector()
+        {
+            QuestionSetSelector questionSetSelector = new QuestionSetSelector();
+            questionSetSelector.MdiParent = this.MdiParent;
+            questionSetSelector.TopMost = true;
+            questionSetSelector.FormClosed += subFormClosed;
+            questionSetSelector.Show();
         }
         #endregion
 
         #region EventHandlers
-        void questionForm_FormClosed(object sender, FormClosedEventArgs e)
+        void subFormClosed(object sender, FormClosedEventArgs e)
         {
             loadGamePanel();
         }
@@ -102,7 +113,7 @@ namespace Anime_Quiz
         {
             Button caller = (Button)sender;
             openQuestion(Convert.ToInt32(caller.Name));
-        }      
+        }
         #endregion
 
         private void GameForm_FormClosing(object sender, FormClosingEventArgs e)

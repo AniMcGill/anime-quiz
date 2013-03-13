@@ -92,6 +92,41 @@ namespace Anime_Quiz
         #endregion
 
         #region Event Handlers
+        private bool isAnswerButton = false;
+        /// <summary>
+        ///     Listens to the order with which each team presses the answer button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void QuestionForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            isAnswerButton = false;
+            if (e.KeyCode >= Keys.NumPad1 && e.KeyCode <= Keys.NumPad4)
+            {
+                isAnswerButton = true;
+                processAnswerButton(e.KeyValue);
+            }
+        }
+
+        /// <summary>
+        ///     Processes order information from the teams.
+        /// </summary>
+        /// <param name="key"></param>
+        private void processAnswerButton(int key)
+        {
+            //MessageBox.Show(String.Format("Team number %d answered first", key));
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        ///     Ignores keyboard input from the keys corresponding to the answer buttons.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void QuestionForm_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!isAnswerButton)
+                e.Handled = true;
+        }
         /// <summary>
         ///     When a question has been answered, show the answer and update the database.
         /// </summary>
