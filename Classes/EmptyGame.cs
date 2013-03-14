@@ -6,16 +6,12 @@ using System.Threading.Tasks;
 
 namespace Anime_Quiz.Classes
 {
-    class CurrentGame
+    class EmptyGame
     {
-        private static Game currentGame;
+        private static Game emptyGame = new Game(String.Empty);
         public static Game getInstance()
         {
-            return currentGame;
-        }
-        public static void setInstance(Game game)
-        {
-            CurrentGame.currentGame = game;
+            return emptyGame;
         }
     }
 }

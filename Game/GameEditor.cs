@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Anime_Quiz.Classes;
+using Microsoft.VisualBasic;
 
 namespace Anime_Quiz
 {
@@ -15,37 +16,25 @@ namespace Anime_Quiz
     {
         //Data
         SQLiteDatabase sqlDB = new SQLiteDatabase();
-        //DataSet gameDataSet;
 
         ComboBox gameList;
-        DataGridView gameGridView;
+        FlowLayoutPanel questionSetFlowPanel;
 
         public GameEditor()
         {
             InitializeComponent();
             reloadGameListAndInfo();
-            loadQuestionSets();
         }
         #region Database Load
         void loadGameList()
         {
             Controls.Remove(gameList);
 
-            String query = "select distinct name from Games";
-            DataTable queryData = sqlDB.getDataTable(query);
-            gameList = new ComboBox();
+            gameList = EmptyGame.getInstance().getGameSelector();
             gameList.Location = new Point(12, 12);
-            gameList.Size = new Size(163, 21);
-            gameList.Text = "Select a game to load";
             gameList.TabIndex = 1;
             gameList.SelectedIndexChanged += gameList_SelectedIndexChanged;
-            
-            foreach (DataRow row in queryData.Rows)
-            {
-                gameList.Items.Add(row["name"]);
-            }
 
-            clearBtn.Enabled = false;
             delBtn.Enabled = false;
             renameBtn.Enabled = false;
 
@@ -53,17 +42,10 @@ namespace Anime_Quiz
         }
         void loadGameInfo()
         {
-            Controls.Remove(gameGridView);
+            Controls.Remove(questionSetFlowPanel);
+            loadQuestionSets();
+            CurrentGame.getInstance().setCheckboxes();
 
-            String query = String.Format("select distinct questionSetId from Games where name='{0}'", CurrentGame.getInstance());
-            DataSet questionSets = sqlDB.getDataSet(query);
-            gameGridView = new DataGridView();
-            gameGridView.Location = new Point(12, 75);
-            gameGridView.AutoSize = true;
-            gameGridView.DataSource = questionSets.Tables[0];
-            Controls.Add(gameGridView);
-
-            clearBtn.Enabled = true;
             delBtn.Enabled = true;
             renameBtn.Enabled = true;
         }
@@ -76,43 +58,50 @@ namespace Anime_Quiz
 
         void loadQuestionSets()
         {
-            String query = "select name from QuestionSets";
-            DataTable questionSetList = sqlDB.getDataTable(query);
-            FlowLayoutPanel questionSetFlowPanel = new FlowLayoutPanel();
-            questionSetFlowPanel.Location = new Point(417, 75);
-            questionSetFlowPanel.AutoSize = true;
-            questionSetFlowPanel.FlowDirection = FlowDirection.TopDown;
-            questionSetFlowPanel.AutoScroll = true;
+            questionSetFlowPanel = CurrentGame.getInstance().addQuestionSetsCheckboxes();
+            questionSetFlowPanel.Location = new Point(12, 75);
             Controls.Add(questionSetFlowPanel);
-
-            foreach (DataRow row in questionSetList.Rows)
-            {
-                CheckBox checkbox = new CheckBox();
-                checkbox.Text = row["name"].ToString();
-                checkbox.CheckedChanged += checkbox_CheckedChanged;
-                questionSetFlowPanel.Controls.Add(checkbox);
-            }
         }
         #endregion
 
+        #region Database Save
+        /*bool saveGames()
+        {
+            try
+            {
+                Dictionary<String, String> data = new Dictionary<string, string>();
+                foreach (CheckBox checkbox in questionSetFlowPanel.Controls.OfType<CheckBox>())
+                {
+                    if (checkbox.Checked)
+                    {
+                        data.Add("name", CurrentGame.getInstance().name);
+                        data.Add("questionSetId", checkbox.Text);
+                    }
+                }
+                sqlDB.Insert("Games", data);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }*/
+        #endregion
+
         #region Buttons
+        /// <summary>
+        ///     Creates an instance of the game. We do not add it to the database if it is empty.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void addBtn_Click(object sender, EventArgs e)
         {
             String gameName = gameNameTextbox.Text;
-            if (gameName != String.Empty && sqlDB.CreateBlankGame(gameName))
+            if (gameName != String.Empty)
             {
-                CurrentGame.setInstance(gameName);
-                reloadGameListAndInfo();
-            }
-        }
-        private void clearBtn_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("Are you sure you want to clear the question sets in this game? Scores will be lost.", 
-                "Confirm deletion", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                sqlDB.DeleteGame(CurrentGame.getInstance());
-                sqlDB.CreateBlankGame(CurrentGame.getInstance());
-                reloadGameListAndInfo();
+                CurrentGame.setInstance(new Game(gameName));
+                loadGameList();
+                loadGameInfo();
             }
         }
 
@@ -121,11 +110,10 @@ namespace Anime_Quiz
             if (MessageBox.Show("Are you sure you want to delete this game? Scores will be lost.", 
                 "Confirm deletion", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                if (sqlDB.DeleteGame(CurrentGame.getInstance()))
+                if (sqlDB.DeleteGame(CurrentGame.getInstance().name))
                 {
                     CurrentGame.setInstance(null);
                     loadGameList();
-                    Controls.Remove(gameGridView);
                 }
                 else
                     SoundMessageBox.Show("There was an error deleting the game.", "Fail", 
@@ -135,7 +123,22 @@ namespace Anime_Quiz
 
         private void renameBtn_Click(object sender, EventArgs e)
         {
-            //TODO
+            string newGameName = Interaction.InputBox("Choose a new name: ", "Rename");
+            try
+            {
+                if (newGameName != String.Empty && sqlDB.DeleteGame(CurrentGame.getInstance().name))
+                {
+                    CurrentGame.setInstance(new Game(newGameName));
+                    CurrentGame.getInstance().saveGame();
+                    //TODO
+                }
+                else
+                    throw new ArgumentNullException("There was an error. Please reflect deeply upon your actions.");
+            }
+            catch (Exception crap)
+            {
+                SoundMessageBox.Show(crap.Message, Anime_Quiz.Properties.Resources.Muda);
+            }
         }
 
         private void closeBtn_Click(object sender, EventArgs e)
@@ -149,19 +152,19 @@ namespace Anime_Quiz
         {
             ComboBox senderComboBox = sender as ComboBox;
             String gameName = senderComboBox.SelectedItem.ToString();
-            CurrentGame.setInstance(gameName);
+            CurrentGame.setInstance(new Game(gameName));
 
             loadGameInfo();
-        }
-
-        void checkbox_CheckedChanged(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             // TODO
+            if (CurrentGame.getInstance() != null
+                && !CurrentGame.getInstance().saveGame()
+                && SoundMessageBox.Show("There was an error saving to the database. Close anyways?", "Database error", MessageBoxButtons.YesNo, Anime_Quiz.Properties.Resources.Muda) == DialogResult.No
+                && !e.Cancel)
+                e.Cancel = true;
             base.OnFormClosing(e);
         }
         #endregion

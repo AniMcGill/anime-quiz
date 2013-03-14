@@ -24,11 +24,11 @@ namespace Anime_Quiz
         {
             InitializeComponent();
 
-            //If there is an instance of CurrentQuestionSet, load it. Otherwise prompt for a list to load (TODO)
+            //If there is an instance of CurrentQuestionSet, load it. Otherwise prompt for a list to load
             if (Settings.Default.reloadPrevious && CurrentQuestionSet.getInstance() != null)
                 loadGamePanel();
             else
-                openQuestionSetSelector();
+                openGameSelector();
         }
         
         #region Controls
@@ -88,6 +88,12 @@ namespace Anime_Quiz
             questionForm.MdiParent = this.MdiParent;
             questionForm.FormClosed += subFormClosed;
             questionForm.Show();
+        }
+
+        void openGameSelector()
+        {
+            GameSelector gameSelector = new GameSelector();
+            gameSelector.Show();
         }
         /// <summary>
         ///     Open a custom dialog to select a Question Set to load

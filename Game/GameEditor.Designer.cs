@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.clearBtn = new System.Windows.Forms.Button();
             this.delBtn = new System.Windows.Forms.Button();
             this.renameBtn = new System.Windows.Forms.Button();
             this.createGameLabel = new System.Windows.Forms.Label();
@@ -37,19 +36,9 @@
             this.closeBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // clearBtn
-            // 
-            this.clearBtn.Location = new System.Drawing.Point(200, 10);
-            this.clearBtn.Name = "clearBtn";
-            this.clearBtn.Size = new System.Drawing.Size(75, 23);
-            this.clearBtn.TabIndex = 0;
-            this.clearBtn.Text = "Clear";
-            this.clearBtn.UseVisualStyleBackColor = true;
-            this.clearBtn.Click += new System.EventHandler(this.clearBtn_Click);
-            // 
             // delBtn
             // 
-            this.delBtn.Location = new System.Drawing.Point(281, 10);
+            this.delBtn.Location = new System.Drawing.Point(200, 10);
             this.delBtn.Name = "delBtn";
             this.delBtn.Size = new System.Drawing.Size(75, 23);
             this.delBtn.TabIndex = 2;
@@ -59,7 +48,7 @@
             // 
             // renameBtn
             // 
-            this.renameBtn.Location = new System.Drawing.Point(362, 10);
+            this.renameBtn.Location = new System.Drawing.Point(281, 10);
             this.renameBtn.Name = "renameBtn";
             this.renameBtn.Size = new System.Drawing.Size(75, 23);
             this.renameBtn.TabIndex = 3;
@@ -114,7 +103,6 @@
             this.Controls.Add(this.createGameLabel);
             this.Controls.Add(this.renameBtn);
             this.Controls.Add(this.delBtn);
-            this.Controls.Add(this.clearBtn);
             this.Name = "GameEditor";
             this.Text = "GameEditor";
             this.ResumeLayout(false);
@@ -124,7 +112,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Button clearBtn;
         private System.Windows.Forms.Button delBtn;
         private System.Windows.Forms.Button renameBtn;
         private System.Windows.Forms.Label createGameLabel;

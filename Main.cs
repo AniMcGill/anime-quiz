@@ -8,7 +8,7 @@ namespace Anime_Quiz
     public partial class GameBoard : Form
     {
         //Forms
-        static GameForm gameForm = new GameForm();
+        public static GameForm gameForm = new GameForm();
         public static ScoreForm scoreForm = new ScoreForm();
 
         public GameBoard()
@@ -17,9 +17,6 @@ namespace Anime_Quiz
             
             gameForm.MdiParent = this;
             gameForm.Show();
-            
-            //BETA
-            //scoreForm.Show();
         }
 
         #region Child Forms
@@ -29,11 +26,16 @@ namespace Anime_Quiz
             TeamEditor teamEditor = new TeamEditor();
             teamEditor.Show();
         }
+        public static void openGameSelector()
+        {
+            GameSelector gameSelector = new GameSelector();
+            gameSelector.Show();
+        }
         public static void openQuestionSetEditor()
         {
             QuestionSetEditor questionSetEditor = new QuestionSetEditor();
             questionSetEditor.FormClosed += questionSetEditor_FormClosed;
-            //Set the form in a new Window (on dual screens, it will be on the monitor 1
+            //Set the form in a new Window (on dual screens, it will be on the monitor 1)
             questionSetEditor.ShowDialog();
         }
         public static void openGameEditor()
@@ -51,6 +53,10 @@ namespace Anime_Quiz
         #endregion
 
         #region FileMenu
+        private void openGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            openGameSelector();
+        }
         private void createQuestionToolStripMenuItem_Click_(object sender, EventArgs e)
         {
             openQuestionSetEditor();
@@ -62,8 +68,6 @@ namespace Anime_Quiz
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Settings.Default.Save();
-            //if(MessageBox.Show(CultureInfo.CurrentUICulture.Name.Equals("ja-JP")?"ゲームを終了します。よろしいですか？":"Are you sure you want to quit?",
-            //    CultureInfo.CurrentUICulture.Name.Equals("ja-JP") ? "( TДT)" : "You are making me sad", MessageBoxButtons.OKCancel) == DialogResult.OK)
             if (MessageBox.Show("Are you sure you want to quit?", "You make me sad Eri-chan", MessageBoxButtons.OKCancel) == DialogResult.OK)
                 Application.Exit();
         }

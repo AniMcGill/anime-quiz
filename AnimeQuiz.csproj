@@ -110,18 +110,26 @@
   <ItemGroup>
     <Compile Include="Classes\CurrentGame.cs" />
     <Compile Include="Classes\CurrentQuestionSet.cs" />
+    <Compile Include="Classes\EmptyGame.cs" />
+    <Compile Include="Classes\Game.cs" />
     <Compile Include="Classes\MusicPlayer.cs" />
     <Compile Include="Classes\SoundMessageBox.cs" />
-    <Compile Include="GameEditor.cs">
+    <Compile Include="Game\GameEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GameEditor.Designer.cs">
+    <Compile Include="Game\GameEditor.Designer.cs">
       <DependentUpon>GameEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="QuestionSetEditor.cs">
+    <Compile Include="Game\GameSelector.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="QuestionSetEditor.Designer.cs">
+    <Compile Include="Game\GameSelector.Designer.cs">
+      <DependentUpon>GameSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Question\QuestionSetEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Question\QuestionSetEditor.Designer.cs">
       <DependentUpon>QuestionSetEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="CueTextBox.cs">
@@ -130,10 +138,10 @@
     <Compile Include="Classes\SQLiteDatabase.cs" />
     <Compile Include="Classes\Score.cs" />
     <Compile Include="Classes\Team.cs" />
-    <Compile Include="GameForm.cs">
+    <Compile Include="Game\GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GameForm.Designer.cs">
+    <Compile Include="Game\GameForm.Designer.cs">
       <DependentUpon>GameForm.cs</DependentUpon>
     </Compile>
     <Compile Include="GlobalVars.cs" />
@@ -152,16 +160,16 @@
     <Compile Include="Classes\Question.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuestionForm.cs">
+    <Compile Include="Question\QuestionForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="QuestionForm.Designer.cs">
+    <Compile Include="Question\QuestionForm.Designer.cs">
       <DependentUpon>QuestionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="QuestionSetSelector.cs">
+    <Compile Include="Question\QuestionSetSelector.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="QuestionSetSelector.Designer.cs">
+    <Compile Include="Question\QuestionSetSelector.Designer.cs">
       <DependentUpon>QuestionSetSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="Scoring\ScoreForm.cs">
@@ -183,19 +191,22 @@
     <Compile Include="Teams\TeamEditor.Designer.cs">
       <DependentUpon>TeamEditor.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="GameEditor.ja-JP.resx">
+    <EmbeddedResource Include="Game\GameEditor.ja-JP.resx">
       <DependentUpon>GameEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GameEditor.resx">
+    <EmbeddedResource Include="Game\GameEditor.resx">
       <DependentUpon>GameEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="QuestionSetEditor.ja-JP.resx">
+    <EmbeddedResource Include="Game\GameSelector.resx">
+      <DependentUpon>GameSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Question\QuestionSetEditor.ja-JP.resx">
       <DependentUpon>QuestionSetEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="QuestionSetEditor.resx">
+    <EmbeddedResource Include="Question\QuestionSetEditor.resx">
       <DependentUpon>QuestionSetEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GameForm.resx">
+    <EmbeddedResource Include="Game\GameForm.resx">
       <DependentUpon>GameForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\Help.resx">
@@ -217,13 +228,13 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="QuestionForm.ja-JP.resx">
+    <EmbeddedResource Include="Question\QuestionForm.ja-JP.resx">
       <DependentUpon>QuestionForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="QuestionForm.resx">
+    <EmbeddedResource Include="Question\QuestionForm.resx">
       <DependentUpon>QuestionForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="QuestionSetSelector.resx">
+    <EmbeddedResource Include="Question\QuestionSetSelector.resx">
       <DependentUpon>QuestionSetSelector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scoring\ScoreForm.resx">
