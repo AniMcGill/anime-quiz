@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
@@ -20,11 +21,16 @@ namespace Anime_Quiz
         MusicPlayer musicPlayer;
         PictureBox screenshotBox;
 
+        // Scoring system
+        List<int> answeringOrder;
+
         public QuestionForm(int questionId)
         {
             InitializeComponent();
+            this.KeyPreview = true;
             closeBtn.Visible = false;
             this.questionId = questionId;
+            answeringOrder = new List<int>(CurrentTeams.getInstance().teams.Length);
 
             loadQuestionPanel();
             loadQuestionLabel();
@@ -91,6 +97,56 @@ namespace Anime_Quiz
         }
         #endregion
 
+        #region Buttons
+        /// <summary>
+        ///     Processes order information from the teams.
+        /// </summary>
+        /// <param name="key"></param>
+        private void processAnswerButton(int key)
+        {
+            int teamIndex = key - 97;
+            if (answeringOrder.Count < CurrentTeams.getInstance().teams.Length
+                && !answeringOrder.Contains(teamIndex))
+            {
+                answeringOrder.Add(teamIndex);
+            }
+            if (answeringOrder.Count == CurrentTeams.getInstance().teams.Length)
+                addAnswerButtons();
+        }
+        FlowLayoutPanel buttonLayoutPanel;
+        void addButtonLayoutPanel()
+        {
+            buttonLayoutPanel = new FlowLayoutPanel();
+            buttonLayoutPanel.Location = new Point(168 + 5, 9);
+            buttonLayoutPanel.Size = new Size(168 + 75 * (1 + CurrentTeams.getInstance().teams.Length) + 10, 25);
+            Controls.Add(buttonLayoutPanel);
+        }
+        void addAnswerButtons()
+        {
+            addButtonLayoutPanel();
+
+            answeringOrder.ForEach(delegate(int i)
+            {
+                Button answerBtn = new Button();
+                answerBtn.Text = CurrentTeams.getInstance().teams[i];
+                answerBtn.Location = new Point((168 + 75 * answeringOrder.IndexOf(i)) + 5, 12);
+                answerBtn.Size = new Size(75, 23);
+                answerBtn.Click += answerBtn_Click;
+                buttonLayoutPanel.Controls.Add(answerBtn);
+            });
+            addResetButton();
+        }
+        void addResetButton()
+        {
+            Button resetBtn = new Button();
+            resetBtn.Text = "Reset";
+            resetBtn.Location = new Point((168 + 75 * CurrentTeams.getInstance().teams.Length) + 10, 12);
+            resetBtn.Size = new Size(75, 23);
+            resetBtn.Click += resetBtn_Click;
+            buttonLayoutPanel.Controls.Add(resetBtn);
+        }
+        #endregion
+
         #region Event Handlers
         private bool isAnswerButton = false;
         /// <summary>
@@ -101,22 +157,14 @@ namespace Anime_Quiz
         private void QuestionForm_KeyDown(object sender, KeyEventArgs e)
         {
             isAnswerButton = false;
-            if (e.KeyCode >= Keys.NumPad1 && e.KeyCode <= Keys.NumPad4)
+            int numOfTeams = CurrentTeams.getInstance().teams.Length;
+            if (e.KeyValue >= 97 && e.KeyValue <= 97+numOfTeams-1)
             {
                 isAnswerButton = true;
                 processAnswerButton(e.KeyValue);
             }
         }
 
-        /// <summary>
-        ///     Processes order information from the teams.
-        /// </summary>
-        /// <param name="key"></param>
-        private void processAnswerButton(int key)
-        {
-            //MessageBox.Show(String.Format("Team number %d answered first", key));
-            throw new NotImplementedException();
-        }
         /// <summary>
         ///     Ignores keyboard input from the keys corresponding to the answer buttons.
         /// </summary>
@@ -129,6 +177,7 @@ namespace Anime_Quiz
         }
         /// <summary>
         ///     When a question has been answered, show the answer and update the database.
+        ///     The team who has answered the question will receive the points.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -139,6 +188,13 @@ namespace Anime_Quiz
             //questionData["answered"] = true;  //Concurrency issue when pushing this back to DB, using alternate method
             String command = String.Format("update Questions set answered = 1 where id = '{0}'", questionId);
             sqlDB.executeNonQuery(command);
+
+            Button senderBtn = sender as Button;
+            if (!senderBtn.Text.Equals("Answer"))
+            {
+                String answeringTeam = senderBtn.Text;
+                // TODO: update score
+            }
 
             closeBtn.Visible = true;
             switch (CurrentQuestionSet.getInstance().type)
@@ -154,6 +210,11 @@ namespace Anime_Quiz
                 default:
                     break;
             }
+        }
+        void resetBtn_Click(object sender, EventArgs e)
+        {
+            Controls.Remove(buttonLayoutPanel);
+            answeringOrder.Clear();
         }
         void closeBtn_Click(object sender, EventArgs e)
         {
