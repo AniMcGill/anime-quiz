@@ -173,12 +173,6 @@
     <Compile Include="Question\QuestionSetSelector.Designer.cs">
       <DependentUpon>QuestionSetSelector.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scoring\ScoreForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scoring\ScoreForm.Designer.cs">
-      <DependentUpon>ScoreForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Menu\SettingsForm.cs">
       <SubType>Form</SubType>
@@ -243,9 +237,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Question\QuestionSetSelector.resx">
       <DependentUpon>QuestionSetSelector.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scoring\ScoreForm.resx">
-      <DependentUpon>ScoreForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\SettingsForm.ja-JP.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>

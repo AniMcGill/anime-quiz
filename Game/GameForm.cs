@@ -14,6 +14,7 @@ namespace Anime_Quiz
         DataSet questionDataSet;
 
         FlowLayoutPanel gamePanel = new FlowLayoutPanel();
+        TableLayoutPanel scorePanel;
 
         //Constants
         Color ANSWERED_COLOR = Color.Black;
@@ -32,10 +33,47 @@ namespace Anime_Quiz
         }
         
         #region Controls
+        public void loadScorePanel()
+        {
+            Controls.Remove(scorePanel);
+            scorePanel = new TableLayoutPanel();
+            scorePanel.Location = new Point(12, 5);
+            scorePanel.Size = new Size(1000, 140);
+            scorePanel.AutoScroll = true;
+            scorePanel.AutoSize = true;
+            scorePanel.RowCount = 2;
+            scorePanel.GrowStyle = TableLayoutPanelGrowStyle.AddColumns;
+            Controls.Add(scorePanel);
+            if (CurrentTeams.getInstance().teams.Length > 0)
+                loadScores();
+        }
+        public void loadScores()
+        {
+            for (int i = 0; i < CurrentTeams.getInstance().teams.Length; i++ )
+            {
+                String teamName = CurrentTeams.getInstance().teams[i];
+                Label teamEntry = new Label();
+                teamEntry.Text = teamName;
+                teamEntry.Font = new Font("Microsoft Sans Serif", 18);
+                teamEntry.MaximumSize = new Size(200, 100);
+                teamEntry.AutoSize = true;
+
+                Label scoreEntry = new Label();
+                scoreEntry.Text = Score.getScore(teamName).ToString();
+                scoreEntry.Font = new Font("Microsoft Sans Serif", 18);
+                scoreEntry.TextAlign = ContentAlignment.MiddleCenter;
+
+                scorePanel.Controls.Add(teamEntry, i, 0);
+                scorePanel.Controls.Add(scoreEntry, i, 1);
+            }
+        }
+        
         public void loadGamePanel()
         {
             clearGamePanel();
-            gamePanel.Location = new Point(12, 75);
+            loadScorePanel();
+
+            gamePanel.Location = new Point(12, 150);
             gamePanel.AutoScroll = true;
             gamePanel.Width = ClientRectangle.Width - 20;
             gamePanel.Height = ClientRectangle.Height - 60;
@@ -95,6 +133,8 @@ namespace Anime_Quiz
             GameSelector gameSelector = new GameSelector();
             gameSelector.Show();
         }
+
+        /*
         /// <summary>
         ///     Open a custom dialog to select a Question Set to load
         /// </summary>
@@ -107,7 +147,7 @@ namespace Anime_Quiz
             questionSetSelector.TopMost = true;
             questionSetSelector.FormClosed += subFormClosed;
             questionSetSelector.Show();
-        }
+        }*/
         #endregion
 
         #region EventHandlers

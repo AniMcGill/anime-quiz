@@ -25,6 +25,21 @@ namespace Anime_Quiz.Classes
             set { this._teams = value; }
         }
 
+        public int getTeamId(String teamName)
+        {
+            String query = String.Format("select id from Teams where name = '{0}'", teamName);
+            try
+            {
+                DataTable data = sqlDB.getDataTable(query);
+                return Convert.ToInt32(data.Rows[0]["id"]);
+            }
+            catch (Exception crap)
+            {
+                MessageBox.Show(crap.Message);
+                return -1;
+            }
+        }
+
         /// <summary>
         ///     Renames the teams
         /// </summary>
@@ -70,6 +85,7 @@ namespace Anime_Quiz.Classes
             return success;
         }
 
+        #region Controls
         private DataTable _allTeams;
         public DataTable getAllTeams()
         {
@@ -90,5 +106,6 @@ namespace Anime_Quiz.Classes
             }
             return _allTeamsSelector;
         }
+        #endregion
     }
 }

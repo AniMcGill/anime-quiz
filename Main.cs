@@ -9,7 +9,6 @@ namespace Anime_Quiz
     {
         //Forms
         public static GameForm gameForm = new GameForm();
-        public static ScoreForm scoreForm = new ScoreForm();
 
         public GameBoard()
         {

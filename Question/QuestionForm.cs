@@ -109,6 +109,7 @@ namespace Anime_Quiz
                 && !answeringOrder.Contains(teamIndex))
             {
                 answeringOrder.Add(teamIndex);
+                addAnswerButtons();
             }
             if (answeringOrder.Count == CurrentTeams.getInstance().teams.Length)
                 addAnswerButtons();
@@ -116,6 +117,8 @@ namespace Anime_Quiz
         FlowLayoutPanel buttonLayoutPanel;
         void addButtonLayoutPanel()
         {
+            Controls.Remove(buttonLayoutPanel);
+
             buttonLayoutPanel = new FlowLayoutPanel();
             buttonLayoutPanel.Location = new Point(168 + 5, 9);
             buttonLayoutPanel.Size = new Size(168 + 75 * (1 + CurrentTeams.getInstance().teams.Length) + 10, 25);
@@ -192,8 +195,17 @@ namespace Anime_Quiz
             Button senderBtn = sender as Button;
             if (!senderBtn.Text.Equals("Answer"))
             {
+                senderBtn.Enabled = false;  // prevents accidentally double-clicking
                 String answeringTeam = senderBtn.Text;
-                // TODO: update score
+                int answeringTeamId = CurrentTeams.getInstance().getTeamId(answeringTeam);
+                String gameId = CurrentGame.getInstance().name;
+                int currentPoints = Score.getScore(answeringTeam);
+                int points = currentPoints + Convert.ToInt32(questionData["points"].ToString());
+
+                Dictionary<String, String> data = new Dictionary<string, string>();
+                data.Add("score", points.ToString());
+                String updateCmd = String.Format("gameId = '{0}' and teamId = {1}", gameId, answeringTeamId);
+                sqlDB.Update("Scores", data, updateCmd);
             }
 
             closeBtn.Visible = true;

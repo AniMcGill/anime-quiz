@@ -20,6 +20,11 @@ namespace Anime_Quiz.Team
         {
             InitializeComponent();
             addTeamTable();
+            if (CurrentTeams.getInstance() != null)
+            {
+                numberOfTeams = CurrentTeams.getInstance().teams.Length;
+                addTeamPicker(true);
+            }
         }
         bool saveTeams()
         {
@@ -57,32 +62,34 @@ namespace Anime_Quiz.Team
             Controls.Add(teamTable);
         }
         
-        public void addTeamPicker(int teamNumber)
+        public void addTeamPicker(bool isTeamExist)
         {
-            Label teamNumberLabel = new Label();
-            teamNumberLabel.Text = "Team " + teamNumber;
-            teamNumberLabel.Anchor = AnchorStyles.Top;
-            teamNumberLabel.Padding = new Padding(5);
-            teamNumberLabel.AutoSize = true;
+            for (int i = 0; i < numberOfTeams; i++)
+            {
+                Label teamNumberLabel = new Label();
+                teamNumberLabel.Text = "Team " + (i + 1);
+                teamNumberLabel.Anchor = AnchorStyles.Top;
+                teamNumberLabel.Padding = new Padding(5);
+                teamNumberLabel.AutoSize = true;
 
-            ComboBox teamSelector = CurrentTeams.getInstance().getAllTeamsSelector();
-            teamSelector.Dock = DockStyle.Fill;
-            
-            teamTable.Controls.Add(teamNumberLabel, 0, teamNumber-1);
-            teamTable.Controls.Add(teamSelector, 1, teamNumber-1);
+                ComboBox teamSelector = CurrentTeams.getInstance().getAllTeamsSelector();
+                teamSelector.Dock = DockStyle.Fill;
+                if (isTeamExist)
+                    teamSelector.SelectedItem = CurrentTeams.getInstance().teams[i];
+
+                teamTable.Controls.Add(teamNumberLabel, 0, i);
+                teamTable.Controls.Add(teamSelector, 1, i);
+            }
         }
         #endregion
 
         #region Event Handlers
         private void teamNumberBtn_Click(object sender, EventArgs e)
         {
+            teamNumberBtn.Enabled = false;
             numberOfTeams = (int) teamNumberBox.Value;
             CurrentTeams.setInstance(new Teams(numberOfTeams));
-
-            for(int i = 1; i <= numberOfTeams; i++)
-            {
-                addTeamPicker(i);
-            }
+            addTeamPicker(false);
         }
         private void registerBtn_Click(object sender, EventArgs e)
         {

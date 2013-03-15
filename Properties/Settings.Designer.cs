@@ -109,17 +109,6 @@ namespace Anime_Quiz.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public Anime_Quiz.Classes.ScoreSet[] scoreSet {
-            get {
-                return ((Anime_Quiz.Classes.ScoreSet[])(this["scoreSet"]));
-            }
-            set {
-                this["scoreSet"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool useScoreSystem {
             get {
@@ -127,17 +116,6 @@ namespace Anime_Quiz.Properties {
             }
             set {
                 this["useScoreSystem"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::Anime_Quiz.Classes.QuestionSet currentSet {
-            get {
-                return ((global::Anime_Quiz.Classes.QuestionSet)(this["currentSet"]));
-            }
-            set {
-                this["currentSet"] = value;
             }
         }
     }

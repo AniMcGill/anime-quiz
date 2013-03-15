@@ -30,6 +30,17 @@ namespace Anime_Quiz
             addTeamSelectBtn();
         }
 
+        void createScoreList()
+        {
+            foreach (String team in CurrentTeams.getInstance().teams)
+            {
+                Dictionary<String, String> data = new Dictionary<string, string>();
+                data.Add("gameId", CurrentGame.getInstance().name);
+                data.Add("teamId", CurrentTeams.getInstance().getTeamId(team).ToString());
+                sqlDB.InsertOrReplace("Scores", data);
+            }
+        }
+
         #region Data Load
         void loadGameList()
         {
@@ -44,6 +55,9 @@ namespace Anime_Quiz
         }
         void loadQuestionSetList()
         {
+            teamSelectBtn.Enabled = false;
+            createScoreList();
+
             Controls.Remove(questionSetList);
             DataTable questionSetTable = CurrentGame.getInstance().getGameQuestionSets();
             questionSetList = new ComboBox();
@@ -107,6 +121,8 @@ namespace Anime_Quiz
             String gameName = senderComboBox.Text;
             CurrentGame.setInstance(new Game(gameName));
             teamSelectBtn.Enabled = true;
+            if (CurrentTeams.getInstance() != null && CurrentTeams.getInstance().teams.Length > 0)
+                loadQuestionSetList();
         }
 
         void teamSelectBtn_Click(object sender, EventArgs e)
@@ -115,7 +131,7 @@ namespace Anime_Quiz
         }
         void teamSelector_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (CurrentTeams.getInstance().teams != null)
+            if (CurrentTeams.getInstance() != null && CurrentTeams.getInstance().teams.Length > 0)
                 loadQuestionSetList();
         }
 
