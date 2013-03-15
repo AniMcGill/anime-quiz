@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Anime_Quiz.Classes;
+using Anime_Quiz.Team;
 
 namespace Anime_Quiz
 {
@@ -19,12 +20,14 @@ namespace Anime_Quiz
         ComboBox gameList;
         ComboBox questionSetList;
         Button loadBtn;
+        Button teamSelectBtn;
 
         public GameSelector()
         {
             InitializeComponent();
             loadGameList();
             addLoadBtn();
+            addTeamSelectBtn();
         }
 
         #region Data Load
@@ -59,6 +62,17 @@ namespace Anime_Quiz
         #endregion
 
         #region Buttons
+        void addTeamSelectBtn()
+        {
+            teamSelectBtn = new Button();
+            teamSelectBtn.Text = "Register Teams";
+            teamSelectBtn.Enabled = false;
+            teamSelectBtn.Location = new Point(200, 12);
+            teamSelectBtn.Size = new Size(106, 23);
+            teamSelectBtn.Click += teamSelectBtn_Click;
+            Controls.Add(teamSelectBtn);
+        }
+
         void addLoadBtn()
         {
             loadBtn = new Button();
@@ -69,6 +83,15 @@ namespace Anime_Quiz
             loadBtn.Size = new Size(53, 23);
             loadBtn.Click += loadBtn_Click;
             Controls.Add(loadBtn);
+        }
+        #endregion
+
+        #region Forms
+        void openTeamSelector()
+        {
+            TeamSelector teamSelector = new TeamSelector();
+            teamSelector.FormClosed += teamSelector_FormClosed;
+            teamSelector.Show();
         }
         #endregion
 
@@ -83,7 +106,17 @@ namespace Anime_Quiz
             ComboBox senderComboBox = sender as ComboBox;
             String gameName = senderComboBox.Text;
             CurrentGame.setInstance(new Game(gameName));
-            loadQuestionSetList();
+            teamSelectBtn.Enabled = true;
+        }
+
+        void teamSelectBtn_Click(object sender, EventArgs e)
+        {
+            openTeamSelector();
+        }
+        void teamSelector_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (CurrentTeams.getInstance().teams != null)
+                loadQuestionSetList();
         }
 
         /// <summary>

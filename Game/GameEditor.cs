@@ -159,7 +159,6 @@ namespace Anime_Quiz
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            // TODO
             if (CurrentGame.getInstance() != null
                 && !CurrentGame.getInstance().saveGame()
                 && SoundMessageBox.Show("There was an error saving to the database. Close anyways?", "Database error", MessageBoxButtons.YesNo, Anime_Quiz.Properties.Resources.Muda) == DialogResult.No

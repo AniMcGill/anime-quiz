@@ -110,6 +110,7 @@
   <ItemGroup>
     <Compile Include="Classes\CurrentGame.cs" />
     <Compile Include="Classes\CurrentQuestionSet.cs" />
+    <Compile Include="Classes\CurrentTeams.cs" />
     <Compile Include="Classes\EmptyGame.cs" />
     <Compile Include="Classes\Game.cs" />
     <Compile Include="Classes\MusicPlayer.cs" />
@@ -137,7 +138,7 @@
     </Compile>
     <Compile Include="Classes\SQLiteDatabase.cs" />
     <Compile Include="Classes\Score.cs" />
-    <Compile Include="Classes\Team.cs" />
+    <Compile Include="Classes\Teams.cs" />
     <Compile Include="Game\GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -185,11 +186,17 @@
     <Compile Include="Menu\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Teams\TeamEditor.cs">
+    <Compile Include="Team\TeamEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Teams\TeamEditor.Designer.cs">
+    <Compile Include="Team\TeamEditor.Designer.cs">
       <DependentUpon>TeamEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Team\TeamSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Team\TeamSelector.Designer.cs">
+      <DependentUpon>TeamSelector.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Game\GameEditor.ja-JP.resx">
       <DependentUpon>GameEditor.cs</DependentUpon>
@@ -246,12 +253,15 @@
     <EmbeddedResource Include="Menu\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Teams\TeamEditor.resx">
+    <EmbeddedResource Include="Team\TeamEditor.resx">
       <DependentUpon>TeamEditor.cs</DependentUpon>
     </EmbeddedResource>
     <Content Include="animequiz.s3db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Team\TeamSelector.resx">
+      <DependentUpon>TeamSelector.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />

@@ -268,6 +268,36 @@ namespace Anime_Quiz.Classes
             return true;
         }
         /// <summary>
+        ///     Updates the database by rewriting existing entries. This doesn't use quotes,
+        ///     allowing us to use SQL commands.
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public bool UnquotedInsertOrReplace(String tableName, Dictionary<String, String> data)
+        {
+            String columns = "";
+            String values = "";
+            foreach (KeyValuePair<String, String> val in data)
+            {
+                columns += String.Format(" {0},", val.Key.ToString());
+                values += String.Format(" {0},", val.Value);
+            }
+            columns = columns.Substring(0, columns.Length - 1);
+            values = values.Substring(0, values.Length - 1);
+            try
+            {
+                this.executeNonQuery(String.Format("insert or replace into {0}({1}) values({2});", tableName, columns, values));
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
         ///     Allows the programmer to easily delete all data from the DB.
         /// </summary>
         /// <returns>A boolean true or false to signify success or failure.</returns>
@@ -344,7 +374,7 @@ namespace Anime_Quiz.Classes
         }
 
         /// <summary>
-        ///     Rename the QuestionSet and cascade the changes to the Questions.
+        ///     Rename the QuestionSet and cascade the changes to the Questions and Games.
         /// </summary>
         /// <param name="oldName">The old QuestionSet name</param>
         /// <param name="newName">The updated QuestionSet name</param>
@@ -359,8 +389,13 @@ namespace Anime_Quiz.Classes
             questionData.Add("questionSet", newName);
             String questionDataCmd = String.Format("questionSet = '{0}'", oldName);
 
+            Dictionary<String, String> gameData = new Dictionary<string, string>();
+            gameData.Add("questionSetId", newName);
+            String gameDataCmd = String.Format("questionSetId = '{0}'", oldName);
+
             return this.Update("QuestionSets", questionSetData, questionSetCmd) 
-                && this.Update("Questions", questionData, questionDataCmd);
+                && this.Update("Questions", questionData, questionDataCmd)
+                && this.Update("Games", gameData, gameDataCmd);
         }
         public Types getQuestionSetType(string setName)
         {
