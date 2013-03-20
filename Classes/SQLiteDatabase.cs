@@ -21,6 +21,19 @@ namespace Anime_Quiz.Classes
         {
             dbConnection = "Data Source=animequiz.s3db;Version=3";
         }
+        public SQLiteDatabase(bool createNew)
+        {
+            if (createNew)
+            {
+                SQLiteConnection.CreateFile("animequiz.s3db");
+                String createCmd = "CREATE TABLE [Games] ([name] TEXT NOT NULL,[questionSetId] TEXT NOT NULL); CREATE TABLE [QuestionSets] ([name] TEXT  NOT NULL PRIMARY KEY,[type] INTEGER  NOT NULL);"
+                    + "CREATE TABLE [Questions] ([id] INTEGER DEFAULT '1' NOT NULL PRIMARY KEY AUTOINCREMENT,[question] TEXT  NOT NULL,[answer] TEXT  NOT NULL,[points] INTEGER DEFAULT '0' NOT NULL,[answered] BOOLEAN DEFAULT '0' NOT NULL,[questionSet] TEXT  NOT NULL,FOREIGN KEY([questionSet]) REFERENCES [QuestionSets]([name]));"
+                    + "CREATE TABLE [Scores] ([gameId] TEXT  NOT NULL,[teamId] INTEGER  NOT NULL,[score] INTEGER DEFAULT '0' NOT NULL);"
+                    + "CREATE TABLE [Teams] ([id] INTEGER DEFAULT '1' NOT NULL PRIMARY KEY AUTOINCREMENT,[name] TEXT  NOT NULL UNIQUE);";
+                this.executeNonQuery(createCmd);
+            }
+            dbConnection = "Data Source=animequiz.s3db;Version=3";
+        }
         /// <summary>
         ///     Single Param Constructor for specifying the DB file.
         /// </summary>

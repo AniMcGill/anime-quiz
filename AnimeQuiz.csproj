@@ -317,6 +317,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Muda.wav" />
+    <None Include="Resources\wakamoto_hellonyan.wav" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

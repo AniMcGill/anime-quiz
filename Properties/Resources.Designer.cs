@@ -68,5 +68,14 @@ namespace Anime_Quiz.Properties {
                 return ResourceManager.GetStream("Muda", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream W_hellonyan {
+            get {
+                return ResourceManager.GetStream("W_hellonyan", resourceCulture);
+            }
+        }
     }
 }

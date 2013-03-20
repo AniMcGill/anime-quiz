@@ -44,7 +44,7 @@ namespace Anime_Quiz
             scorePanel.RowCount = 2;
             scorePanel.GrowStyle = TableLayoutPanelGrowStyle.AddColumns;
             Controls.Add(scorePanel);
-            if (CurrentTeams.getInstance().teams.Length > 0)
+            if (CurrentTeams.getInstance() != null && CurrentTeams.getInstance().teams.Length > 0)
                 loadScores();
         }
         public void loadScores()

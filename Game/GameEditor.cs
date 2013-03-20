@@ -24,6 +24,9 @@ namespace Anime_Quiz
         {
             InitializeComponent();
             reloadGameListAndInfo();
+
+            // The rename button doesn't work yet, disable it for now
+            renameBtn.Enabled = false;
         }
         #region Database Load
         void loadGameList()
@@ -102,6 +105,8 @@ namespace Anime_Quiz
                 CurrentGame.setInstance(new Game(gameName));
                 loadGameList();
                 loadGameInfo();
+                SoundMessageBox.Show("The Game has been created. You can now select the Question Sets.", "Game Created", 
+                    MessageBoxButtons.OK, Anime_Quiz.Properties.Resources.W_hellonyan); //provide some feedback
             }
         }
 
@@ -123,6 +128,7 @@ namespace Anime_Quiz
 
         private void renameBtn_Click(object sender, EventArgs e)
         {
+            /*
             string newGameName = Interaction.InputBox("Choose a new name: ", "Rename");
             try
             {
@@ -138,7 +144,7 @@ namespace Anime_Quiz
             catch (Exception crap)
             {
                 SoundMessageBox.Show(crap.Message, Anime_Quiz.Properties.Resources.Muda);
-            }
+            }*/
         }
 
         private void closeBtn_Click(object sender, EventArgs e)
