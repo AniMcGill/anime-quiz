@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GameContext;
 
-namespace Anime_Quiz.Classes
+namespace Anime_Quiz_3.Classes
 {
     class CurrentGame
     {
-        private static Game currentGame;
-        public static Game getInstance()
+        private static Games currentGame;
+        public static Games getInstance()
         {
             return currentGame;
         }
-        public static void setInstance(Game game)
+        public static void setInstance(Games game)
         {
             CurrentGame.currentGame = game;
         }

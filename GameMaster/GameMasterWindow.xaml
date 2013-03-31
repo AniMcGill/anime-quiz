@@ -1,0 +1,21 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:GameMaster="clr-namespace:Anime_Quiz_3.GameMaster" x:Class="Anime_Quiz_3.GameMasterWindow"
+        Title="Game Master Interface" SizeToContent="WidthAndHeight" Height="283" Width="448">
+    <Grid>
+        <DockPanel HorizontalAlignment="Left" LastChildFill="False" Margin="0" VerticalAlignment="Top">
+            <Frame x:Name="_gmWindow" />
+        </DockPanel>
+        <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top" IsMainMenu="True">
+            <MenuItem Header="_File">
+                <Separator />
+                <MenuItem x:Name="exitMenuItem" Header="E_xit" Click="exitMenuItem_Click"/>
+            </MenuItem>
+            <MenuItem Header="_Teams"></MenuItem>
+            <MenuItem Header="_Settings"></MenuItem>
+            <MenuItem x:Name="helpMenuItem" Header="_Help" Click="helpMenuItem_Click" />
+        </Menu>
+
+    </Grid>
+</Window>

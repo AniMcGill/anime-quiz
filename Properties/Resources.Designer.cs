@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Anime_Quiz.Properties {
+namespace Anime_Quiz_3.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Anime_Quiz.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Anime_Quiz.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Anime_Quiz_3.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -72,9 +72,27 @@ namespace Anime_Quiz.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
-        internal static System.IO.UnmanagedMemoryStream W_hellonyan {
+        internal static System.IO.UnmanagedMemoryStream Muda_long {
             get {
-                return ResourceManager.GetStream("W_hellonyan", resourceCulture);
+                return ResourceManager.GetStream("Muda_long", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream W_hello {
+            get {
+                return ResourceManager.GetStream("W_hello", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream w_lulu {
+            get {
+                return ResourceManager.GetStream("w_lulu", resourceCulture);
             }
         }
     }

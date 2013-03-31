@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using GameContext;
 
-namespace Anime_Quiz.Classes
+namespace Anime_Quiz_3.Classes
 {
-    public class CurrentQuestionSet
+    class CurrentQuestionSet
     {
-        private static QuestionSet questionSet;
-
-        public static QuestionSet getInstance()
+        private static QuestionSets currentQuestionSet;
+        public static QuestionSets getInstance()
         {
-            return questionSet;
+            return currentQuestionSet;
         }
-        public static void setInstance(QuestionSet q)
+        public static void setInstance(QuestionSets questionSet)
         {
-            CurrentQuestionSet.questionSet = q;
+            CurrentQuestionSet.currentQuestionSet = questionSet;
         }
     }
 }

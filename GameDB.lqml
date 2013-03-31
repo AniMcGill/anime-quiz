@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database Name="main" EntityNamespace="GameContext" ContextNamespace="GameContext" Class="GameDataContext" xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" ed:Guid="2aeb835c-4d41-45e1-9583-c1db6ceeb497" Provider="Devart.Data.SQLite.Linq.Provider.SQLiteDataProvider, Devart.Data.SQLite.Linq" Extended="true" xmlns="http://schemas.devart.com/linqconnect/mapping">
+  <Connection Mode="ConnectionString" ConnectionString="Data Source=&quot;C:\Natsumi\Dropbox\Visual Studio 2012 Projects\Anime Quiz 3\Anime Quiz 3\animequiz.s3db&quot;" Provider="Devart.Data.SQLite" />
+  <Table Name="&quot;main&quot;.Questions" Member="Questions">
+    <Type Name="Questions" ed:Guid="fd44b687-650c-4bcc-8dab-ee4e13c90bd5">
+      <Column Name="QuestionId" Type="System.Int32" AutoSync="OnInsert" DbType="integer NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" ed:ValidateRequired="True" ed:Guid="bec50ff8-b30b-41fa-bb42-8d64ebd4a9fb" />
+      <Column Name="Question" Type="System.String" AutoSync="Always" DbType="text NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="2100507c-056d-4ed8-9e1d-1da84df5532c" />
+      <Column Name="Answer" Type="System.String" AutoSync="OnUpdate" DbType="text NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="7e14ebfb-2fd9-4e26-b988-c6e63e37ea07" />
+      <Column Name="Points" Type="System.Int32" AutoSync="Always" DbType="integer NOT NULL" CanBeNull="false" UpdateCheck="Never" DefaultValue="'0'" ed:ValidateRequired="True" ed:Guid="66b00057-5d92-4c64-ac2c-19f69dcccd4c" />
+      <Column Name="Answered" Type="System.Boolean" AutoSync="Always" DbType="integer NOT NULL" CanBeNull="false" UpdateCheck="Never" DefaultValue="'0'" ed:ValidateRequired="True" ed:Guid="c20b3e49-74b3-420f-8948-c9877f4fa8e6" />
+      <Column Name="QuestionSetId" Type="System.Int32" AutoSync="Always" DbType="integer NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="b7235c90-d1bd-422f-bfa2-a89c6eb98b04" />
+      <Association Name="QuestionSets_Questions" ed:AssociationGuid="6c7fbf71-ca4a-4430-83d9-377ab10bb064" Member="QuestionSets" ed:Guid="dd11f05b-c034-4484-a1f9-b25d4bffebe4" ThisKey="QuestionSetId" OtherKey="QuestionSetId" Type="QuestionSets" DeleteRule="CASCADE" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="&quot;main&quot;.QuestionSets" Member="QuestionSets">
+    <Type Name="QuestionSets" ed:Guid="d5c712d8-05dc-436f-9ddc-261fc11f81d4">
+      <Column Name="QuestionSetId" Type="System.Int32" AutoSync="OnInsert" DbType="integer NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" ed:ValidateRequired="True" ed:Guid="215d8bf6-969e-4790-9f3c-5904a0cf6035" />
+      <Column Name="Name" Type="System.String" AutoSync="Always" DbType="text NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="85b3d388-a733-4a8b-baa9-18680fee81f3" />
+      <Column Name="Type" Type="System.Int32" AutoSync="Always" DbType="integer NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="b9dec8ef-6a97-447e-9c07-7b5683a43b4f" />
+      <Column Name="GameId" Type="System.Int32" AutoSync="Always" DbType="integer" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="6f5140ed-13b3-4940-a231-8a81b7067000" />
+      <Association Name="QuestionSets_Questions" ed:AssociationGuid="6c7fbf71-ca4a-4430-83d9-377ab10bb064" Member="Questions" ed:Guid="af2ca05c-d4cd-4344-84cb-04af6fea19a4" ThisKey="QuestionSetId" OtherKey="QuestionSetId" Type="Questions" />
+      <Association Name="Games_QuestionSets" ed:AssociationGuid="3c37ff26-a4c9-4374-9e59-b3a2d16370d7" Member="Games" ed:Guid="43072118-6371-4f2e-9f7f-3c8e26eb0b79" ThisKey="GameId" OtherKey="GameId" Type="Games" DeleteRule="SET NULL" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="&quot;main&quot;.Games" Member="Games">
+    <Type Name="Games" ed:Guid="4931b7a2-0fff-4f02-9f4e-5ba46c602193">
+      <Column Name="GameId" Type="System.Int32" AutoSync="OnInsert" DbType="integer NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" ed:ValidateRequired="True" ed:Guid="2ddc5388-7e1d-4406-9eda-57883631ae50" />
+      <Column Name="Name" Type="System.String" AutoSync="Always" DbType="text NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="abe718c8-a01c-4c18-8740-e22743895b80" />
+      <Association Name="Games_QuestionSets" ed:AssociationGuid="3c37ff26-a4c9-4374-9e59-b3a2d16370d7" Member="QuestionSets" ed:Guid="096de093-d33c-4bcc-a1b6-b66efd0a69d2" ThisKey="GameId" OtherKey="GameId" Type="QuestionSets" />
+      <Association Name="Games_Teams" ed:AssociationGuid="95276641-8f00-41c7-98c6-631f95f4b93d" Member="Teams" ed:Guid="9650adde-fa73-4446-8212-af2f9b9d4644" ThisKey="GameId" OtherKey="GameId" Type="Teams" />
+      <Association Name="Games_TeamScores" ed:AssociationGuid="afc9b3b7-d0a8-4895-9afa-d1f7b574b3f6" Member="TeamScores" ed:Guid="40ad165b-474e-4ffc-941f-2db591ca8663" ThisKey="GameId" OtherKey="GameId" Type="TeamScores" />
+      <Association Name="Games_Scores" ed:AssociationGuid="0ae27494-feb5-433d-a722-eee73a85e26b" Member="Scores" ed:Guid="055cd74b-8583-4159-8480-2806564057db" ThisKey="GameId" OtherKey="GameId" Type="Scores" />
+    </Type>
+  </Table>
+  <Table Name="&quot;main&quot;.Teams" Member="Teams">
+    <Type Name="Teams" ed:Guid="29e5d0d0-06be-4cc7-a670-b96e6ed08662">
+      <Column Name="TeamId" Type="System.Int32" AutoSync="OnInsert" DbType="integer NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" ed:ValidateRequired="True" ed:Guid="55c2555e-69f9-4b9d-9a95-97f47ab70c78" />
+      <Column Name="Name" Type="System.String" AutoSync="Always" DbType="text NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="b5f3139f-5590-4d1c-aa62-e57fa755e1b3" />
+      <Column Name="GameId" Type="System.Int32" AutoSync="Always" DbType="integer" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="1f35268b-eb0e-42dc-a1b4-08690cbffb24" />
+      <Association Name="Games_Teams" ed:AssociationGuid="95276641-8f00-41c7-98c6-631f95f4b93d" Member="Games" ed:Guid="58b3d97d-38e3-42c8-87ef-99a0abfe2b6f" ThisKey="GameId" OtherKey="GameId" Type="Games" DeleteRule="SET NULL" IsForeignKey="true" />
+      <Association Name="Teams_TeamMembers" ed:AssociationGuid="d0a9248c-a744-441e-92fc-8535c6bf31cf" Member="TeamMembers" ed:Guid="9f672400-b8f9-479e-b390-7c14f1f0cc76" ThisKey="TeamId" OtherKey="TeamId" Type="TeamMembers" />
+      <Association Name="Teams_TeamScores" ed:AssociationGuid="2d9a92b7-3a5b-47b5-aaf5-1547e0edd4a0" Member="TeamScores" ed:Guid="c696170c-026a-469e-a7d6-939b7ef9a544" ThisKey="TeamId" OtherKey="TeamId" Type="TeamScores" />
+    </Type>
+  </Table>
+  <Table Name="&quot;main&quot;.TeamScores" Member="TeamScores">
+    <Type Name="TeamScores" ed:Guid="21eb1685-0c7f-49eb-a28d-fa03a78a4f23">
+      <Column Name="GameId" Type="System.Int32" AutoSync="Always" DbType="integer NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="1d59bf0b-94af-4189-82e6-9ad0e3eebf29" />
+      <Column Name="TeamId" Type="System.Int32" AutoSync="Always" DbType="integer NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="1bb136d1-06d0-481b-b6f4-41a80a65d8e1" />
+      <Column Name="Score" Type="System.Int32" AutoSync="Always" DbType="integer NOT NULL" CanBeNull="false" UpdateCheck="Never" DefaultValue="'0'" ed:ValidateRequired="True" ed:Guid="f86e2cc5-40a5-4558-9db1-32b473e29ee7" />
+      <Association Name="Games_TeamScores" ed:AssociationGuid="afc9b3b7-d0a8-4895-9afa-d1f7b574b3f6" Member="Games" ed:Guid="340337f5-f846-4fe6-9a4a-e03e27a7f179" ThisKey="GameId" OtherKey="GameId" Type="Games" DeleteRule="CASCADE" IsForeignKey="true" />
+      <Association Name="Teams_TeamScores" ed:AssociationGuid="2d9a92b7-3a5b-47b5-aaf5-1547e0edd4a0" Member="Teams" ed:Guid="f361a48c-2d2f-4c7c-bad5-99c2e239b84d" ThisKey="TeamId" OtherKey="TeamId" Type="Teams" DeleteRule="CASCADE" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="&quot;main&quot;.Scores" Member="Scores">
+    <Type Name="Scores" ed:Guid="d7ad8a31-2bb7-4aa6-88a0-a4ca390dc8bb">
+      <Column Name="MemberId" Type="System.Int32" AutoSync="Always" DbType="integer NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="5026e0a7-b55a-4797-a94f-0f1faf3dc24f" />
+      <Column Name="GameId" Type="System.Int32" AutoSync="Always" DbType="integer NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="92a0fc68-b03d-4446-98dc-93d9110824ed" />
+      <Column Name="Score" Type="System.Int32" AutoSync="Always" DbType="integer NOT NULL" CanBeNull="false" UpdateCheck="Never" DefaultValue="'0'" ed:ValidateRequired="True" ed:Guid="a5e5e2b4-5304-4dd5-a788-f88ec1653417" />
+      <Association Name="Games_Scores" ed:AssociationGuid="0ae27494-feb5-433d-a722-eee73a85e26b" Member="Games" ed:Guid="ec598b41-1a70-486a-a385-424c9fe9e971" ThisKey="GameId" OtherKey="GameId" Type="Games" DeleteRule="CASCADE" IsForeignKey="true" />
+      <Association Name="TeamMembers_Scores" ed:AssociationGuid="a665013e-923e-41f3-95b0-52389e04626e" Member="TeamMembers" ed:Guid="79f4ae5c-56e3-4d0b-91fd-d8500f460dc4" ThisKey="MemberId" OtherKey="MemberId" Type="TeamMembers" DeleteRule="CASCADE" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="&quot;main&quot;.TeamMembers" Member="TeamMembers">
+    <Type Name="TeamMembers" ed:Guid="ff3e1ff5-46f4-4021-9852-9b1e570dd1aa">
+      <Column Name="MemberId" Type="System.Int32" AutoSync="OnInsert" DbType="integer NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" ed:ValidateRequired="True" ed:Guid="5ec10ee7-053d-4162-b417-6d9816e6d27c" />
+      <Column Name="Name" Type="System.String" AutoSync="Always" DbType="text NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="62817309-5eeb-4386-8ed0-2f6db20c9c5c" />
+      <Column Name="TeamId" Type="System.Int32" AutoSync="Always" DbType="integer NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="c42834f8-5e9f-472c-9d0b-4d46d4600ecd" />
+      <Association Name="Teams_TeamMembers" ed:AssociationGuid="d0a9248c-a744-441e-92fc-8535c6bf31cf" Member="Teams" ed:Guid="f70cbf4a-537f-4a76-9b10-e847a05bb4f1" ThisKey="TeamId" OtherKey="TeamId" Type="Teams" DeleteRule="CASCADE" IsForeignKey="true" />
+      <Association Name="TeamMembers_Scores" ed:AssociationGuid="a665013e-923e-41f3-95b0-52389e04626e" Member="Scores" ed:Guid="4a23eac7-1288-4a87-b58d-854c9c49b796" ThisKey="MemberId" OtherKey="MemberId" Type="Scores" />
+    </Type>
+  </Table>
+  <EnumType Name="Types" ed:Guid="95ec6a05-e6d9-4c01-ba1e-ac7ad4234121">
+    <Member Name="Question" ed:Guid="67bb3cb7-4d8a-4c11-8333-246047ecd322" />
+    <Member Name="Music" ed:Guid="2c9175b5-ac57-43f2-a984-f7e3d47e276c" />
+    <Member Name="Screenshot" ed:Guid="3bc4b345-72e3-4ba5-83b3-fadbcf83cd08" />
+  </EnumType>
+</Database>

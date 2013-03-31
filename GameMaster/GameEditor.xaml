@@ -1,0 +1,28 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:GameContext="clr-namespace:GameContext" x:Name="GameEditorPage" x:Class="Anime_Quiz_3.GameMaster.GameEditor" 
+      mc:Ignorable="d" 
+      d:DesignHeight="768" d:DesignWidth="1024"
+	Title="GameEditor" UseLayoutRounding="False">
+
+    <Grid ScrollViewer.VerticalScrollBarVisibility="Auto">
+        <ComboBox x:Name="gameComboBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" MinWidth="120" Text="Select a Game" SelectionChanged="gameComboBox_SelectionChanged"/>
+        <Button x:Name="delBtn" Content="Delete" HorizontalAlignment="Left" Margin="135,10,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="delBtn_Click"/>
+
+        <TextBox x:Name="renameTextBox" HorizontalAlignment="Left" Height="23" Margin="215,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" TextChanged="renameTextBox_TextChanged" />
+        <Button x:Name="renameBtn" Content="Rename" HorizontalAlignment="Left" Margin="340,11,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="renameBtn_Click"/>
+
+        <Button x:Name="closeBtn" Content="Close" HorizontalAlignment="Left" Margin="939,10,0,0" VerticalAlignment="Top" Width="75" Click="closeBtn_Click"/>
+
+        <TextBox x:Name="newGameTextBox"  HorizontalAlignment="Left" Height="23" Margin="10,37,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" TextChanged="newGameTextBox_TextChanged"/>
+        <Button x:Name="addBtn" Content="Add" HorizontalAlignment="Left" Margin="215,38,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="addBtn_Click"/>
+
+        <StackPanel x:Name="questionSetStackPanel" HorizontalAlignment="Left" MaxHeight="693" Margin="10,75,0,0" Visibility="Hidden" VerticalAlignment="Top" MaxWidth="1004">
+            <Label x:Name="questionSetsLabel" HorizontalAlignment="Left" Content="Check/Uncheck the Question Sets you want to associate with this game." />
+        </StackPanel>
+
+    </Grid>
+</Page>

@@ -1,0 +1,34 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:GameContext="clr-namespace:GameContext" x:Class="Anime_Quiz_3.GameMaster.QuestionSetEditor" 
+      mc:Ignorable="d" 
+      d:DesignHeight="768" d:DesignWidth="1024"
+	Title="QuestionSetEditor">
+
+    <Grid>
+        <ComboBox x:Name="questionSetComboBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" MinWidth="120" Text="Select a Question Set" SelectionChanged="questionSetComboBox_SelectionChanged"/>
+        <Button x:Name="delBtn" Content="Delete" HorizontalAlignment="Left" Margin="135,10,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="delBtn_Click"/>
+
+        <TextBox x:Name="renameTextBox" HorizontalAlignment="Left" Height="23" Margin="215,9,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" TextChanged="renameTextBox_TextChanged"/>
+        <Button x:Name="renameBtn" Content="Rename" HorizontalAlignment="Left" Margin="340,9,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="renameBtn_Click"/>
+
+        <Button x:Name="closeBtn" Content="Close" HorizontalAlignment="Left" Margin="939,10,0,0" VerticalAlignment="Top" Width="75" Click="closeBtn_Click"/>
+        <Button x:Name="uncheckBtn" Content="Uncheck" HorizontalAlignment="Left" Margin="859,10,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="uncheckBtn_Click"/>
+
+        <TextBox x:Name="questionSetTextBox"  HorizontalAlignment="Left" Height="23" Margin="10,37,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="155" TextChanged="questionSetTextBox_TextChanged"/>
+        <ComboBox x:Name="questionSetTypeComboBox" Text="Choose Type" HorizontalAlignment="Left" Margin="170,37,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="questionSetTypeComboBox_SelectionChanged" />
+        <Button x:Name="addBtn" Content="Add" HorizontalAlignment="Left" Margin="295,38,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="addBtn_Click"/>
+
+        
+        <DockPanel x:Name="questionDock" HorizontalAlignment="Stretch" Height="683" LastChildFill="True" Margin="10,75,0,0" VerticalAlignment="Top">
+            <DataGrid x:Name="questionSetDataGrid" DockPanel.Dock="Left" HorizontalAlignment="Left" MaxHeight="683" Margin="10,0,0,0" VerticalAlignment="Top" Visibility="Hidden" SelectedCellsChanged="questionSetDataGrid_SelectedCellsChanged"/>
+            <Image x:Name="screenshotPreviewImage" DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10,0,0,0" MaxHeight="683" MaxWidth="236" Visibility="Collapsed" />
+            <MediaElement x:Name="musicPreview" DockPanel.Dock="Right" MaxHeight="683" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10,0,0,0" MaxWidth="236" Visibility="Collapsed" LoadedBehavior="Manual"/>
+        </DockPanel>
+
+
+    </Grid>
+</Page>

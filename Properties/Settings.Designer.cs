@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Anime_Quiz.Properties {
+namespace Anime_Quiz_3.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -20,54 +20,6 @@ namespace Anime_Quiz.Properties {
         public static Settings Default {
             get {
                 return defaultInstance;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string defaultFolder {
-            get {
-                return ((string)(this["defaultFolder"]));
-            }
-            set {
-                this["defaultFolder"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool reloadPrevious {
-            get {
-                return ((bool)(this["reloadPrevious"]));
-            }
-            set {
-                this["reloadPrevious"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool autostartSong {
-            get {
-                return ((bool)(this["autostartSong"]));
-            }
-            set {
-                this["autostartSong"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
-        public int defaultVolume {
-            get {
-                return ((int)(this["defaultVolume"]));
-            }
-            set {
-                this["defaultVolume"] = value;
             }
         }
         
@@ -92,30 +44,6 @@ namespace Anime_Quiz.Properties {
             }
             set {
                 this["defaultScreenshotFolder"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int songDuration {
-            get {
-                return ((int)(this["songDuration"]));
-            }
-            set {
-                this["songDuration"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool useScoreSystem {
-            get {
-                return ((bool)(this["useScoreSystem"]));
-            }
-            set {
-                this["useScoreSystem"] = value;
             }
         }
     }
