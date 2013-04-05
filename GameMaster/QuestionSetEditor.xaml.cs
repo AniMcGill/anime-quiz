@@ -43,7 +43,15 @@ namespace Anime_Quiz_3.GameMaster
                 from questionSet in questionSets
                 select questionSet.Name;
             questionSetComboBox.ItemsSource = questionSetList;
-        }     
+        }
+        void populateQuestionSetDataGrid()
+        {
+            questions = from question in db.GetTable<Questions>()
+                        where question.QuestionSets.Name.Equals(CurrentQuestionSet.getInstance().Name)
+                        select question;
+            questionSetDataGrid.ItemsSource = questions;
+            questionSetDataGrid.Visibility = System.Windows.Visibility.Visible;
+        }
         private void questionSetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             saveQuestions();
@@ -52,18 +60,17 @@ namespace Anime_Quiz_3.GameMaster
                 CurrentQuestionSet.setInstance((from questionSet in questionSets
                                                 where questionSet.Name.Equals((sender as ComboBox).SelectedValue.ToString())
                                                 select questionSet).Single());
-                questions = from question in db.GetTable<Questions>()
-                            where question.QuestionSets.Name.Equals(CurrentQuestionSet.getInstance().Name)
-                            select question;
-                questionSetDataGrid.ItemsSource = questions;
-                questionSetDataGrid.Visibility = System.Windows.Visibility.Visible;
+                populateQuestionSetDataGrid();
+                setDelUncheckButtons(true);
 
-                loadEasterEggMedia((Types) CurrentQuestionSet.getInstance().Type);
+                loadEasterEggMedia((Types)CurrentQuestionSet.getInstance().Type);
             }
             else
+            {
                 CurrentQuestionSet.setInstance(null);
-
-            setDelUncheckButtons(true);
+                questionSetDataGrid.Visibility = System.Windows.Visibility.Hidden;
+                setDelUncheckButtons(false);
+            }
         }
 
         private void renameTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -104,7 +111,7 @@ namespace Anime_Quiz_3.GameMaster
                 db.SubmitChanges();
             }
         }
-
+        // TODO
         void openFilePicker(TextBox targetCell)
         {
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
@@ -177,9 +184,6 @@ namespace Anime_Quiz_3.GameMaster
 
             db.SubmitChanges();
             populateQuestionSetSelector();
-            questionSetDataGrid.Visibility = System.Windows.Visibility.Hidden;
-
-            setDelUncheckButtons(false);
         }
 
         private void renameBtn_Click(object sender, RoutedEventArgs e)

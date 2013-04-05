@@ -26,6 +26,27 @@ namespace Anime_Quiz_3
             InitializeComponent();
         }
 
+        #region File
+        private void createQuestionSetMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            _gmWindow.NavigationService.Navigate(new QuestionSetEditor());
+        }
+        private void createGameMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            _gmWindow.NavigationService.Navigate(new GameEditor());
+        }
+        #endregion
+
+        private void teamsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            _gmWindow.NavigationService.Navigate(new TeamEditor());
+        }
+
+        private void settingsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void helpMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var helpWindow = new HelpWindow();

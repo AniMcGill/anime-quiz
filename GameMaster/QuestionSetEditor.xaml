@@ -6,7 +6,7 @@
       xmlns:GameContext="clr-namespace:GameContext" x:Class="Anime_Quiz_3.GameMaster.QuestionSetEditor" 
       mc:Ignorable="d" 
       d:DesignHeight="768" d:DesignWidth="1024"
-	Title="QuestionSetEditor">
+	Title="Question Set Editor">
 
     <Grid>
         <ComboBox x:Name="questionSetComboBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" MinWidth="120" Text="Select a Question Set" SelectionChanged="questionSetComboBox_SelectionChanged"/>

@@ -1,0 +1,153 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using Anime_Quiz_3.Classes;
+using Devart.Data.Linq;
+using GameContext;
+
+namespace Anime_Quiz_3.GameMaster
+{
+    /// <summary>
+    /// Interaction logic for TeamEditor.xaml
+    /// </summary>
+    public partial class TeamEditor : Page
+    {
+        static GameDataContext db;
+        static Table<Teams> teamsList;
+        static IQueryable<TeamMembers> teamMembersList;
+        public TeamEditor()
+        {
+            InitializeComponent();
+            db = new GameDataContext();
+            populateTeamsComboBox();
+        }
+
+        public void populateTeamsComboBox()
+        {
+            teamsList = db.GetTable<Teams>();
+            var teamNames = from team in teamsList select team.Name;
+            teamComboBox.ItemsSource = teamNames;
+        }
+        public void populateTeamDataGrid()
+        {
+            teamMembersList = from teamMember in db.GetTable<TeamMembers>()
+                              where teamMember.Teams.Name.Equals(CurrentTeam.getInstance().Name)
+                              select teamMember;
+            teamDataGrid.ItemsSource = teamMembersList;
+            teamDataGrid.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        public void saveTeams()
+        {
+            if (CurrentTeam.getInstance() != null)
+            {
+                db.SubmitChanges();
+                var changedTeamMembers = from teamMember in db.GetTable<TeamMembers>()
+                                         where teamMember.TeamId == 0
+                                         select teamMember;
+                foreach (TeamMembers changedTeamMember in changedTeamMembers)
+                {
+                    changedTeamMember.TeamId = CurrentTeam.getInstance().TeamId;
+                    changedTeamMember.Teams = CurrentTeam.getInstance();
+                }
+                db.SubmitChanges();
+            }
+        }
+
+        #region Event Handlers
+        private void teamComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            saveTeams();
+            if ((sender as ComboBox).SelectedIndex > -1)
+            {
+                CurrentTeam.setInstance((from team in teamsList
+                                         where team.Name.Equals((sender as ComboBox).SelectedValue.ToString())
+                                         select team).Single());
+                populateTeamDataGrid();
+            }
+            else
+            {
+                CurrentTeam.setInstance(null);
+                teamDataGrid.Visibility = System.Windows.Visibility.Collapsed;
+            }
+            delBtn.IsEnabled = (sender as ComboBox).SelectedIndex > -1;
+        }
+
+        private void teamTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            addBtn.IsEnabled = (sender as TextBox).Text.Length > 0;
+        }
+
+        private void renameTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            renameBtn.IsEnabled = teamComboBox.SelectedIndex > -1 && (sender as TextBox).Text.Length > 0;
+        }
+        #endregion
+
+        #region Buttons
+        private void delBtn_Click(object sender, RoutedEventArgs e)
+        {
+            db.Teams.DeleteOnSubmit(CurrentTeam.getInstance());
+            var teamMembersToDelete = from teamMember in teamMembersList 
+                                      where teamMember.TeamId == CurrentTeam.getInstance().TeamId 
+                                      select teamMember;
+            var teamScoresToDelete = from teamScore in db.GetTable<TeamScores>()
+                                     where teamScore.TeamId == CurrentTeam.getInstance().TeamId
+                                     select teamScore;
+            foreach (TeamMembers teamMemberToDelete in teamMembersToDelete)
+            {
+                var scoresToDelete = from score in db.GetTable<Scores>()
+                                    where score.MemberId == teamMemberToDelete.MemberId
+                                    select score;
+                db.Scores.DeleteAllOnSubmit(scoresToDelete);
+            }
+
+            db.TeamMembers.DeleteAllOnSubmit(teamMembersToDelete);
+            db.TeamScores.DeleteAllOnSubmit(teamScoresToDelete);
+            CurrentTeam.setInstance(null);
+
+            db.SubmitChanges();
+            populateTeamsComboBox();
+        }
+        private void renameBtn_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentTeam.getInstance().Name = renameTextBox.Text;
+            db.SubmitChanges();
+
+            populateTeamsComboBox();
+            teamComboBox.SelectedItem = renameTextBox.Text;
+            renameTextBox.Text = String.Empty;
+        }
+        private void addBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Teams newTeam = new Teams();
+            newTeam.Name = teamTextBox.Text;
+            // TODO: pre-register teams to a game?
+            db.Teams.InsertOnSubmit(newTeam);
+            db.SubmitChanges();
+
+            populateTeamsComboBox();
+            teamComboBox.SelectedItem = newTeam.Name;
+            teamTextBox.Text = String.Empty;
+        }
+
+        private void closeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            saveTeams();
+            this.NavigationService.GoBack();
+        }
+
+        #endregion
+    }
+}
