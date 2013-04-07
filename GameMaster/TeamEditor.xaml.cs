@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Anime_Quiz_3.Classes;
 using Devart.Data.Linq;
 using GameContext;
@@ -110,7 +100,7 @@ namespace Anime_Quiz_3.GameMaster
                 var scoresToDelete = from score in db.GetTable<Scores>()
                                     where score.MemberId == teamMemberToDelete.MemberId
                                     select score;
-                db.Scores.DeleteAllOnSubmit(scoresToDelete);
+                db.Scores.DeleteAllOnSubmit(scoresToDelete);    //might not be possible to delete teams
             }
 
             db.TeamMembers.DeleteAllOnSubmit(teamMembersToDelete);
