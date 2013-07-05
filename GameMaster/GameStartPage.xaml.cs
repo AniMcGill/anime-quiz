@@ -17,6 +17,7 @@ using Anime_Quiz_3.Properties;
 using Devart.Data.Linq;
 using GameContext;
 using Anime_Quiz_3.Controls;
+using Anime_Quiz_3.Player;
 
 namespace Anime_Quiz_3.GameMaster
 {
@@ -113,20 +114,50 @@ namespace Anime_Quiz_3.GameMaster
 
         private void questionSetLoadBtn_Click(object sender, RoutedEventArgs e)
         {
-            //TODO: load the game
-            getTeams();
-            loadTeams();
+            bool playerWindowExists = false;
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window is PlayerWindow)
+                {
+                    (window as PlayerWindow).Refresh();
+                    playerWindowExists = true;
+                    //window.Close();
+                    break;
+                }
+            }
+            if (!playerWindowExists)
+            {
+                PlayerWindow playerWindow = new PlayerWindow();
+                playerWindow.QuestionReady += playerWindow_QuestionReady;
+                playerWindow.Show();
+                
+                getTeams();
+                loadTeams();
+            } 
         }
 
-        void teamScoringControl_RemoveButtonClicked()
+        void playerWindow_QuestionReady(object sender, EventArgs e)
         {
             throw new NotImplementedException();
         }
-        void teamMemberScoringControl_AddButtonClicked()
+
+        public event EventHandler ShowAnswer;
+        protected virtual void OnShowAnswer(EventArgs e)
+        {
+            EventHandler handler = ShowAnswer;
+            if (handler != null)
+                handler(this, e);
+        }
+
+        void teamScoringControl_RemoveButtonClicked(object sender, EventArgs e)
         {
             throw new NotImplementedException();
         }
-        void teamMemberScoringControl_RemoveButtonClicked()
+        void teamMemberScoringControl_AddButtonClicked(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+        void teamMemberScoringControl_RemoveButtonClicked(object sender, EventArgs e)
         {
             throw new NotImplementedException();
         }

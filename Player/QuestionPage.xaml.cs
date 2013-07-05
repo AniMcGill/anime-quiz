@@ -13,21 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Anime_Quiz_3
+namespace Anime_Quiz_3.Player
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for QuestionPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class QuestionPage : Page
     {
-        public MainWindow()
+        public QuestionPage()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            
         }
     }
 }
