@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Database Name="main" EntityNamespace="GameContext" ContextNamespace="GameContext" Class="GameDataContext" xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" ed:Guid="2aeb835c-4d41-45e1-9583-c1db6ceeb497" Provider="Devart.Data.SQLite.Linq.Provider.SQLiteDataProvider, Devart.Data.SQLite.Linq" Extended="true" xmlns="http://schemas.devart.com/linqconnect/mapping">
-  <Connection Mode="ConnectionString" ConnectionString="Data Source=&quot;C:\Natsumi\Dropbox\Visual Studio 2012 Projects\Anime Quiz 3\Anime Quiz 3\animequiz.s3db&quot;" Provider="Devart.Data.SQLite" />
+  <Connection Mode="ConnectionString" ConnectionString="Data Source=&quot;C:\Users\Natsumi\Dropbox\Visual Studio 2012 Projects\Anime Quiz 3\Anime Quiz 3\animequiz.s3db&quot;" Provider="Devart.Data.SQLite" />
   <Table Name="&quot;main&quot;.Questions" Member="Questions">
     <Type Name="Questions" ed:Guid="fd44b687-650c-4bcc-8dab-ee4e13c90bd5">
       <Column Name="QuestionId" Type="System.Int32" AutoSync="OnInsert" DbType="integer NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" ed:ValidateRequired="True" ed:Guid="bec50ff8-b30b-41fa-bb42-8d64ebd4a9fb" />
@@ -44,6 +44,7 @@
   </Table>
   <Table Name="&quot;main&quot;.TeamScores" Member="TeamScores">
     <Type Name="TeamScores" ed:Guid="21eb1685-0c7f-49eb-a28d-fa03a78a4f23">
+      <Column Name="TeamScoreId" Type="System.Int32" DbType="integer NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" ed:ValidateRequired="True" ed:Guid="aaf11ac6-fb46-4f7d-ad4c-f97caf0c72a2" />
       <Column Name="GameId" Type="System.Int32" AutoSync="Always" DbType="integer NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="1d59bf0b-94af-4189-82e6-9ad0e3eebf29" />
       <Column Name="TeamId" Type="System.Int32" AutoSync="Always" DbType="integer NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="1bb136d1-06d0-481b-b6f4-41a80a65d8e1" />
       <Column Name="Score" Type="System.Int32" AutoSync="Always" DbType="integer NOT NULL" CanBeNull="false" UpdateCheck="Never" DefaultValue="'0'" ed:ValidateRequired="True" ed:Guid="f86e2cc5-40a5-4558-9db1-32b473e29ee7" />
@@ -53,6 +54,7 @@
   </Table>
   <Table Name="&quot;main&quot;.Scores" Member="Scores">
     <Type Name="Scores" ed:Guid="d7ad8a31-2bb7-4aa6-88a0-a4ca390dc8bb">
+      <Column Name="ScoreId" Type="System.Int32" DbType="integer NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" ed:ValidateRequired="True" ed:Guid="7e685b3b-2c6c-4d6b-b574-92454f0c6d95" />
       <Column Name="MemberId" Type="System.Int32" AutoSync="Always" DbType="integer NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="5026e0a7-b55a-4797-a94f-0f1faf3dc24f" />
       <Column Name="GameId" Type="System.Int32" AutoSync="Always" DbType="integer NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="92a0fc68-b03d-4446-98dc-93d9110824ed" />
       <Column Name="Score" Type="System.Int32" AutoSync="Always" DbType="integer NOT NULL" CanBeNull="false" UpdateCheck="Never" DefaultValue="'0'" ed:ValidateRequired="True" ed:Guid="a5e5e2b4-5304-4dd5-a788-f88ec1653417" />

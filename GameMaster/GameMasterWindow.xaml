@@ -7,6 +7,8 @@
         
         <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top" IsMainMenu="True">
             <MenuItem Header="_File">
+                <MenuItem x:Name="startGameMenuItem" Header="_Start Game" Click="startGameMenuItem_Click" />
+                <Separator />
                 <MenuItem x:Name="createQuestionSetMenuItem" Header="Create _Questions" Click="createQuestionSetMenuItem_Click" />
                 <MenuItem x:Name="createGameMenuItem" Header="Create _Game" Click="createGameMenuItem_Click" />
                 <Separator />

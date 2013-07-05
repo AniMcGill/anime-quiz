@@ -43,6 +43,8 @@ namespace Anime_Quiz_3.GameMaster
                 from questionSet in questionSets
                 select questionSet.Name;
             questionSetComboBox.ItemsSource = questionSetList;
+            if (CurrentQuestionSet.getInstance() != null)
+                questionSetComboBox.SelectedItem = CurrentQuestionSet.getInstance().Name;
         }
         void populateQuestionSetDataGrid()
         {
@@ -220,7 +222,8 @@ namespace Anime_Quiz_3.GameMaster
         private void closeBtn_Click(object sender, RoutedEventArgs e)
         {
             saveQuestions();
-            this.NavigationService.GoBack();
+            if (this.NavigationService.CanGoBack)
+                this.NavigationService.GoBack();
         }
         #endregion
 

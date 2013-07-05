@@ -7,11 +7,11 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Anime Quiz 3")]
+[assembly: AssemblyTitle("Anime Quiz 改")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("NatsumiHoshino")]
-[assembly: AssemblyProduct("Anime Quiz 3")]
+[assembly: AssemblyProduct("Anime Quiz 改")]
 [assembly: AssemblyCopyright("Copyright © Natsumi Hoshino 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

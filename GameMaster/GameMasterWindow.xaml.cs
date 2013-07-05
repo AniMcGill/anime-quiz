@@ -24,9 +24,14 @@ namespace Anime_Quiz_3
         public GameMasterWindow()
         {
             InitializeComponent();
+            _gmWindow.NavigationUIVisibility = System.Windows.Navigation.NavigationUIVisibility.Hidden;
         }
 
         #region File
+        private void startGameMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            _gmWindow.NavigationService.Navigate(new GameStartPage());
+        }
         private void createQuestionSetMenuItem_Click(object sender, RoutedEventArgs e)
         {
             _gmWindow.NavigationService.Navigate(new QuestionSetEditor());

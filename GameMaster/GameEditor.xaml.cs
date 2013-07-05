@@ -32,6 +32,8 @@ namespace Anime_Quiz_3.GameMaster
             games = db.GetTable<Games>();
             IEnumerable<String> gameNames = from game in games select game.Name;
             gameComboBox.ItemsSource = gameNames;
+            if (CurrentGame.getInstance() != null)
+                gameComboBox.SelectedItem = CurrentGame.getInstance().Name;
         }
         private void populateStackPanel()
         {
@@ -101,6 +103,8 @@ namespace Anime_Quiz_3.GameMaster
         {
             renameBtn.IsEnabled = (sender as TextBox).Text.Length > 0 && gameComboBox.SelectedIndex > -1;
         }
+
+
         #endregion
 
         #region Buttons
@@ -141,7 +145,8 @@ namespace Anime_Quiz_3.GameMaster
         private void closeBtn_Click(object sender, RoutedEventArgs e)
         {
             db.SubmitChanges();
-            this.NavigationService.GoBack();
+            if (this.NavigationService.CanGoBack)
+                this.NavigationService.GoBack();
         }
         #endregion
     }

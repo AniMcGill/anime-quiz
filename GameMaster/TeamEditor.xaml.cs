@@ -20,14 +20,25 @@ namespace Anime_Quiz_3.GameMaster
         {
             InitializeComponent();
             db = new GameDataContext();
+            populateGamesComboBox();
             populateTeamsComboBox();
         }
 
+        public void populateGamesComboBox()
+        {
+            var gameNames = from game in db.GetTable<Games>()
+                            select game.Name;
+            gameComboBox.ItemsSource = gameNames;
+            if (CurrentGame.getInstance() != null)
+                gameComboBox.SelectedItem = CurrentGame.getInstance().Name;
+        }
         public void populateTeamsComboBox()
         {
             teamsList = db.GetTable<Teams>();
             var teamNames = from team in teamsList select team.Name;
             teamComboBox.ItemsSource = teamNames;
+            if (CurrentTeam.getInstance() != null)
+                teamComboBox.SelectedItem = CurrentTeam.getInstance().Name;
         }
         public void populateTeamDataGrid()
         {
@@ -83,6 +94,10 @@ namespace Anime_Quiz_3.GameMaster
         {
             renameBtn.IsEnabled = teamComboBox.SelectedIndex > -1 && (sender as TextBox).Text.Length > 0;
         }
+        private void gameComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            registerTeamBtn.IsEnabled = (sender as ComboBox).SelectedIndex > -1;
+        }
         #endregion
 
         #region Buttons
@@ -131,11 +146,20 @@ namespace Anime_Quiz_3.GameMaster
             teamComboBox.SelectedItem = newTeam.Name;
             teamTextBox.Text = String.Empty;
         }
-
+        private void registerTeamBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Games registeredGame = (from game in db.GetTable<Games>()
+                                    where game.Name.Equals(gameComboBox.SelectedValue.ToString())
+                                    select game).Single();
+            if (CurrentTeam.getInstance() != null)
+                CurrentTeam.getInstance().Games = registeredGame;
+            db.SubmitChanges();
+        }
         private void closeBtn_Click(object sender, RoutedEventArgs e)
         {
             saveTeams();
-            this.NavigationService.GoBack();
+            if (this.NavigationService.CanGoBack)
+                this.NavigationService.GoBack();
         }
 
         #endregion

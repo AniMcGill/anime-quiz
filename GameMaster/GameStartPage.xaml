@@ -1,0 +1,19 @@
+﻿<Page x:Class="Anime_Quiz_3.GameMaster.GameStartPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="768" d:DesignWidth="1024"
+	Title="GameStartPage">
+
+    <Grid ScrollViewer.VerticalScrollBarVisibility="Auto">
+        <ComboBox Name="gameComboBox" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="120" Margin="5,5,5,5" Text="Select a Game" SelectionChanged="gameComboBox_SelectionChanged" />
+        <!--<Button Name="registerTeamBtn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="135,5,5,5" IsEnabled="True" Content="Register Teams" Click="registerTeamsBtn_Click" />-->
+        <ComboBox Name="questionSetComboBox" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="120" Margin="5,35,5,5" IsEnabled="False" Text="Select Question Set" SelectionChanged="questionSetComboBox_SelectionChanged" />
+        <Button Name="questionSetLoadBtn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="135,35,5,5" IsEnabled="False" Content="Load" Click="questionSetLoadBtn_Click" />
+        <StackPanel Name="teamsStackPanel" Width="600" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,75,0,0">
+            
+        </StackPanel>
+    </Grid>
+</Page>

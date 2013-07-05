@@ -8,12 +8,13 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Anime_Quiz_3</RootNamespace>
-    <AssemblyName>Anime Quiz 3</AssemblyName>
+    <AssemblyName>Anime Quiz 改</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
-    <PublishUrl>publish\</PublishUrl>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\Program Files\Anime Quiz\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -28,10 +29,10 @@
     <PublisherName>NatsumiHoshino</PublisherName>
     <SuiteName>Anime Quiz</SuiteName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -73,6 +74,18 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>59DE4C71910BBE4A97EEE67FF478F3011286A699</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Anime Quiz 3_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Devart.Data.Linq, Version=4.1.207.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
     <Reference Include="Devart.Data.SQLite, Version=4.5.202.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
@@ -105,6 +118,9 @@
     <Compile Include="Classes\CurrentQuestion.cs" />
     <Compile Include="Classes\CurrentQuestionSet.cs" />
     <Compile Include="Classes\CurrentTeam.cs" />
+    <Compile Include="Controls\ScoringControl.xaml.cs">
+      <DependentUpon>ScoringControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SoundMessageBox.cs" />
     <Compile Include="GameDB.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -117,13 +133,24 @@
     <Compile Include="GameMaster\GameMasterWindow.xaml.cs">
       <DependentUpon>GameMasterWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GameMaster\GameStartPage.xaml.cs">
+      <DependentUpon>GameStartPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GameMaster\TeamEditor.xaml.cs">
       <DependentUpon>TeamEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Scoring\TeamScoresView.xaml.cs">
       <DependentUpon>TeamScoresView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\ScoringControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GameMaster\GameEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GameMaster\GameStartPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -197,6 +224,7 @@
     <Content Include="animequiz.s3db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Anime Quiz 3_TemporaryKey.pfx" />
     <None Include="GameDB.Diagram1.view">
       <DependentUpon>GameDB.lqml</DependentUpon>
     </None>
