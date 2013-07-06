@@ -24,14 +24,16 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>false</MapFileExtensions>
+    <SupportUrl>http://www.natsumihoshino.com</SupportUrl>
     <TargetCulture>en-CA</TargetCulture>
-    <ProductName>Anime Quiz</ProductName>
+    <ProductName>Anime Quiz 改</ProductName>
     <PublisherName>NatsumiHoshino</PublisherName>
     <SuiteName>Anime Quiz</SuiteName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationRevision>4</ApplicationRevision>
+    <ApplicationVersion>3.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -85,6 +87,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>asagao_2012_08_14.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Devart.Data.Linq, Version=4.1.207.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
@@ -220,6 +225,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="asagao_2012_08_14.ico" />
     <Content Include="Resources\w_lulu.wav" />
     <Resource Include="Resources\troll.jpg" />
     <Resource Include="Resources\maedax.png" />

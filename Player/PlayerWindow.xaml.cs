@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using Anime_Quiz_3.Scoring;
 
 namespace Anime_Quiz_3.Player
 {
@@ -8,16 +9,25 @@ namespace Anime_Quiz_3.Player
     /// </summary>
     public partial class PlayerWindow : Window
     {
+        QuestionPage questionPage;
+        QuestionSetPage questionSetPage;
+
         public PlayerWindow()
         {
             InitializeComponent();
             _playerFrame.NavigationUIVisibility = System.Windows.Navigation.NavigationUIVisibility.Hidden;
+            _leaderboardFrame.NavigationUIVisibility = System.Windows.Navigation.NavigationUIVisibility.Hidden;
+            loadLeaderboard();
             loadQuestionSet();
         }
 
+        public void loadLeaderboard()
+        {
+            _leaderboardFrame.NavigationService.Navigate(new TeamScoresView());
+        }
         private void loadQuestionSet()
         {
-            QuestionSetPage questionSetPage = new QuestionSetPage();
+            questionSetPage = new QuestionSetPage();
             questionSetPage.QuestionSelected += questionSetPage_QuestionSelected;
             _playerFrame.NavigationService.Content = questionSetPage;
         }
@@ -28,7 +38,7 @@ namespace Anime_Quiz_3.Player
         void questionSetPage_QuestionSelected(object sender, EventArgs e)
         {
             _leaderboardFrame.Visibility = System.Windows.Visibility.Collapsed;
-            QuestionPage questionPage = new QuestionPage();
+            questionPage = new QuestionPage();
             _playerFrame.NavigationService.Navigate(questionPage);
             OnQuestionReady(EventArgs.Empty);
         }
@@ -41,10 +51,14 @@ namespace Anime_Quiz_3.Player
                 handler(this, e);
         }
 
+        public void showAnswer()
+        {
+            questionPage.showAnswer();
+        }
         public void Refresh()
         {
-            //_playerFrame.NavigationService.Refresh();
             loadQuestionSet();
+            loadLeaderboard();
             if (_leaderboardFrame.Visibility != System.Windows.Visibility.Visible)
                 _leaderboardFrame.Visibility = System.Windows.Visibility.Visible;
         }

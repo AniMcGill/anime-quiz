@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("Anime Quiz 改")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("NatsumiHoshino")]
+[assembly: AssemblyCompany("Atelier Hoshino")]
 [assembly: AssemblyProduct("Anime Quiz 改")]
 [assembly: AssemblyCopyright("Copyright © Natsumi Hoshino 2013")]
 [assembly: AssemblyTrademark("")]

@@ -1,23 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Anime_Quiz_3.Classes;
-using Anime_Quiz_3.Properties;
-using Devart.Data.Linq;
-using GameContext;
 using Anime_Quiz_3.Controls;
 using Anime_Quiz_3.Player;
+using Devart.Data.Linq;
+using GameContext;
 
 namespace Anime_Quiz_3.GameMaster
 {
@@ -30,6 +20,8 @@ namespace Anime_Quiz_3.GameMaster
         static Table<Games> games;
         public static IQueryable<QuestionSets> questionSets;
         static IQueryable<Teams> teams;
+
+        PlayerWindow playerWindow;
 
         public GameStartPage()
         {
@@ -69,9 +61,10 @@ namespace Anime_Quiz_3.GameMaster
             {
                 Separator separator = new Separator();
                 ScoringControl teamScoringControl = new ScoringControl();
-                teamScoringControl.Text = team.Name;
+                teamScoringControl.Text = "Team " + team.Name;
                 teamScoringControl.IsTeam = true;
-                teamScoringControl.RemoveButtonClicked += teamScoringControl_RemoveButtonClicked;
+                teamScoringControl.RemoveButtonClicked += (sender, args) =>
+                    teamScoringControl_RemoveButtonClicked(team.TeamId, args);
 
                 teamsStackPanel.Children.Add(teamScoringControl);
                 teamsStackPanel.Children.Add(separator);
@@ -83,8 +76,10 @@ namespace Anime_Quiz_3.GameMaster
                 {
                     ScoringControl teamMemberScoringControl = new ScoringControl();
                     teamMemberScoringControl.Text = teamMember.Name;
-                    teamMemberScoringControl.AddButtonClicked += teamMemberScoringControl_AddButtonClicked;
-                    teamMemberScoringControl.RemoveButtonClicked += teamMemberScoringControl_RemoveButtonClicked;
+                    teamMemberScoringControl.AddButtonClicked += (sender, args) =>
+                        teamMemberScoringControl_AddButtonClicked(teamMember.MemberId, teamMember.TeamId, args);
+                    teamMemberScoringControl.RemoveButtonClicked += (sender,args) =>
+                        teamMemberScoringControl_RemoveButtonClicked(teamMember.MemberId, teamMember.TeamId, args);
 
                     teamsStackPanel.Children.Add(teamMemberScoringControl);
                 }
@@ -92,6 +87,40 @@ namespace Anime_Quiz_3.GameMaster
                 endSeparator.Margin = new Thickness(0, 0, 0, 20);
                 teamsStackPanel.Children.Add(endSeparator);
             }
+        }
+        private void initializeScores()
+        {
+            getTeams();
+            foreach (Teams team in teams)
+            {
+                // Create team score entry
+                TeamScores teamScore = new TeamScores();
+                teamScore.TeamId = team.TeamId;
+                teamScore.GameId = CurrentGame.getInstance().GameId;
+                db.TeamScores.InsertOnSubmit(teamScore);
+
+                //Create individual score entry
+                IQueryable<TeamMembers> teamMembers = from teamMember in db.GetTable<TeamMembers>()
+                                                      where teamMember.TeamId.Equals(team.TeamId)
+                                                      select teamMember;
+                foreach (TeamMembers teamMember in teamMembers)
+                {
+                    Scores score = new Scores();
+                    score.MemberId = teamMember.MemberId;
+                    score.GameId = CurrentGame.getInstance().GameId;
+                    db.Scores.InsertOnSubmit(score);
+                }
+            }
+            db.SubmitChanges();
+        }
+        private void toggleQuestionInfo(bool show)
+        {
+            showAnswerBtn.IsEnabled = show;
+            closeQuestionBtn.IsEnabled = show;
+            if (show)
+                currentQuestionStack.Visibility = System.Windows.Visibility.Visible;
+            else
+                currentQuestionStack.Visibility = System.Windows.Visibility.Collapsed;
         }
 
         #region Event Handlers
@@ -102,6 +131,12 @@ namespace Anime_Quiz_3.GameMaster
                                      select game).Single());
             getQuestionSets();
             questionSetComboBox.IsEnabled = gameComboBox.SelectedIndex >= 0;
+            loadGameBtn.IsEnabled = gameComboBox.SelectedIndex >= 0;
+        }
+        private void loadGameBtn_Click(object sender, RoutedEventArgs e)
+        {
+            loadGameBtn.IsEnabled = false;
+            initializeScores();
         }
 
         private void questionSetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -109,12 +144,24 @@ namespace Anime_Quiz_3.GameMaster
             CurrentQuestionSet.setInstance((from questionSet in questionSets
                                             where questionSet.Name.Equals((sender as ComboBox).SelectedValue.ToString())
                                             select questionSet).Single());
-            questionSetLoadBtn.IsEnabled = questionSetComboBox.SelectedIndex >= 0;
+            questionSetLoadBtn.IsEnabled = questionSetComboBox.SelectedIndex >= 0 && !loadGameBtn.IsEnabled;
         }
-
         private void questionSetLoadBtn_Click(object sender, RoutedEventArgs e)
         {
-            bool playerWindowExists = false;
+            try
+            {
+                playerWindow.Refresh();
+            }
+            catch
+            {
+                playerWindow = new PlayerWindow();
+                playerWindow.QuestionReady += playerWindow_QuestionReady;
+                playerWindow.Show();
+
+                getTeams();
+                loadTeams();
+            }
+            /*bool playerWindowExists = false;
             foreach (Window window in Application.Current.Windows)
             {
                 if (window is PlayerWindow)
@@ -127,39 +174,92 @@ namespace Anime_Quiz_3.GameMaster
             }
             if (!playerWindowExists)
             {
-                PlayerWindow playerWindow = new PlayerWindow();
+                playerWindow = new PlayerWindow();
                 playerWindow.QuestionReady += playerWindow_QuestionReady;
                 playerWindow.Show();
                 
                 getTeams();
                 loadTeams();
-            } 
+            }*/
+        }
+        private void showAnswerBtn_Click(object sender, RoutedEventArgs e)
+        {
+            playerWindow.showAnswer();
+            CurrentQuestion.getInstance().Answered = true;
+            db.SubmitChanges();
+        }
+
+        private void closeQuestionBtn_Click(object sender, RoutedEventArgs e)
+        {
+            toggleQuestionInfo(false);
+            playerWindow.Refresh();
+            CurrentQuestion.setInstance(null);
         }
 
         void playerWindow_QuestionReady(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            toggleQuestionInfo(true);
+            currentQuestionAnswerLabel.Content = "Answer: " + CurrentQuestion.getInstance().Answer.ToString();
+            currentQuestionPointLabel.Content = "Points: " + CurrentQuestion.getInstance().Points.ToString();
+            //TODO: Reset answering order
         }
 
-        public event EventHandler ShowAnswer;
-        protected virtual void OnShowAnswer(EventArgs e)
-        {
-            EventHandler handler = ShowAnswer;
-            if (handler != null)
-                handler(this, e);
-        }
 
-        void teamScoringControl_RemoveButtonClicked(object sender, EventArgs e)
+        void teamScoringControl_RemoveButtonClicked(int teamId, EventArgs e)
         {
-            throw new NotImplementedException();
+            try
+            {
+                TeamScores teamScore = (from team in db.GetTable<TeamScores>()
+                                        where team.TeamId.Equals(teamId)
+                                        select team).Single();
+                teamScore.Score -= CurrentQuestion.getInstance().Points;
+                db.SubmitChanges();
+            }
+            catch (NullReferenceException crap)
+            {
+                SoundMessageBox.Show("No Question has been loaded", "Fail", Anime_Quiz_3.Properties.Resources.Muda);
+            }
         }
-        void teamMemberScoringControl_AddButtonClicked(object sender, EventArgs e)
+        void teamMemberScoringControl_AddButtonClicked(int teamMemberId, int teamId, EventArgs e)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Scores teamMemberScore = (from teamMember in db.GetTable<Scores>()
+                                          where teamMember.MemberId.Equals(teamMemberId)
+                                          select teamMember).Single();
+                teamMemberScore.Score += CurrentQuestion.getInstance().Points;
+
+                TeamScores teamScore = (from team in db.GetTable<TeamScores>()
+                                        where team.TeamId.Equals(teamId)
+                                        select team).Single();
+                teamScore.Score += CurrentQuestion.getInstance().Points;
+                db.SubmitChanges();
+                playerWindow.showAnswer();
+            }
+            catch (NullReferenceException crap)
+            {
+                SoundMessageBox.Show("No Question has been loaded", "Fail", Anime_Quiz_3.Properties.Resources.Muda);
+            }
         }
-        void teamMemberScoringControl_RemoveButtonClicked(object sender, EventArgs e)
+        void teamMemberScoringControl_RemoveButtonClicked(int teamMemberId, int teamId, EventArgs e)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Scores teamMemberScore = (from teamMember in db.GetTable<Scores>()
+                                          where teamMember.MemberId.Equals(teamMemberId)
+                                          select teamMember).Single();
+                teamMemberScore.Score -= CurrentQuestion.getInstance().Points;
+
+                TeamScores teamScore = (from team in db.GetTable<TeamScores>()
+                                        where team.TeamId.Equals(teamId)
+                                        select team).Single();
+                teamScore.Score -= CurrentQuestion.getInstance().Points;
+                db.SubmitChanges();
+            }
+            catch (NullReferenceException crap)
+            {
+                SoundMessageBox.Show("No Question has been loaded", "Fail", Anime_Quiz_3.Properties.Resources.Muda);
+            }
         }
         #endregion
     }

@@ -153,6 +153,7 @@ namespace Anime_Quiz_3.GameMaster
                                     select game).Single();
             if (CurrentTeam.getInstance() != null)
                 CurrentTeam.getInstance().Games = registeredGame;
+
             db.SubmitChanges();
         }
         private void closeBtn_Click(object sender, RoutedEventArgs e)

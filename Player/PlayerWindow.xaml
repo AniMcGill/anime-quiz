@@ -4,7 +4,7 @@
         Title="PlayerWindow" Height="768" Width="1024">
     <Grid>
         <DockPanel HorizontalAlignment="Left" LastChildFill="True" Margin="0,0,0,0" VerticalAlignment="Top">
-            <Frame x:Name="_leaderboardFrame" DockPanel.Dock="Right" />
+            <Frame x:Name="_leaderboardFrame" DockPanel.Dock="Right" HorizontalAlignment="Right" />
             <Frame x:Name="_playerFrame" />
         </DockPanel>
     </Grid>

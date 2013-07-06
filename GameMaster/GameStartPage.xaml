@@ -9,10 +9,18 @@
 
     <Grid ScrollViewer.VerticalScrollBarVisibility="Auto">
         <ComboBox Name="gameComboBox" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="120" Margin="5,5,5,5" Text="Select a Game" SelectionChanged="gameComboBox_SelectionChanged" />
-        <!--<Button Name="registerTeamBtn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="135,5,5,5" IsEnabled="True" Content="Register Teams" Click="registerTeamsBtn_Click" />-->
+        <Button Name="loadGameBtn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="135,5,5,5" IsEnabled="False" Content="Register Teams" Click="loadGameBtn_Click" />
         <ComboBox Name="questionSetComboBox" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="120" Margin="5,35,5,5" IsEnabled="False" Text="Select Question Set" SelectionChanged="questionSetComboBox_SelectionChanged" />
         <Button Name="questionSetLoadBtn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="135,35,5,5" IsEnabled="False" Content="Load" Click="questionSetLoadBtn_Click" />
-        <StackPanel Name="teamsStackPanel" Width="600" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,75,0,0">
+        <StackPanel Name="currentQuestionStack" HorizontalAlignment="Right" Orientation="Vertical" VerticalAlignment="Top" Visibility="Collapsed">
+            <Label x:Name="currentQuestionLabel" HorizontalAlignment="Center" FontSize="20" Content="Current Question" />
+            <Label x:Name="currentQuestionAnswerLabel" HorizontalAlignment="Center" Content="Answer: " FontSize="15" />
+            <Label x:Name="currentQuestionPointLabel" HorizontalAlignment="Center" Content="Points: " />
+        </StackPanel>
+        <Button Name="showAnswerBtn" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5,100,95,5" Content="Show Answer" IsEnabled="False" Click="showAnswerBtn_Click" />
+        <Button Name="closeQuestionBtn" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5,100,5,5" Content="Close Question" IsEnabled="False" Click="closeQuestionBtn_Click" />
+        
+        <StackPanel Name="teamsStackPanel" Width="600" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,150,0,0">
             
         </StackPanel>
     </Grid>
