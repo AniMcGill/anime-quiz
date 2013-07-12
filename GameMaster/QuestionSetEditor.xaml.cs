@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Anime_Quiz_3.Classes;
 using Anime_Quiz_3.Properties;
@@ -27,6 +32,7 @@ namespace Anime_Quiz_3.GameMaster
             
             populateQuestionSetSelector();
             populateTypeComboBox();
+            questionSetDataGrid.CellEditEnding += HandleEditEnding;
         }
 
         #region QuestionSets
@@ -101,6 +107,7 @@ namespace Anime_Quiz_3.GameMaster
         {
             if (CurrentQuestionSet.getInstance() != null)
             {
+                cleanRows();
                 db.SubmitChanges();
                 var changedQuestions = from question in db.GetTable<Questions>()
                                        where question.QuestionSetId == 0
@@ -113,13 +120,19 @@ namespace Anime_Quiz_3.GameMaster
                 db.SubmitChanges();
             }
         }
-        // TODO
-        void openFilePicker(TextBox targetCell)
+        void cleanRows()
+        {
+            if (db.HasErrors)
+            {
+                questionSetDataGrid.Items.RemoveAt(questionSetDataGrid.Items.Count - 1);
+            }
+        }
+        String pickFile()
         {
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
             switch (CurrentQuestionSet.getInstance().Type)
             {
-                case (int) Types.Music:
+                case (int)Types.Music:
                     if (Settings.Default.defaultMusicFolder != String.Empty)
                         openFileDialog.InitialDirectory = Settings.Default.defaultMusicFolder;
                     openFileDialog.Filter = "Music Formats|" +
@@ -128,15 +141,55 @@ namespace Anime_Quiz_3.GameMaster
                         "wav (*.wav)|*.wav|wma (*.wma)|*.wma|mid (*.mid)|*.mid|" +
                         "mp4 (*.mp4)|*.mp4";
                     break;
-                case (int) Types.Screenshot:
+                case (int)Types.Screenshot:
                     if (Settings.Default.defaultScreenshotFolder != String.Empty)
                         openFileDialog.InitialDirectory = Settings.Default.defaultScreenshotFolder;
                     openFileDialog.Filter = "JPG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|BMP files (*.bmp)|*.bmp";
                     break;
             }
             if (openFileDialog.ShowDialog() ?? false)
-                targetCell.Text = openFileDialog.FileName;
+                return openFileDialog.FileName;
+            else
+                return String.Empty;
         }
+
+        // to remove
+
+        /// <summary>
+        ///     Get the current cell
+        /// </summary>
+        /// <see cref="http://stackoverflow.com/questions/1764498/wpf-datagrid-programmatically-editing-a-cell"/>
+        static DataGridCell GetCurrentCell(DataGrid grid, DataGridCellInfo cellInfo)
+        {
+            DataGridRow currentRow = (DataGridRow)grid.ItemContainerGenerator.ContainerFromItem(cellInfo.Item);
+            DataGridCellsPresenter presenter = GetVisualChild<DataGridCellsPresenter>(currentRow);
+            int columnIndex = grid.Columns.IndexOf(cellInfo.Column);
+            return presenter.ItemContainerGenerator.ContainerFromIndex(columnIndex) as DataGridCell;
+        }
+        /// <summary>
+        ///     
+        /// </summary>
+        /// <see cref="http://wpf.codeplex.com/discussions/34542"/>
+        static T GetVisualChild<T>(Visual parent) where T : Visual
+        {
+            T child = default(T);
+            int numVisuals = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < numVisuals; i++)
+            {
+                Visual v = (Visual)VisualTreeHelper.GetChild(parent, i);
+                child = v as T;
+                if (child == null)
+                {
+                    child = GetVisualChild<T>(v);
+                }
+                if (child != null)
+                {
+                    break;
+                }
+            }
+            return child;
+        }
+        
         void displayMedia(String filename)
         {
             switch (CurrentQuestionSet.getInstance().Type)
@@ -152,28 +205,67 @@ namespace Anime_Quiz_3.GameMaster
                     break;
             }
         }
-        private void questionSetDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        void hideMedia()
         {
             // Stop whatever preview has been running
             try { musicPreview.Stop(); }
             catch { }
             musicPreview.Visibility = System.Windows.Visibility.Collapsed;
             screenshotPreviewImage.Visibility = System.Windows.Visibility.Collapsed;
+        }
+
+        private void questionSetDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            /*
+            if (questionSetDataGrid.CurrentColumn.Header.Equals("Question") &&
+                CurrentQuestionSet.getInstance().Type != (int)Types.Question)
+            {
+                hideMedia();
+                
+                DataGridCell currentCell = GetCurrentCell(questionSetDataGrid, questionSetDataGrid.CurrentCell);
+
+                if ((currentCell.Content as TextBlock).Text == String.Empty)
+                {
+                    TextBlock filename = new TextBlock();
+                    filename.Text = pickFile();
+                    currentCell.Content = filename;
+                    questionSetDataGrid.CommitEdit();
+                    questionSetDataGrid.Items.Refresh();
+                }
+                else
+                    displayMedia(currentCell.Content.ToString());
+            }*/
 
             if (e.AddedCells.Count != 1)
                 return;
-
-            if (e.AddedCells[0].Column.Header.Equals("Question")
-                && CurrentQuestionSet.getInstance().Type != (int)Types.Question)
+            //MessageBox.Show((e.AddedCells[0].Column.GetCellContent(e.AddedCells[0].Item) as TextBlock).Text);
+            if (e.AddedCells[0].Column.Header.Equals("Question") &&
+                CurrentQuestionSet.getInstance().Type != (int)Types.Question)
             {
-                TextBox currentCell = e.AddedCells[0].Column.GetCellContent(e.AddedCells[0].Item) as TextBox;
+                hideMedia();
+
+                TextBlock currentCell = e.AddedCells[0].Column.GetCellContent(e.AddedCells[0].Item) as TextBlock;
                 if (currentCell.Text == String.Empty)
-                    openFilePicker(currentCell);
+                {
+                    currentCell.Text = pickFile(); //string doesn't register
+                    //questionSetDataGrid.GetBindingExpression(DataGrid.ItemsSourceProperty).UpdateTarget();
+                    //BindingOperations.GetBindingExpressionBase(questionSetDataGrid, DataGrid.ItemsSourceProperty).UpdateSource();
+                }
                 else
-                    displayMedia(currentCell.Text);
+                    displayMedia(currentCell.Text.ToString());
             }
         }
-
+        private bool isManualEditCommit;
+        void HandleEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            if (!isManualEditCommit)
+            {
+                isManualEditCommit = true;
+                DataGrid grid = (DataGrid)sender;
+                grid.CommitEdit(DataGridEditingUnit.Row, true);
+                isManualEditCommit = false;
+            }
+        }
         #endregion
 
         #region Buttons

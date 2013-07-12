@@ -24,7 +24,7 @@
 
         
         <DockPanel x:Name="questionDock" HorizontalAlignment="Stretch" Height="683" LastChildFill="True" Margin="10,75,0,0" VerticalAlignment="Top">
-            <DataGrid x:Name="questionSetDataGrid" DockPanel.Dock="Left" HorizontalAlignment="Left" MaxHeight="683" Margin="10,0,0,0" VerticalAlignment="Top" Visibility="Hidden" SelectedCellsChanged="questionSetDataGrid_SelectedCellsChanged"/>
+            <DataGrid x:Name="questionSetDataGrid" DockPanel.Dock="Left" HorizontalAlignment="Left" MaxHeight="683" Margin="10,0,0,0" VerticalAlignment="Top" Visibility="Hidden" SelectionUnit="Cell" SelectedCellsChanged="questionSetDataGrid_SelectedCellsChanged"/>
             <Image x:Name="screenshotPreviewImage" DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10,0,0,0" MaxHeight="683" MaxWidth="236" Visibility="Collapsed" />
             <MediaElement x:Name="musicPreview" DockPanel.Dock="Right" MaxHeight="683" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10,0,0,0" MaxWidth="236" Visibility="Collapsed" LoadedBehavior="Manual"/>
         </DockPanel>

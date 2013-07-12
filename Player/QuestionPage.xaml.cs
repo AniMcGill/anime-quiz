@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 using Anime_Quiz_3.Classes;
+using GameContext;
 
 namespace Anime_Quiz_3.Player
 {
@@ -23,16 +24,15 @@ namespace Anime_Quiz_3.Player
         private void initializePage()
         {
             loadAnswerLabel();
-            // 0: Question, 1: Music 2: Screenshot
             switch (CurrentQuestionSet.getInstance().Type)
             {
-                case 0:
+                case (int)Types.Question:
                     loadQuestion();
                     break;
-                case 1:
+                case (int)Types.Music:
                     loadMusic();
                     break;
-                case 2:
+                case (int)Types.Screenshot:
                     loadScreenshot();
                     break;
             }
@@ -70,12 +70,12 @@ namespace Anime_Quiz_3.Player
         {
             switch (CurrentQuestionSet.getInstance().Type)
             {
-                case 0:
+                case (int)Types.Question:
                     break;
-                case 1:
+                case (int)Types.Music:
                     musicPlayer.Stop();
                     break;
-                case 2:
+                case (int)Types.Screenshot:
                     //TODO
                     break;
             }
