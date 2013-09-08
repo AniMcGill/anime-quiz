@@ -16,11 +16,8 @@
 
         <Button x:Name="closeBtn" Content="Close" HorizontalAlignment="Left" Margin="939,10,0,0" VerticalAlignment="Top" Width="75" Click="closeBtn_Click"/>
 
-        <ComboBox x:Name="gameComboBox" HorizontalAlignment="Left" Height="23" Margin="10,37,0,0" VerticalAlignment="Top" Width="155" Text="Select Game" SelectionChanged="gameComboBox_SelectionChanged" />
-        <Button x:Name="registerTeamBtn" HorizontalAlignment="Left" Margin="170,37,0,0" VerticalAlignment="Top" IsEnabled="False" Content="Register" Click="registerTeamBtn_Click" />
-
-        <TextBox x:Name="teamTextBox"  HorizontalAlignment="Left" Height="23" Margin="10,64,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="155" TextChanged="teamTextBox_TextChanged"/>
-        <Button x:Name="addBtn" Content="Add Member" HorizontalAlignment="Left" Margin="170,64,0,0" VerticalAlignment="Top" IsEnabled="False" Click="addBtn_Click"/>
+        <TextBox x:Name="teamTextBox"  HorizontalAlignment="Left" Height="23" Margin="10,37,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="155" TextChanged="teamTextBox_TextChanged"/>
+        <Button x:Name="addBtn" Content="Add Member" HorizontalAlignment="Left" Margin="170,37,0,0" VerticalAlignment="Top" IsEnabled="False" Click="addBtn_Click"/>
 
         <DockPanel x:Name="teamDock" HorizontalAlignment="Stretch" Height="683" LastChildFill="True" Margin="10,100,0,0" VerticalAlignment="Top">
             <DataGrid x:Name="teamDataGrid" DockPanel.Dock="Left" HorizontalAlignment="Left" MaxHeight="683" Margin="10,0,0,0" VerticalAlignment="Top" Visibility="Hidden" />

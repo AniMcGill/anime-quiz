@@ -119,7 +119,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Classes\CurrentGame.cs" />
     <Compile Include="Classes\CurrentQuestion.cs" />
     <Compile Include="Classes\CurrentQuestionSet.cs" />
     <Compile Include="Classes\CurrentTeam.cs" />
@@ -131,9 +130,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>GameDB.lqml</DependentUpon>
-    </Compile>
-    <Compile Include="GameMaster\GameEditor.xaml.cs">
-      <DependentUpon>GameEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="GameMaster\GameMasterWindow.xaml.cs">
       <DependentUpon>GameMasterWindow.xaml</DependentUpon>
@@ -157,10 +153,6 @@
       <DependentUpon>TeamScoresView.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\ScoringControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="GameMaster\GameEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -241,7 +233,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Content Include="animequiz.s3db">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Anime Quiz 3_TemporaryKey.pfx" />
     <None Include="GameDB.Diagram1.view">

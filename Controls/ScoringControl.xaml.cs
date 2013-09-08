@@ -15,7 +15,7 @@ namespace Anime_Quiz_3.Controls
         {
             InitializeComponent();
             addPointBtn.Click += addPointBtn_Click;
-            removePointBtn.Click += removePointBtn_Click;
+            //removePointBtn.Click += removePointBtn_Click;
         }
 
         public object Text
@@ -31,7 +31,8 @@ namespace Anime_Quiz_3.Controls
                 isTeam = value;
                 if (isTeam)
                 {
-                    scoringControlGrid.Children.Remove(addPointBtn);
+                    //scoringControlGrid.Children.Remove(addPointBtn);
+                    addPointBtn.Content += " 100";
                     nameLabel.FontWeight = FontWeights.Bold;
                 }
             }
@@ -42,13 +43,14 @@ namespace Anime_Quiz_3.Controls
         {
             OnAddButtonClicked(EventArgs.Empty);
         }
+        /*
         void removePointBtn_Click(object sender, RoutedEventArgs e)
         {
             OnRemoveButtonClicked(EventArgs.Empty);
-        }
+        }*/
 
         public event EventHandler AddButtonClicked;
-        public event EventHandler RemoveButtonClicked;
+        //public event EventHandler RemoveButtonClicked;
 
         protected virtual void OnAddButtonClicked(EventArgs e)
         {
@@ -56,11 +58,12 @@ namespace Anime_Quiz_3.Controls
             if (handler != null)
                 handler(this, e);
         }
+        /*
         protected virtual void OnRemoveButtonClicked(EventArgs e)
         {
             EventHandler handler = RemoveButtonClicked;
             if (handler != null)
                 handler(this, e);
-        }
+        }*/
     }
 }

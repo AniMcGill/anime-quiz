@@ -24,10 +24,6 @@ namespace Anime_Quiz_3
         {
             _gmWindow.NavigationService.Navigate(new QuestionSetEditor());
         }
-        private void createGameMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            _gmWindow.NavigationService.Navigate(new GameEditor());
-        }
         #endregion
 
         private void teamsMenuItem_Click(object sender, RoutedEventArgs e)

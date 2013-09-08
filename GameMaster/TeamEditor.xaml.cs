@@ -20,18 +20,10 @@ namespace Anime_Quiz_3.GameMaster
         {
             InitializeComponent();
             db = new GameDataContext();
-            populateGamesComboBox();
             populateTeamsComboBox();
+            this.GotFocus += TeamEditor_GotFocus;
         }
 
-        public void populateGamesComboBox()
-        {
-            var gameNames = from game in db.GetTable<Games>()
-                            select game.Name;
-            gameComboBox.ItemsSource = gameNames;
-            if (CurrentGame.getInstance() != null)
-                gameComboBox.SelectedItem = CurrentGame.getInstance().Name;
-        }
         public void populateTeamsComboBox()
         {
             teamsList = db.GetTable<Teams>();
@@ -94,10 +86,6 @@ namespace Anime_Quiz_3.GameMaster
         {
             renameBtn.IsEnabled = teamComboBox.SelectedIndex > -1 && (sender as TextBox).Text.Length > 0;
         }
-        private void gameComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            registerTeamBtn.IsEnabled = (sender as ComboBox).SelectedIndex > -1;
-        }
         #endregion
 
         #region Buttons
@@ -107,19 +95,8 @@ namespace Anime_Quiz_3.GameMaster
             var teamMembersToDelete = from teamMember in teamMembersList 
                                       where teamMember.TeamId == CurrentTeam.getInstance().TeamId 
                                       select teamMember;
-            var teamScoresToDelete = from teamScore in db.GetTable<TeamScores>()
-                                     where teamScore.TeamId == CurrentTeam.getInstance().TeamId
-                                     select teamScore;
-            foreach (TeamMembers teamMemberToDelete in teamMembersToDelete)
-            {
-                var scoresToDelete = from score in db.GetTable<Scores>()
-                                    where score.MemberId == teamMemberToDelete.MemberId
-                                    select score;
-                db.Scores.DeleteAllOnSubmit(scoresToDelete);    //might not be possible to delete teams
-            }
 
             db.TeamMembers.DeleteAllOnSubmit(teamMembersToDelete);
-            db.TeamScores.DeleteAllOnSubmit(teamScoresToDelete);
             CurrentTeam.setInstance(null);
 
             db.SubmitChanges();
@@ -146,21 +123,15 @@ namespace Anime_Quiz_3.GameMaster
             teamComboBox.SelectedItem = newTeam.Name;
             teamTextBox.Text = String.Empty;
         }
-        private void registerTeamBtn_Click(object sender, RoutedEventArgs e)
-        {
-            Games registeredGame = (from game in db.GetTable<Games>()
-                                    where game.Name.Equals(gameComboBox.SelectedValue.ToString())
-                                    select game).Single();
-            if (CurrentTeam.getInstance() != null)
-                CurrentTeam.getInstance().Games = registeredGame;
 
-            db.SubmitChanges();
+        void TeamEditor_GotFocus(object sender, RoutedEventArgs e)
+        {
+            closeBtn.IsEnabled = this.NavigationService.CanGoBack;
         }
         private void closeBtn_Click(object sender, RoutedEventArgs e)
         {
             saveTeams();
-            if (this.NavigationService.CanGoBack)
-                this.NavigationService.GoBack();
+            this.NavigationService.GoBack();
         }
 
         #endregion

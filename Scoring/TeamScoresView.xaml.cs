@@ -11,7 +11,7 @@ namespace Anime_Quiz_3.Scoring
     /// </summary>
     public partial class TeamScoresView : Page
     {
-        IQueryable<TeamScores> teamScores;
+        IQueryable<Teams> teams;
         public TeamScoresView()
         {
             InitializeComponent();
@@ -19,22 +19,19 @@ namespace Anime_Quiz_3.Scoring
         }
         void getScores()
         {
-            teamScores = from teamScore in GameStartPage.db.GetTable<TeamScores>()
-                         where teamScore.TeamId.Equals(CurrentTeam.getInstance().TeamId) &&
-                                teamScore.GameId.Equals(CurrentGame.getInstance().GameId)
-                         select teamScore;
-            teamScores.OrderBy(t => t.Score);
+            teams = GameStartPage.db.GetTable<Teams>();
+            teams.OrderBy(t => t.Score);
         }
 
         void displayScores()
         {
-            foreach (TeamScores teamScore in teamScores)
+            foreach (Teams team in teams)
             {
                 Label teamNameLabel = new Label();
-                teamNameLabel.Content = teamScore.Teams.Name;
+                teamNameLabel.Content = team.Name;
                 teamNameLabel.Margin = new System.Windows.Thickness(0, 20, 0, 0);
                 Label teamScoreLabel = new Label();
-                teamScoreLabel.Content = teamScore.Score;
+                teamScoreLabel.Content = team.Score;
 
                 pageStack.Children.Add(teamNameLabel);
                 pageStack.Children.Add(teamScoreLabel);

@@ -6,7 +6,6 @@ using System.Windows.Controls;
 using Anime_Quiz_3.Classes;
 using Anime_Quiz_3.Controls;
 using Anime_Quiz_3.Player;
-using Devart.Data.Linq;
 using GameContext;
 
 namespace Anime_Quiz_3.GameMaster
@@ -17,7 +16,6 @@ namespace Anime_Quiz_3.GameMaster
     public partial class GameStartPage : Page
     {
         public static GameDataContext db;
-        static Table<Games> games;
         public static IQueryable<QuestionSets> questionSets;
         static IQueryable<Teams> teams;
 
@@ -28,22 +26,13 @@ namespace Anime_Quiz_3.GameMaster
             InitializeComponent();
             db = new GameDataContext();
             
-            getGames();
+            getQuestionSets();
+            getTeams();
         }
 
-        private void getGames()
-        {
-            games = db.GetTable<Games>();
-            IEnumerable<String> gameNames = from game in games select game.Name;
-            gameComboBox.ItemsSource = gameNames;
-            if (CurrentGame.getInstance() != null)
-                gameComboBox.SelectedItem = CurrentGame.getInstance().Name;
-        }
         private void getQuestionSets()
         {
-            questionSets = from questionSet in db.GetTable<QuestionSets>()
-                           where questionSet.GameId.Equals(CurrentGame.getInstance().GameId)
-                           select questionSet;
+            questionSets = db.GetTable<QuestionSets>();
             IEnumerable<String> questionSetNames = from questionSet in questionSets select questionSet.Name;
             questionSetComboBox.ItemsSource = questionSetNames;
             if (CurrentQuestionSet.getInstance() != null)
@@ -51,9 +40,7 @@ namespace Anime_Quiz_3.GameMaster
         }
         private void getTeams()
         {
-            teams = from team in db.GetTable<Teams>()
-                    where team.GameId.Equals(CurrentGame.getInstance().GameId)
-                    select team;
+            teams = db.GetTable<Teams>();
         }
         private void loadTeams()
         {
@@ -62,9 +49,9 @@ namespace Anime_Quiz_3.GameMaster
                 Separator separator = new Separator();
                 ScoringControl teamScoringControl = new ScoringControl();
                 teamScoringControl.Text = "Team " + team.Name;
+                teamScoringControl.AddButtonClicked += (sender, args) =>
+                    teamScoringControl_AddButtonClicked(team.TeamId, args);
                 teamScoringControl.IsTeam = true;
-                teamScoringControl.RemoveButtonClicked += (sender, args) =>
-                    teamScoringControl_RemoveButtonClicked(team.TeamId, args);
 
                 teamsStackPanel.Children.Add(teamScoringControl);
                 teamsStackPanel.Children.Add(separator);
@@ -75,11 +62,9 @@ namespace Anime_Quiz_3.GameMaster
                 foreach (TeamMembers teamMember in teamMembers)
                 {
                     ScoringControl teamMemberScoringControl = new ScoringControl();
-                    teamMemberScoringControl.Text = teamMember.Name;
+                    teamMemberScoringControl.Text = teamMember.MemberName;
                     teamMemberScoringControl.AddButtonClicked += (sender, args) =>
                         teamMemberScoringControl_AddButtonClicked(teamMember.MemberId, teamMember.TeamId, args);
-                    teamMemberScoringControl.RemoveButtonClicked += (sender,args) =>
-                        teamMemberScoringControl_RemoveButtonClicked(teamMember.MemberId, teamMember.TeamId, args);
 
                     teamsStackPanel.Children.Add(teamMemberScoringControl);
                 }
@@ -88,31 +73,11 @@ namespace Anime_Quiz_3.GameMaster
                 teamsStackPanel.Children.Add(endSeparator);
             }
         }
-        private void initializeScores()
-        {
-            getTeams();
-            foreach (Teams team in teams)
-            {
-                // Create team score entry
-                TeamScores teamScore = new TeamScores();
-                teamScore.TeamId = team.TeamId;
-                teamScore.GameId = CurrentGame.getInstance().GameId;
-                db.TeamScores.InsertOnSubmit(teamScore);
-
-                //Create individual score entry
-                IQueryable<TeamMembers> teamMembers = from teamMember in db.GetTable<TeamMembers>()
-                                                      where teamMember.TeamId.Equals(team.TeamId)
-                                                      select teamMember;
-                foreach (TeamMembers teamMember in teamMembers)
-                {
-                    Scores score = new Scores();
-                    score.MemberId = teamMember.MemberId;
-                    score.GameId = CurrentGame.getInstance().GameId;
-                    db.Scores.InsertOnSubmit(score);
-                }
-            }
-            db.SubmitChanges();
-        }
+        
+        /// <summary>
+        ///     Toggles the visibility of the Current Question information section
+        /// </summary>
+        /// <param name="show">True if visible; False otherwise</param>
         private void toggleQuestionInfo(bool show)
         {
             showAnswerBtn.IsEnabled = show;
@@ -124,27 +89,13 @@ namespace Anime_Quiz_3.GameMaster
         }
 
         #region Event Handlers
-        private void gameComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            CurrentGame.setInstance((from game in games
-                                     where game.Name.Equals((sender as ComboBox).SelectedValue.ToString())
-                                     select game).Single());
-            getQuestionSets();
-            questionSetComboBox.IsEnabled = gameComboBox.SelectedIndex >= 0;
-            loadGameBtn.IsEnabled = gameComboBox.SelectedIndex >= 0;
-        }
-        private void loadGameBtn_Click(object sender, RoutedEventArgs e)
-        {
-            loadGameBtn.IsEnabled = false;
-            initializeScores();
-        }
 
         private void questionSetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CurrentQuestionSet.setInstance((from questionSet in questionSets
                                             where questionSet.Name.Equals((sender as ComboBox).SelectedValue.ToString())
                                             select questionSet).Single());
-            questionSetLoadBtn.IsEnabled = questionSetComboBox.SelectedIndex >= 0 && !loadGameBtn.IsEnabled;
+            questionSetLoadBtn.IsEnabled = questionSetComboBox.SelectedIndex >= 0;
         }
         private void questionSetLoadBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -204,57 +155,37 @@ namespace Anime_Quiz_3.GameMaster
             //TODO: Reset answering order
         }
 
-
-        void teamScoringControl_RemoveButtonClicked(int teamId, EventArgs e)
+        /// <summary>
+        ///     Add 100 to the score of each other team
+        /// </summary>
+        /// <param name="teamId">The Id of the team to exclude</param>
+        /// <param name="e"></param>
+        void teamScoringControl_AddButtonClicked(int teamId, EventArgs e)
         {
-            try
+            IEnumerable<Teams> otherTeams = from team in teams
+                                             where !team.TeamId.Equals(teamId)
+                                             select team;
+            foreach (Teams otherTeam in otherTeams)
             {
-                TeamScores teamScore = (from team in db.GetTable<TeamScores>()
-                                        where team.TeamId.Equals(teamId)
-                                        select team).Single();
-                teamScore.Score -= CurrentQuestion.getInstance().Points;
-                db.SubmitChanges();
+                otherTeam.Score += 100;
             }
-            catch (NullReferenceException crap)
-            {
-                SoundMessageBox.Show("No Question has been loaded", "Fail", Anime_Quiz_3.Properties.Resources.Muda);
-            }
+            db.SubmitChanges();
         }
+
         void teamMemberScoringControl_AddButtonClicked(int teamMemberId, int teamId, EventArgs e)
         {
             try
             {
-                Scores teamMemberScore = (from teamMember in db.GetTable<Scores>()
-                                          where teamMember.MemberId.Equals(teamMemberId)
-                                          select teamMember).Single();
-                teamMemberScore.Score += CurrentQuestion.getInstance().Points;
+                TeamMembers scoringTeamMember = (from teamMember in db.GetTable<TeamMembers>()
+                                           where teamMember.MemberId.Equals(teamMemberId)
+                                           select teamMember).Single();
+                scoringTeamMember.MemberScore += CurrentQuestion.getInstance().Points;
 
-                TeamScores teamScore = (from team in db.GetTable<TeamScores>()
-                                        where team.TeamId.Equals(teamId)
-                                        select team).Single();
-                teamScore.Score += CurrentQuestion.getInstance().Points;
+                Teams scoringTeam = (from team in teams where teamId.Equals(teamId) select team).Single();
+                scoringTeam.Score += CurrentQuestion.getInstance().Points;
+
                 db.SubmitChanges();
                 playerWindow.showAnswer();
-            }
-            catch (NullReferenceException crap)
-            {
-                SoundMessageBox.Show("No Question has been loaded", "Fail", Anime_Quiz_3.Properties.Resources.Muda);
-            }
-        }
-        void teamMemberScoringControl_RemoveButtonClicked(int teamMemberId, int teamId, EventArgs e)
-        {
-            try
-            {
-                Scores teamMemberScore = (from teamMember in db.GetTable<Scores>()
-                                          where teamMember.MemberId.Equals(teamMemberId)
-                                          select teamMember).Single();
-                teamMemberScore.Score -= CurrentQuestion.getInstance().Points;
-
-                TeamScores teamScore = (from team in db.GetTable<TeamScores>()
-                                        where team.TeamId.Equals(teamId)
-                                        select team).Single();
-                teamScore.Score -= CurrentQuestion.getInstance().Points;
-                db.SubmitChanges();
             }
             catch (NullReferenceException crap)
             {

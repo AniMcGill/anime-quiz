@@ -32,7 +32,7 @@ namespace Anime_Quiz_3.GameMaster
             
             populateQuestionSetSelector();
             populateTypeComboBox();
-            questionSetDataGrid.CellEditEnding += HandleEditEnding;
+            this.GotFocus += QuestionSetEditor_GotFocus;
         }
 
         #region QuestionSets
@@ -52,6 +52,7 @@ namespace Anime_Quiz_3.GameMaster
             if (CurrentQuestionSet.getInstance() != null)
                 questionSetComboBox.SelectedItem = CurrentQuestionSet.getInstance().Name;
         }
+
         void populateQuestionSetDataGrid()
         {
             questions = from question in db.GetTable<Questions>()
@@ -127,7 +128,8 @@ namespace Anime_Quiz_3.GameMaster
                 questionSetDataGrid.Items.RemoveAt(questionSetDataGrid.Items.Count - 1);
             }
         }
-        String pickFile()
+
+        void pickFile()
         {
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
             switch (CurrentQuestionSet.getInstance().Type)
@@ -147,47 +149,20 @@ namespace Anime_Quiz_3.GameMaster
                     openFileDialog.Filter = "JPG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|BMP files (*.bmp)|*.bmp";
                     break;
             }
+            openFileDialog.Multiselect = false; // just to be safe
+
             if (openFileDialog.ShowDialog() ?? false)
-                return openFileDialog.FileName;
-            else
-                return String.Empty;
-        }
-
-        // to remove
-
-        /// <summary>
-        ///     Get the current cell
-        /// </summary>
-        /// <see cref="http://stackoverflow.com/questions/1764498/wpf-datagrid-programmatically-editing-a-cell"/>
-        static DataGridCell GetCurrentCell(DataGrid grid, DataGridCellInfo cellInfo)
-        {
-            DataGridRow currentRow = (DataGridRow)grid.ItemContainerGenerator.ContainerFromItem(cellInfo.Item);
-            DataGridCellsPresenter presenter = GetVisualChild<DataGridCellsPresenter>(currentRow);
-            int columnIndex = grid.Columns.IndexOf(cellInfo.Column);
-            return presenter.ItemContainerGenerator.ContainerFromIndex(columnIndex) as DataGridCell;
-        }
-        /// <summary>
-        ///     
-        /// </summary>
-        /// <see cref="http://wpf.codeplex.com/discussions/34542"/>
-        static T GetVisualChild<T>(Visual parent) where T : Visual
-        {
-            T child = default(T);
-            int numVisuals = VisualTreeHelper.GetChildrenCount(parent);
-            for (int i = 0; i < numVisuals; i++)
             {
-                Visual v = (Visual)VisualTreeHelper.GetChild(parent, i);
-                child = v as T;
-                if (child == null)
-                {
-                    child = GetVisualChild<T>(v);
-                }
-                if (child != null)
-                {
-                    break;
-                }
+                Questions newQuestion = new Questions();
+                newQuestion.Question = openFileDialog.FileName;
+                newQuestion.Answer = "";
+
+                db.Questions.InsertOnSubmit(newQuestion);
+                db.SubmitChanges();
+                
+                saveQuestions();
+                populateQuestionSetDataGrid();
             }
-            return child;
         }
         
         void displayMedia(String filename)
@@ -216,54 +191,20 @@ namespace Anime_Quiz_3.GameMaster
 
         private void questionSetDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            /*
-            if (questionSetDataGrid.CurrentColumn.Header.Equals("Question") &&
-                CurrentQuestionSet.getInstance().Type != (int)Types.Question)
-            {
-                hideMedia();
-                
-                DataGridCell currentCell = GetCurrentCell(questionSetDataGrid, questionSetDataGrid.CurrentCell);
-
-                if ((currentCell.Content as TextBlock).Text == String.Empty)
-                {
-                    TextBlock filename = new TextBlock();
-                    filename.Text = pickFile();
-                    currentCell.Content = filename;
-                    questionSetDataGrid.CommitEdit();
-                    questionSetDataGrid.Items.Refresh();
-                }
-                else
-                    displayMedia(currentCell.Content.ToString());
-            }*/
-
             if (e.AddedCells.Count != 1)
                 return;
-            //MessageBox.Show((e.AddedCells[0].Column.GetCellContent(e.AddedCells[0].Item) as TextBlock).Text);
+
             if (e.AddedCells[0].Column.Header.Equals("Question") &&
                 CurrentQuestionSet.getInstance().Type != (int)Types.Question)
             {
                 hideMedia();
 
                 TextBlock currentCell = e.AddedCells[0].Column.GetCellContent(e.AddedCells[0].Item) as TextBlock;
+                
                 if (currentCell.Text == String.Empty)
-                {
-                    currentCell.Text = pickFile(); //string doesn't register
-                    //questionSetDataGrid.GetBindingExpression(DataGrid.ItemsSourceProperty).UpdateTarget();
-                    //BindingOperations.GetBindingExpressionBase(questionSetDataGrid, DataGrid.ItemsSourceProperty).UpdateSource();
-                }
+                    pickFile();
                 else
                     displayMedia(currentCell.Text.ToString());
-            }
-        }
-        private bool isManualEditCommit;
-        void HandleEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-        {
-            if (!isManualEditCommit)
-            {
-                isManualEditCommit = true;
-                DataGrid grid = (DataGrid)sender;
-                grid.CommitEdit(DataGridEditingUnit.Row, true);
-                isManualEditCommit = false;
             }
         }
         #endregion
@@ -311,11 +252,14 @@ namespace Anime_Quiz_3.GameMaster
             questionSetTextBox.Text = String.Empty;
         }
 
+        void QuestionSetEditor_GotFocus(object sender, RoutedEventArgs e)
+        {
+            closeBtn.IsEnabled = this.NavigationService.CanGoBack;
+        }
         private void closeBtn_Click(object sender, RoutedEventArgs e)
         {
             saveQuestions();
-            if (this.NavigationService.CanGoBack)
-                this.NavigationService.GoBack();
+            this.NavigationService.GoBack();
         }
         #endregion
 
