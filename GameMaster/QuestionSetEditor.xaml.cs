@@ -21,14 +21,14 @@ namespace Anime_Quiz_3.GameMaster
     public partial class QuestionSetEditor : Page
     {
         // Data
-        static GameDataContext db;
-        static Table<QuestionSets> questionSets;
+        //static GameDataContext db;
+        //static Table<QuestionSets> questionSets;
         static IQueryable<Questions> questions;
 
         public QuestionSetEditor()
         {
             InitializeComponent();
-            db = new GameDataContext();
+            //db = new GameDataContext();
             
             populateQuestionSetSelector();
             populateTypeComboBox();
@@ -44,9 +44,9 @@ namespace Anime_Quiz_3.GameMaster
         }
         void populateQuestionSetSelector()
         {
-            questionSets = db.GetTable<QuestionSets>();
+            //questionSets = db.GetTable<QuestionSets>();
             var questionSetList =
-                from questionSet in questionSets
+                from questionSet in App.questionSets
                 select questionSet.Name;
             questionSetComboBox.ItemsSource = questionSetList;
             if (CurrentQuestionSet.getInstance() != null)
@@ -55,7 +55,7 @@ namespace Anime_Quiz_3.GameMaster
 
         void populateQuestionSetDataGrid()
         {
-            questions = from question in db.GetTable<Questions>()
+            questions = from question in App.db.GetTable<Questions>()
                         where question.QuestionSets.Name.Equals(CurrentQuestionSet.getInstance().Name)
                         select question;
             questionSetDataGrid.ItemsSource = questions;
@@ -66,7 +66,7 @@ namespace Anime_Quiz_3.GameMaster
             saveQuestions();
             if ((sender as ComboBox).SelectedIndex > -1)
             {
-                CurrentQuestionSet.setInstance((from questionSet in questionSets
+                CurrentQuestionSet.setInstance((from questionSet in App.questionSets
                                                 where questionSet.Name.Equals((sender as ComboBox).SelectedValue.ToString())
                                                 select questionSet).Single());
                 populateQuestionSetDataGrid();
@@ -109,8 +109,8 @@ namespace Anime_Quiz_3.GameMaster
             if (CurrentQuestionSet.getInstance() != null)
             {
                 cleanRows();
-                db.SubmitChanges();
-                var changedQuestions = from question in db.GetTable<Questions>()
+                App.db.SubmitChanges();
+                var changedQuestions = from question in App.db.GetTable<Questions>()
                                        where question.QuestionSetId == 0
                                        select question;
                 foreach (Questions changedQuestion in changedQuestions)
@@ -118,12 +118,12 @@ namespace Anime_Quiz_3.GameMaster
                     changedQuestion.QuestionSetId = CurrentQuestionSet.getInstance().QuestionSetId;
                     changedQuestion.QuestionSets = CurrentQuestionSet.getInstance();
                 }
-                db.SubmitChanges();
+                App.db.SubmitChanges();
             }
         }
         void cleanRows()
         {
-            if (db.HasErrors)
+            if (App.db.HasErrors)
             {
                 questionSetDataGrid.Items.RemoveAt(questionSetDataGrid.Items.Count - 1);
             }
@@ -157,8 +157,8 @@ namespace Anime_Quiz_3.GameMaster
                 newQuestion.Question = openFileDialog.FileName;
                 newQuestion.Answer = "";
 
-                db.Questions.InsertOnSubmit(newQuestion);
-                db.SubmitChanges();
+                App.db.Questions.InsertOnSubmit(newQuestion);
+                App.db.SubmitChanges();
                 
                 saveQuestions();
                 populateQuestionSetDataGrid();
@@ -212,19 +212,19 @@ namespace Anime_Quiz_3.GameMaster
         #region Buttons
         private void delBtn_Click(object sender, RoutedEventArgs e)
         {
-            db.QuestionSets.DeleteOnSubmit(CurrentQuestionSet.getInstance());
+            App.db.QuestionSets.DeleteOnSubmit(CurrentQuestionSet.getInstance());
             var questionsToDelete = from question in questions where question.QuestionId == CurrentQuestionSet.getInstance().QuestionSetId select question;
-            db.Questions.DeleteAllOnSubmit(questionsToDelete);
+            App.db.Questions.DeleteAllOnSubmit(questionsToDelete);
             CurrentQuestionSet.setInstance(null);
 
-            db.SubmitChanges();
+            App.db.SubmitChanges();
             populateQuestionSetSelector();
         }
 
         private void renameBtn_Click(object sender, RoutedEventArgs e)
         {
             CurrentQuestionSet.getInstance().Name = renameTextBox.Text;
-            db.SubmitChanges();
+            App.db.SubmitChanges();
 
             populateQuestionSetSelector();
             questionSetComboBox.SelectedItem = renameTextBox.Text;
@@ -235,7 +235,7 @@ namespace Anime_Quiz_3.GameMaster
         {
             foreach (Questions question in questions)
                 question.Answered = false;
-            db.SubmitChanges();
+            App.db.SubmitChanges();
         }
 
         private void addBtn_Click(object sender, RoutedEventArgs e)
@@ -243,8 +243,8 @@ namespace Anime_Quiz_3.GameMaster
             QuestionSets newQuestionSet = new QuestionSets();
             newQuestionSet.Name = questionSetTextBox.Text;
             newQuestionSet.Type = questionSetTypeComboBox.SelectedIndex;
-            db.QuestionSets.InsertOnSubmit(newQuestionSet);
-            db.SubmitChanges();
+            App.db.QuestionSets.InsertOnSubmit(newQuestionSet);
+            App.db.SubmitChanges();
 
             populateQuestionSetSelector();
             questionSetComboBox.SelectedItem = newQuestionSet.Name;

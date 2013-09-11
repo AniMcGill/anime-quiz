@@ -25,7 +25,7 @@ namespace Anime_Quiz_3.Player
             pointBoxesPanel = new WrapPanel();
             pointBoxesPanel.Margin = new Thickness(10, 10, 10, 10);
             pageGrid.Children.Add(pointBoxesPanel);
-            var questions = from question in GameStartPage.db.GetTable<Questions>()
+            var questions = from question in App.db.GetTable<Questions>()
                                  where question.QuestionSetId.Equals(CurrentQuestionSet.getInstance().QuestionSetId) &&
                                        question.Answered.Equals(false)
                                  select question;
@@ -51,7 +51,7 @@ namespace Anime_Quiz_3.Player
         }
         void pointBtn_Click(int questionId, RoutedEventArgs e)
         {
-            CurrentQuestion.setInstance((from question in GameStartPage.db.GetTable<Questions>()
+            CurrentQuestion.setInstance((from question in App.db.GetTable<Questions>()
                                          where question.QuestionId.Equals(questionId)
                                          select question).Single());
             OnQuestionSelected(EventArgs.Empty);

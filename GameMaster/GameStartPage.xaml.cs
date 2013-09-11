@@ -15,36 +15,36 @@ namespace Anime_Quiz_3.GameMaster
     /// </summary>
     public partial class GameStartPage : Page
     {
-        public static GameDataContext db;
-        public static IQueryable<QuestionSets> questionSets;
-        static IQueryable<Teams> teams;
+        //public static IQueryable<QuestionSets> questionSets;
+        //static IQueryable<Teams> teams;
 
         PlayerWindow playerWindow;
 
         public GameStartPage()
         {
             InitializeComponent();
-            db = new GameDataContext();
+            //App.db = new GameDataContext();
             
             getQuestionSets();
-            getTeams();
+            //getTeams();
         }
 
         private void getQuestionSets()
         {
-            questionSets = db.GetTable<QuestionSets>();
-            IEnumerable<String> questionSetNames = from questionSet in questionSets select questionSet.Name;
+            //questionSets = App.db.GetTable<QuestionSets>();
+            var questionSetNames = from questionSet in App.questionSets select questionSet.Name;
             questionSetComboBox.ItemsSource = questionSetNames;
             if (CurrentQuestionSet.getInstance() != null)
                 questionSetComboBox.SelectedItem = CurrentQuestionSet.getInstance().Name;
         }
+        /*
         private void getTeams()
         {
-            teams = db.GetTable<Teams>();
-        }
+            //teams = App.db.GetTable<Teams>();
+        }*/
         private void loadTeams()
         {
-            foreach (Teams team in teams)
+            foreach (Teams team in App.teams)
             {
                 Separator separator = new Separator();
                 ScoringControl teamScoringControl = new ScoringControl();
@@ -56,7 +56,7 @@ namespace Anime_Quiz_3.GameMaster
                 teamsStackPanel.Children.Add(teamScoringControl);
                 teamsStackPanel.Children.Add(separator);
 
-                IQueryable<TeamMembers> teamMembers = from teamMember in db.GetTable<TeamMembers>()
+                IQueryable<TeamMembers> teamMembers = from teamMember in App.db.GetTable<TeamMembers>()
                                                       where teamMember.TeamId.Equals(team.TeamId)
                                                       select teamMember;
                 foreach (TeamMembers teamMember in teamMembers)
@@ -92,7 +92,7 @@ namespace Anime_Quiz_3.GameMaster
 
         private void questionSetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CurrentQuestionSet.setInstance((from questionSet in questionSets
+            CurrentQuestionSet.setInstance((from questionSet in App.questionSets
                                             where questionSet.Name.Equals((sender as ComboBox).SelectedValue.ToString())
                                             select questionSet).Single());
             questionSetLoadBtn.IsEnabled = questionSetComboBox.SelectedIndex >= 0;
@@ -109,7 +109,7 @@ namespace Anime_Quiz_3.GameMaster
                 playerWindow.QuestionReady += playerWindow_QuestionReady;
                 playerWindow.Show();
 
-                getTeams();
+                //getTeams();
                 loadTeams();
             }
             /*bool playerWindowExists = false;
@@ -137,7 +137,8 @@ namespace Anime_Quiz_3.GameMaster
         {
             playerWindow.showAnswer();
             CurrentQuestion.getInstance().Answered = true;
-            db.SubmitChanges();
+            App.db.SubmitChanges();
+            //App.db.Refresh(Devart.Data.Linq.RefreshMode.KeepChanges, CurrentQuestion.getInstance());
         }
 
         private void closeQuestionBtn_Click(object sender, RoutedEventArgs e)
@@ -162,29 +163,31 @@ namespace Anime_Quiz_3.GameMaster
         /// <param name="e"></param>
         void teamScoringControl_AddButtonClicked(int teamId, EventArgs e)
         {
-            IEnumerable<Teams> otherTeams = from team in teams
+            IEnumerable<Teams> otherTeams = from team in App.teams
                                              where !team.TeamId.Equals(teamId)
                                              select team;
             foreach (Teams otherTeam in otherTeams)
             {
                 otherTeam.Score += 100;
             }
-            db.SubmitChanges();
+            App.db.SubmitChanges();
+            App.db.Refresh(Devart.Data.Linq.RefreshMode.KeepChanges, App.teams);
         }
 
         void teamMemberScoringControl_AddButtonClicked(int teamMemberId, int teamId, EventArgs e)
         {
             try
             {
-                TeamMembers scoringTeamMember = (from teamMember in db.GetTable<TeamMembers>()
+                TeamMembers scoringTeamMember = (from teamMember in App.db.GetTable<TeamMembers>()
                                            where teamMember.MemberId.Equals(teamMemberId)
                                            select teamMember).Single();
                 scoringTeamMember.MemberScore += CurrentQuestion.getInstance().Points;
 
-                Teams scoringTeam = (from team in teams where teamId.Equals(teamId) select team).Single();
+                Teams scoringTeam = (from team in App.teams where teamId.Equals(teamId) select team).Single();
                 scoringTeam.Score += CurrentQuestion.getInstance().Points;
 
-                db.SubmitChanges();
+                App.db.SubmitChanges();
+                App.db.Refresh(Devart.Data.Linq.RefreshMode.KeepChanges, App.teams);
                 playerWindow.showAnswer();
             }
             catch (NullReferenceException crap)

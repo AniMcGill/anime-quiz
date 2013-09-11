@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Windows.Controls;
-using Anime_Quiz_3.Classes;
-using Anime_Quiz_3.GameMaster;
+using Anime_Quiz_3.Controls;
 using GameContext;
 
 namespace Anime_Quiz_3.Scoring
@@ -19,7 +18,7 @@ namespace Anime_Quiz_3.Scoring
         }
         void getScores()
         {
-            teams = GameStartPage.db.GetTable<Teams>();
+            teams = App.db.GetTable<Teams>();
             teams.OrderBy(t => t.Score);
         }
 
@@ -27,6 +26,12 @@ namespace Anime_Quiz_3.Scoring
         {
             foreach (Teams team in teams)
             {
+                Score teamScore = new Score();
+                teamScore.Name = team.Name;
+                teamScore.Points = team.Score;
+
+                pageStack.Children.Add(teamScore);
+                /*
                 Label teamNameLabel = new Label();
                 teamNameLabel.Content = team.Name;
                 teamNameLabel.Margin = new System.Windows.Thickness(0, 20, 0, 0);
@@ -34,7 +39,7 @@ namespace Anime_Quiz_3.Scoring
                 teamScoreLabel.Content = team.Score;
 
                 pageStack.Children.Add(teamNameLabel);
-                pageStack.Children.Add(teamScoreLabel);
+                pageStack.Children.Add(teamScoreLabel);*/
             }
         }
     }

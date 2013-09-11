@@ -13,28 +13,28 @@ namespace Anime_Quiz_3.GameMaster
     /// </summary>
     public partial class TeamEditor : Page
     {
-        static GameDataContext db;
-        static Table<Teams> teamsList;
+        //static GameDataContext db;
+        //static Table<Teams> teamsList;
         static IQueryable<TeamMembers> teamMembersList;
         public TeamEditor()
         {
             InitializeComponent();
-            db = new GameDataContext();
+            //db = new GameDataContext();
             populateTeamsComboBox();
             this.GotFocus += TeamEditor_GotFocus;
         }
 
         public void populateTeamsComboBox()
         {
-            teamsList = db.GetTable<Teams>();
-            var teamNames = from team in teamsList select team.Name;
+            //teamsList = db.GetTable<Teams>();
+            var teamNames = from team in App.teams select team.Name;
             teamComboBox.ItemsSource = teamNames;
             if (CurrentTeam.getInstance() != null)
                 teamComboBox.SelectedItem = CurrentTeam.getInstance().Name;
         }
         public void populateTeamDataGrid()
         {
-            teamMembersList = from teamMember in db.GetTable<TeamMembers>()
+            teamMembersList = from teamMember in App.db.GetTable<TeamMembers>()
                               where teamMember.Teams.Name.Equals(CurrentTeam.getInstance().Name)
                               select teamMember;
             teamDataGrid.ItemsSource = teamMembersList;
@@ -45,8 +45,8 @@ namespace Anime_Quiz_3.GameMaster
         {
             if (CurrentTeam.getInstance() != null)
             {
-                db.SubmitChanges();
-                var changedTeamMembers = from teamMember in db.GetTable<TeamMembers>()
+                App.db.SubmitChanges();
+                var changedTeamMembers = from teamMember in App.db.GetTable<TeamMembers>()
                                          where teamMember.TeamId == 0
                                          select teamMember;
                 foreach (TeamMembers changedTeamMember in changedTeamMembers)
@@ -54,7 +54,8 @@ namespace Anime_Quiz_3.GameMaster
                     changedTeamMember.TeamId = CurrentTeam.getInstance().TeamId;
                     changedTeamMember.Teams = CurrentTeam.getInstance();
                 }
-                db.SubmitChanges();
+                App.db.SubmitChanges();
+                App.db.Refresh(RefreshMode.KeepChanges, App.teams);
             }
         }
 
@@ -64,7 +65,7 @@ namespace Anime_Quiz_3.GameMaster
             saveTeams();
             if ((sender as ComboBox).SelectedIndex > -1)
             {
-                CurrentTeam.setInstance((from team in teamsList
+                CurrentTeam.setInstance((from team in App.teams
                                          where team.Name.Equals((sender as ComboBox).SelectedValue.ToString())
                                          select team).Single());
                 populateTeamDataGrid();
@@ -91,21 +92,23 @@ namespace Anime_Quiz_3.GameMaster
         #region Buttons
         private void delBtn_Click(object sender, RoutedEventArgs e)
         {
-            db.Teams.DeleteOnSubmit(CurrentTeam.getInstance());
+            App.db.Teams.DeleteOnSubmit(CurrentTeam.getInstance());
             var teamMembersToDelete = from teamMember in teamMembersList 
                                       where teamMember.TeamId == CurrentTeam.getInstance().TeamId 
                                       select teamMember;
 
-            db.TeamMembers.DeleteAllOnSubmit(teamMembersToDelete);
+            App.db.TeamMembers.DeleteAllOnSubmit(teamMembersToDelete);
             CurrentTeam.setInstance(null);
 
-            db.SubmitChanges();
+            App.db.SubmitChanges();
+            App.db.Refresh(RefreshMode.KeepChanges, App.teams);
             populateTeamsComboBox();
         }
         private void renameBtn_Click(object sender, RoutedEventArgs e)
         {
             CurrentTeam.getInstance().Name = renameTextBox.Text;
-            db.SubmitChanges();
+            App.db.SubmitChanges();
+            App.db.Refresh(RefreshMode.KeepChanges, App.teams);
 
             populateTeamsComboBox();
             teamComboBox.SelectedItem = renameTextBox.Text;
@@ -116,8 +119,9 @@ namespace Anime_Quiz_3.GameMaster
             Teams newTeam = new Teams();
             newTeam.Name = teamTextBox.Text;
             // TODO: pre-register teams to a game?
-            db.Teams.InsertOnSubmit(newTeam);
-            db.SubmitChanges();
+            App.db.Teams.InsertOnSubmit(newTeam);
+            App.db.SubmitChanges();
+            App.db.Refresh(RefreshMode.KeepChanges, App.teams);
 
             populateTeamsComboBox();
             teamComboBox.SelectedItem = newTeam.Name;

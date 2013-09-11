@@ -7,7 +7,7 @@
              d:DesignHeight="25" d:DesignWidth="300" MaxWidth="600">
     <Grid Name="scoringControlGrid">
         <Label Name="nameLabel" HorizontalAlignment="Left" />
-        <Button Name="addPointBtn" HorizontalAlignment="Right" Margin="10,0,0,0" Height="20" Width="20" Content="+" />
+        <Button Name="addPointBtn" HorizontalAlignment="Right" Margin="10,0,0,0" Height="20" Content="+" />
         <!--<Button Name="removePointBtn" HorizontalAlignment="Right" Margin="10,0,0,0" Height="20" Width="20" Content="-" />-->
     </Grid>
 </UserControl>

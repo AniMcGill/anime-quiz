@@ -122,6 +122,9 @@
     <Compile Include="Classes\CurrentQuestion.cs" />
     <Compile Include="Classes\CurrentQuestionSet.cs" />
     <Compile Include="Classes\CurrentTeam.cs" />
+    <Compile Include="Controls\Score.xaml.cs">
+      <DependentUpon>Score.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ScoringControl.xaml.cs">
       <DependentUpon>ScoringControl.xaml</DependentUpon>
     </Compile>
@@ -149,9 +152,16 @@
     <Compile Include="Player\QuestionSetPage.xaml.cs">
       <DependentUpon>QuestionSetPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Scoring\IndividualScores.xaml.cs">
+      <DependentUpon>IndividualScores.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Scoring\TeamScoresView.xaml.cs">
       <DependentUpon>TeamScoresView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\Score.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ScoringControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -195,6 +205,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Player\QuestionSetPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Scoring\IndividualScores.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

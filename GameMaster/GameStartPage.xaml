@@ -8,7 +8,7 @@
 	Title="GameStartPage">
 
     <Grid ScrollViewer.VerticalScrollBarVisibility="Auto">
-        <ComboBox Name="questionSetComboBox" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="120" Margin="5,5,5,5" IsEnabled="False" Text="Select Question Set" SelectionChanged="questionSetComboBox_SelectionChanged" />
+        <ComboBox Name="questionSetComboBox" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="120" Margin="5,5,5,5" IsEnabled="True" Text="Select Question Set" SelectionChanged="questionSetComboBox_SelectionChanged" />
         <Button Name="questionSetLoadBtn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="135,5,5,5" IsEnabled="False" Content="Load" Click="questionSetLoadBtn_Click" />
         <StackPanel Name="currentQuestionStack" HorizontalAlignment="Right" Orientation="Vertical" VerticalAlignment="Top" Visibility="Collapsed">
             <Label x:Name="currentQuestionLabel" HorizontalAlignment="Center" FontSize="20" Content="Current Question" />
