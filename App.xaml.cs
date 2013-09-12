@@ -23,7 +23,16 @@ namespace Anime_Quiz_3
 
         public static void refreshDb(object entity)
         {
-            db.Refresh(Devart.Data.Linq.RefreshMode.KeepChanges, entity);
+            try
+            {
+                db.Refresh(Devart.Data.Linq.RefreshMode.KeepChanges, entity);
+            }
+            catch (System.InvalidOperationException crap)
+            {
+                // Ugly hack
+                questionSets = db.GetTable<QuestionSets>();
+                teams = db.GetTable<Teams>();
+            }
         }
     }
 }
