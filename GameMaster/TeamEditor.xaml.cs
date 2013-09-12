@@ -3,7 +3,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Anime_Quiz_3.Classes;
-using Devart.Data.Linq;
 using GameContext;
 
 namespace Anime_Quiz_3.GameMaster
@@ -13,20 +12,18 @@ namespace Anime_Quiz_3.GameMaster
     /// </summary>
     public partial class TeamEditor : Page
     {
-        //static GameDataContext db;
-        //static Table<Teams> teamsList;
         static IQueryable<TeamMembers> teamMembersList;
         public TeamEditor()
         {
             InitializeComponent();
-            //db = new GameDataContext();
+            
             populateTeamsComboBox();
             this.GotFocus += TeamEditor_GotFocus;
         }
 
+        #region Initialization
         public void populateTeamsComboBox()
         {
-            //teamsList = db.GetTable<Teams>();
             var teamNames = from team in App.teams select team.Name;
             teamComboBox.ItemsSource = teamNames;
             if (CurrentTeam.getInstance() != null)
@@ -40,7 +37,9 @@ namespace Anime_Quiz_3.GameMaster
             teamDataGrid.ItemsSource = teamMembersList;
             teamDataGrid.Visibility = System.Windows.Visibility.Visible;
         }
+        #endregion
 
+        #region Teams
         public void saveTeams()
         {
             if (CurrentTeam.getInstance() != null)
@@ -55,11 +54,9 @@ namespace Anime_Quiz_3.GameMaster
                     changedTeamMember.Teams = CurrentTeam.getInstance();
                 }
                 App.db.SubmitChanges();
-                App.db.Refresh(RefreshMode.KeepChanges, App.teams);
             }
         }
 
-        #region Event Handlers
         private void teamComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             saveTeams();
@@ -77,19 +74,15 @@ namespace Anime_Quiz_3.GameMaster
             }
             delBtn.IsEnabled = (sender as ComboBox).SelectedIndex > -1;
         }
-
         private void teamTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             addBtn.IsEnabled = (sender as TextBox).Text.Length > 0;
         }
-
         private void renameTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             renameBtn.IsEnabled = teamComboBox.SelectedIndex > -1 && (sender as TextBox).Text.Length > 0;
         }
-        #endregion
 
-        #region Buttons
         private void delBtn_Click(object sender, RoutedEventArgs e)
         {
             App.db.Teams.DeleteOnSubmit(CurrentTeam.getInstance());
@@ -101,14 +94,14 @@ namespace Anime_Quiz_3.GameMaster
             CurrentTeam.setInstance(null);
 
             App.db.SubmitChanges();
-            App.db.Refresh(RefreshMode.KeepChanges, App.teams);
+            App.refreshDb(App.teams);
             populateTeamsComboBox();
         }
         private void renameBtn_Click(object sender, RoutedEventArgs e)
         {
             CurrentTeam.getInstance().Name = renameTextBox.Text;
             App.db.SubmitChanges();
-            App.db.Refresh(RefreshMode.KeepChanges, App.teams);
+            App.refreshDb(App.teams);
 
             populateTeamsComboBox();
             teamComboBox.SelectedItem = renameTextBox.Text;
@@ -118,15 +111,16 @@ namespace Anime_Quiz_3.GameMaster
         {
             Teams newTeam = new Teams();
             newTeam.Name = teamTextBox.Text;
-            // TODO: pre-register teams to a game?
+
             App.db.Teams.InsertOnSubmit(newTeam);
             App.db.SubmitChanges();
-            App.db.Refresh(RefreshMode.KeepChanges, App.teams);
+            App.refreshDb(App.teams);
 
             populateTeamsComboBox();
             teamComboBox.SelectedItem = newTeam.Name;
             teamTextBox.Text = String.Empty;
         }
+        #endregion
 
         void TeamEditor_GotFocus(object sender, RoutedEventArgs e)
         {
@@ -138,6 +132,6 @@ namespace Anime_Quiz_3.GameMaster
             this.NavigationService.GoBack();
         }
 
-        #endregion
+        
     }
 }

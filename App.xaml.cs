@@ -20,5 +20,10 @@ namespace Anime_Quiz_3
             questionSets = db.GetTable<QuestionSets>();
             teams = db.GetTable<Teams>();
         }
+
+        public static void refreshDb(object entity)
+        {
+            db.Refresh(Devart.Data.Linq.RefreshMode.KeepChanges, entity);
+        }
     }
 }

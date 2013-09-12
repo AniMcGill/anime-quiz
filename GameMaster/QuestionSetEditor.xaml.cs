@@ -20,15 +20,11 @@ namespace Anime_Quiz_3.GameMaster
     /// </summary>
     public partial class QuestionSetEditor : Page
     {
-        // Data
-        //static GameDataContext db;
-        //static Table<QuestionSets> questionSets;
         static IQueryable<Questions> questions;
 
         public QuestionSetEditor()
         {
             InitializeComponent();
-            //db = new GameDataContext();
             
             populateQuestionSetSelector();
             populateTypeComboBox();
@@ -44,7 +40,6 @@ namespace Anime_Quiz_3.GameMaster
         }
         void populateQuestionSetSelector()
         {
-            //questionSets = db.GetTable<QuestionSets>();
             var questionSetList =
                 from questionSet in App.questionSets
                 select questionSet.Name;
@@ -110,6 +105,7 @@ namespace Anime_Quiz_3.GameMaster
             {
                 cleanRows();
                 App.db.SubmitChanges();
+
                 var changedQuestions = from question in App.db.GetTable<Questions>()
                                        where question.QuestionSetId == 0
                                        select question;
@@ -149,7 +145,7 @@ namespace Anime_Quiz_3.GameMaster
                     openFileDialog.Filter = "JPG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|BMP files (*.bmp)|*.bmp";
                     break;
             }
-            openFileDialog.Multiselect = false; // just to be safe
+            openFileDialog.Multiselect = false;
 
             if (openFileDialog.ShowDialog() ?? false)
             {
@@ -218,6 +214,7 @@ namespace Anime_Quiz_3.GameMaster
             CurrentQuestionSet.setInstance(null);
 
             App.db.SubmitChanges();
+            App.refreshDb(App.questionSets);
             populateQuestionSetSelector();
         }
 
@@ -225,6 +222,7 @@ namespace Anime_Quiz_3.GameMaster
         {
             CurrentQuestionSet.getInstance().Name = renameTextBox.Text;
             App.db.SubmitChanges();
+            App.refreshDb(App.questionSets);
 
             populateQuestionSetSelector();
             questionSetComboBox.SelectedItem = renameTextBox.Text;
@@ -245,6 +243,7 @@ namespace Anime_Quiz_3.GameMaster
             newQuestionSet.Type = questionSetTypeComboBox.SelectedIndex;
             App.db.QuestionSets.InsertOnSubmit(newQuestionSet);
             App.db.SubmitChanges();
+            App.refreshDb(App.questionSets);
 
             populateQuestionSetSelector();
             questionSetComboBox.SelectedItem = newQuestionSet.Name;

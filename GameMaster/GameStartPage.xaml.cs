@@ -15,33 +15,24 @@ namespace Anime_Quiz_3.GameMaster
     /// </summary>
     public partial class GameStartPage : Page
     {
-        //public static IQueryable<QuestionSets> questionSets;
-        //static IQueryable<Teams> teams;
-
         PlayerWindow playerWindow;
 
         public GameStartPage()
         {
             InitializeComponent();
-            //App.db = new GameDataContext();
+        
             
             getQuestionSets();
-            //getTeams();
         }
 
         private void getQuestionSets()
         {
-            //questionSets = App.db.GetTable<QuestionSets>();
             var questionSetNames = from questionSet in App.questionSets select questionSet.Name;
             questionSetComboBox.ItemsSource = questionSetNames;
             if (CurrentQuestionSet.getInstance() != null)
                 questionSetComboBox.SelectedItem = CurrentQuestionSet.getInstance().Name;
         }
-        /*
-        private void getTeams()
-        {
-            //teams = App.db.GetTable<Teams>();
-        }*/
+        
         private void loadTeams()
         {
             foreach (Teams team in App.teams)
@@ -109,7 +100,6 @@ namespace Anime_Quiz_3.GameMaster
                 playerWindow.QuestionReady += playerWindow_QuestionReady;
                 playerWindow.Show();
 
-                //getTeams();
                 loadTeams();
             }
             /*bool playerWindowExists = false;
@@ -138,7 +128,7 @@ namespace Anime_Quiz_3.GameMaster
             playerWindow.showAnswer();
             CurrentQuestion.getInstance().Answered = true;
             App.db.SubmitChanges();
-            //App.db.Refresh(Devart.Data.Linq.RefreshMode.KeepChanges, CurrentQuestion.getInstance());
+            App.refreshDb(CurrentQuestion.getInstance());
         }
 
         private void closeQuestionBtn_Click(object sender, RoutedEventArgs e)
@@ -171,7 +161,7 @@ namespace Anime_Quiz_3.GameMaster
                 otherTeam.Score += 100;
             }
             App.db.SubmitChanges();
-            App.db.Refresh(Devart.Data.Linq.RefreshMode.KeepChanges, App.teams);
+            App.refreshDb(App.teams);
         }
 
         void teamMemberScoringControl_AddButtonClicked(int teamMemberId, int teamId, EventArgs e)
@@ -187,7 +177,7 @@ namespace Anime_Quiz_3.GameMaster
                 scoringTeam.Score += CurrentQuestion.getInstance().Points;
 
                 App.db.SubmitChanges();
-                App.db.Refresh(Devart.Data.Linq.RefreshMode.KeepChanges, App.teams);
+                App.refreshDb(App.teams);
                 playerWindow.showAnswer();
             }
             catch (NullReferenceException crap)
