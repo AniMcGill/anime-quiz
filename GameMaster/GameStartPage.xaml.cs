@@ -153,13 +153,14 @@ namespace Anime_Quiz_3.GameMaster
         /// <param name="e"></param>
         void teamScoringControl_AddButtonClicked(int teamId, EventArgs e)
         {
-            IEnumerable<Teams> otherTeams = from team in App.teams
-                                             where !team.TeamId.Equals(teamId)
-                                             select team;
-            foreach (Teams otherTeam in otherTeams)
+            foreach (Teams team in App.teams)
             {
-                otherTeam.Score += 100;
+                if (team.TeamId != teamId)
+                {
+                    team.Score += 100;
+                }
             }
+
             App.db.SubmitChanges();
             App.refreshDb(App.teams);
         }
@@ -173,8 +174,14 @@ namespace Anime_Quiz_3.GameMaster
                                            select teamMember).Single();
                 scoringTeamMember.MemberScore += CurrentQuestion.getInstance().Points;
 
-                Teams scoringTeam = (from team in App.teams where teamId.Equals(teamId) select team).Single();
+                //scoringTeamMember.Teams.Score += CurrentQuestion.getInstance().Points;
+
+                /*
+                Teams scoringTeam = (from team in App.teams where team.TeamId.Equals(teamId) select team).Single();
                 scoringTeam.Score += CurrentQuestion.getInstance().Points;
+                 */
+                // this won't work because scoringTeam is detached from the global teams variable.
+                // the singletons used in TeamEditor were actually useful.
 
                 App.db.SubmitChanges();
                 App.refreshDb(App.teams);
