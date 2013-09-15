@@ -1,11 +1,12 @@
 ﻿using System.Windows;
 using Anime_Quiz_3.Classes;
 using Anime_Quiz_3.GameMaster;
+using Anime_Quiz_3.Scoring;
 
 namespace Anime_Quiz_3
 {
     /// <summary>
-    /// Interaction logic for Window1.xaml
+    /// Interaction logic for GameMasterWindow.xaml
     /// </summary>
     public partial class GameMasterWindow : Window
     {
@@ -19,6 +20,7 @@ namespace Anime_Quiz_3
         private void startGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
             _gmWindow.NavigationService.Navigate(new GameStartPage());
+            //_sideWindow.NavigationService.Navigate(new IndividualScores());
         }
         private void createQuestionSetMenuItem_Click(object sender, RoutedEventArgs e)
         {

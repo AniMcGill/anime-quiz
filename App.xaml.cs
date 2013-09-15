@@ -11,9 +11,7 @@ namespace Anime_Quiz_3
     {
         public static GameDataContext db;
         public static IQueryable<QuestionSets> questionSets;
-        //public static IQueryable<Questions> questions = db.GetTable<Questions>();
         public static IQueryable<Teams> teams;
-        //public static IQueryable<TeamMembers> teamMembers = db.GetTable<TeamMembers>();
         public App()
         {
             db = new GameDataContext();

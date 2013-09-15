@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 using Anime_Quiz_3.Classes;
+using Anime_Quiz_3.Controls;
 using GameContext;
 
 namespace Anime_Quiz_3.Player
@@ -11,9 +12,7 @@ namespace Anime_Quiz_3.Player
     public partial class QuestionPage : Page
     {
         // Controls
-        Label answerLabel;
-        Label questionControl;
-        MediaElement musicPlayer;
+        AbstractQuestionControl questionControl;
 
         public QuestionPage()
         {
@@ -23,63 +22,24 @@ namespace Anime_Quiz_3.Player
 
         private void initializePage()
         {
-            loadAnswerLabel();
             switch (CurrentQuestionSet.getInstance().Type)
             {
                 case (int)Types.Question:
-                    loadQuestion();
+                    questionControl = new QuestionControl();
                     break;
                 case (int)Types.Music:
-                    loadMusic();
+                    questionControl = new MusicControl();
                     break;
-                case (int)Types.Screenshot:
-                    loadScreenshot();
+                case(int)Types.Screenshot:
+                    questionControl = new ScreenshotControl();
                     break;
             }
-        }
-        private void loadAnswerLabel()
-        {
-            answerLabel = new Label();
-            answerLabel.Content = "A) " + CurrentQuestion.getInstance().Answer;
-            answerLabel.FontSize = 50;
-            answerLabel.Visibility = System.Windows.Visibility.Collapsed;
-            pageStack.Children.Add(answerLabel);
-        }
-        private void loadQuestion()
-        {
-            questionControl = new Label();
-            questionControl.Content = "Q) " + CurrentQuestion.getInstance().Question;
-            questionControl.FontSize = 50;
-            
             pageStack.Children.Add(questionControl);
+            //TODO: if settings contain autostart, startQuestion()
         }
-        private void loadMusic()
-        {
-            musicPlayer = new MediaElement();
-            musicPlayer.Source = new Uri(CurrentQuestion.getInstance().Question, UriKind.RelativeOrAbsolute);
-            musicPlayer.Play(); //TODO: autoplay option
-
-            pageStack.Children.Add(musicPlayer);
-        }
-        private void loadScreenshot()
-        {
-            //TODO
-        }
-
         public void showAnswer()
         {
-            switch (CurrentQuestionSet.getInstance().Type)
-            {
-                case (int)Types.Question:
-                    break;
-                case (int)Types.Music:
-                    musicPlayer.Stop();
-                    break;
-                case (int)Types.Screenshot:
-                    //TODO
-                    break;
-            }
-            answerLabel.Visibility = System.Windows.Visibility.Visible;
+            questionControl.showAnswer();
         }
     }
 }

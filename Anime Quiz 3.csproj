@@ -92,6 +92,9 @@
     <ApplicationIcon>asagao_2012_08_14.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CheckerboardImage">
+      <HintPath>..\..\CheckerboardImage\CheckerboardImage\bin\Release\CheckerboardImage.dll</HintPath>
+    </Reference>
     <Reference Include="Devart.Data.Linq, Version=4.1.207.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
     <Reference Include="Devart.Data.SQLite, Version=4.5.202.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
     <Reference Include="Devart.Data.SQLite.Linq, Version=4.1.207.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
@@ -122,12 +125,20 @@
     <Compile Include="Classes\CurrentQuestion.cs" />
     <Compile Include="Classes\CurrentQuestionSet.cs" />
     <Compile Include="Classes\CurrentTeam.cs" />
+    <Compile Include="Controls\AbstractQuestionControl.xaml.cs">
+      <DependentUpon>AbstractQuestionControl.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls\AbstractQuestionControlDescriptionProvider.cs" />
+    <Compile Include="Controls\MusicControl.cs" />
+    <Compile Include="Controls\QuestionControl.cs" />
     <Compile Include="Controls\Score.xaml.cs">
       <DependentUpon>Score.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ScoringControl.xaml.cs">
       <DependentUpon>ScoringControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ScreenshotControl.cs" />
     <Compile Include="Controls\SoundMessageBox.cs" />
     <Compile Include="GameDB.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -158,6 +169,10 @@
     <Compile Include="Scoring\TeamScoresView.xaml.cs">
       <DependentUpon>TeamScoresView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\AbstractQuestionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Score.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -173,15 +173,7 @@ namespace Anime_Quiz_3.GameMaster
                                            where teamMember.MemberId.Equals(teamMemberId)
                                            select teamMember).Single();
                 scoringTeamMember.MemberScore += CurrentQuestion.getInstance().Points;
-
-                //scoringTeamMember.Teams.Score += CurrentQuestion.getInstance().Points;
-
-                /*
-                Teams scoringTeam = (from team in App.teams where team.TeamId.Equals(teamId) select team).Single();
-                scoringTeam.Score += CurrentQuestion.getInstance().Points;
-                 */
-                // this won't work because scoringTeam is detached from the global teams variable.
-                // the singletons used in TeamEditor were actually useful.
+                scoringTeamMember.Teams.Score += CurrentQuestion.getInstance().Points;
 
                 App.db.SubmitChanges();
                 App.refreshDb(App.teams);
