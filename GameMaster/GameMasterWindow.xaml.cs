@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using Anime_Quiz_3.Classes;
 using Anime_Quiz_3.GameMaster;
 using Anime_Quiz_3.Scoring;
@@ -14,23 +15,38 @@ namespace Anime_Quiz_3
         {
             InitializeComponent();
             _gmWindow.NavigationUIVisibility = System.Windows.Navigation.NavigationUIVisibility.Hidden;
+            _sideWindow.NavigationUIVisibility = System.Windows.Navigation.NavigationUIVisibility.Hidden;
         }
 
-        #region File
+        private void loadLeaderboard()
+        {
+            _sideWindow.NavigationService.Navigate(new IndividualScores());
+            _sideWindow.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        void gameStartPage_ScoreUpdated(object sender, EventArgs e)
+        {
+            loadLeaderboard();
+        }
+
+        #region Menu
         private void startGameMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            _gmWindow.NavigationService.Navigate(new GameStartPage());
-            //_sideWindow.NavigationService.Navigate(new IndividualScores());
+            GameStartPage gameStartPage = new GameStartPage();
+            gameStartPage.ScoreUpdated += gameStartPage_ScoreUpdated;
+            _gmWindow.NavigationService.Navigate(gameStartPage);
+            loadLeaderboard();
         }
         private void createQuestionSetMenuItem_Click(object sender, RoutedEventArgs e)
         {
             _gmWindow.NavigationService.Navigate(new QuestionSetEditor());
+            _sideWindow.Visibility = System.Windows.Visibility.Collapsed;
         }
-        #endregion
 
         private void teamsMenuItem_Click(object sender, RoutedEventArgs e)
         {
             _gmWindow.NavigationService.Navigate(new TeamEditor());
+            _sideWindow.Visibility = System.Windows.Visibility.Collapsed;
         }
 
         private void settingsMenuItem_Click(object sender, RoutedEventArgs e)
@@ -49,6 +65,7 @@ namespace Anime_Quiz_3
         {
             this.Close();
         }
+        #endregion
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {

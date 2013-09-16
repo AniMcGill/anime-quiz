@@ -20,7 +20,6 @@ namespace Anime_Quiz_3.GameMaster
         public GameStartPage()
         {
             InitializeComponent();
-        
             
             getQuestionSets();
         }
@@ -80,7 +79,13 @@ namespace Anime_Quiz_3.GameMaster
         }
 
         #region Event Handlers
-
+        public EventHandler ScoreUpdated;
+        protected virtual void OnScoreUpdated(EventArgs e)
+        {
+            EventHandler handler = ScoreUpdated;
+            if (handler != null)
+                handler(this, e);
+        }
         private void questionSetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CurrentQuestionSet.setInstance((from questionSet in App.questionSets
@@ -102,26 +107,6 @@ namespace Anime_Quiz_3.GameMaster
 
                 loadTeams();
             }
-            /*bool playerWindowExists = false;
-            foreach (Window window in Application.Current.Windows)
-            {
-                if (window is PlayerWindow)
-                {
-                    (window as PlayerWindow).Refresh();
-                    playerWindowExists = true;
-                    //window.Close();
-                    break;
-                }
-            }
-            if (!playerWindowExists)
-            {
-                playerWindow = new PlayerWindow();
-                playerWindow.QuestionReady += playerWindow_QuestionReady;
-                playerWindow.Show();
-                
-                getTeams();
-                loadTeams();
-            }*/
         }
         private void showAnswerBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -163,6 +148,8 @@ namespace Anime_Quiz_3.GameMaster
 
             App.db.SubmitChanges();
             App.refreshDb(App.teams);
+
+            OnScoreUpdated(EventArgs.Empty);
         }
 
         void teamMemberScoringControl_AddButtonClicked(int teamMemberId, int teamId, EventArgs e)
@@ -177,6 +164,8 @@ namespace Anime_Quiz_3.GameMaster
 
                 App.db.SubmitChanges();
                 App.refreshDb(App.teams);
+                
+                OnScoreUpdated(EventArgs.Empty);
                 playerWindow.showAnswer();
             }
             catch (NullReferenceException crap)

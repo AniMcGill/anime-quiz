@@ -8,6 +8,8 @@
 	Title="IndividualScores">
 
     <Grid>
-        
+        <StackPanel Name="pageStack" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Label FontSize="30" Content="Leaderboard" />
+        </StackPanel>
     </Grid>
 </Page>

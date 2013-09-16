@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" d:DesignWidth="300" Height="60">
+             mc:Ignorable="d" d:DesignWidth="300">
     <Grid>
-        <Label x:Name="scoreLabel" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="20" />
-        <Label x:Name="scoreValue" VerticalAlignment="Bottom" HorizontalAlignment="Right" FontSize="20" />
+        <Label x:Name="scoreLabel" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="12" />
+        <Label x:Name="scoreValue" VerticalAlignment="Bottom" HorizontalAlignment="Right" FontSize="12" />
     </Grid>
 </UserControl>

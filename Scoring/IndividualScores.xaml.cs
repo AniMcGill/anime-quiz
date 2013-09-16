@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Linq;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Anime_Quiz_3.Controls;
 using GameContext;
 
 namespace Anime_Quiz_3.Scoring
@@ -25,7 +14,22 @@ namespace Anime_Quiz_3.Scoring
         public IndividualScores()
         {
             InitializeComponent();
+            displayScores();
         }
 
+        public void displayScores()
+        {
+            foreach (Teams team in App.teams.OrderByDescending(t => t.Score))
+            {
+                foreach (TeamMembers teamMember in team.TeamMembers.OrderByDescending(m => m.MemberScore))
+                {
+                    Score teamMemberScore = new Score();
+                    teamMemberScore.ScoreName = teamMember.MemberName + " (" + team.Name + ")";
+                    teamMemberScore.Points = teamMember.MemberScore;
+
+                    pageStack.Children.Add(teamMemberScore);
+                }
+            }
+        }
     }
 }
