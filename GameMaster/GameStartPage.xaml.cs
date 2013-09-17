@@ -54,7 +54,7 @@ namespace Anime_Quiz_3.GameMaster
                     ScoringControl teamMemberScoringControl = new ScoringControl();
                     teamMemberScoringControl.Text = teamMember.MemberName;
                     teamMemberScoringControl.AddButtonClicked += (sender, args) =>
-                        teamMemberScoringControl_AddButtonClicked(teamMember.MemberId, teamMember.TeamId, args);
+                        teamMemberScoringControl_AddButtonClicked(teamMember.MemberId, args);
 
                     teamsStackPanel.Children.Add(teamMemberScoringControl);
                 }
@@ -152,7 +152,7 @@ namespace Anime_Quiz_3.GameMaster
             OnScoreUpdated(EventArgs.Empty);
         }
 
-        void teamMemberScoringControl_AddButtonClicked(int teamMemberId, int teamId, EventArgs e)
+        void teamMemberScoringControl_AddButtonClicked(int teamMemberId, EventArgs e)
         {
             try
             {
@@ -170,7 +170,7 @@ namespace Anime_Quiz_3.GameMaster
             }
             catch (NullReferenceException crap)
             {
-                SoundMessageBox.Show("No Question has been loaded", "Fail", Anime_Quiz_3.Properties.Resources.Muda);
+                SoundMessageBox.Show("No Question has been loaded/n/n" + crap.Message, "Fail", Anime_Quiz_3.Properties.Resources.Muda);
             }
         }
         #endregion

@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Anime_Quiz_3.Classes;
 using Anime_Quiz_3.Properties;
-using Devart.Data.Linq;
 using GameContext;
 
 namespace Anime_Quiz_3.GameMaster
