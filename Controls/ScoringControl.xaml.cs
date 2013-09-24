@@ -32,7 +32,7 @@ namespace Anime_Quiz_3.Controls
                 if (isTeam)
                 {
                     //scoringControlGrid.Children.Remove(addPointBtn);
-                    addPointBtn.Content += " 100";
+                    addPointBtn.Content = "罰";
                     nameLabel.FontWeight = FontWeights.Bold;
                 }
             }

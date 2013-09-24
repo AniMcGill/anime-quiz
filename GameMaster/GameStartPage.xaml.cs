@@ -32,7 +32,7 @@ namespace Anime_Quiz_3.GameMaster
                 questionSetComboBox.SelectedItem = CurrentQuestionSet.getInstance().Name;
         }
         
-        private void loadTeams()
+        void loadTeams()
         {
             foreach (Teams team in App.teams)
             {
@@ -62,13 +62,12 @@ namespace Anime_Quiz_3.GameMaster
                 endSeparator.Margin = new Thickness(0, 0, 0, 20);
                 teamsStackPanel.Children.Add(endSeparator);
             }
-        }
-        
+        }      
         /// <summary>
         ///     Toggles the visibility of the Current Question information section
         /// </summary>
         /// <param name="show">True if visible; False otherwise</param>
-        private void toggleQuestionInfo(bool show)
+        void toggleQuestionInfo(bool show)
         {
             showAnswerBtn.IsEnabled = show;
             closeQuestionBtn.IsEnabled = show;
@@ -76,6 +75,35 @@ namespace Anime_Quiz_3.GameMaster
                 currentQuestionStack.Visibility = System.Windows.Visibility.Visible;
             else
                 currentQuestionStack.Visibility = System.Windows.Visibility.Collapsed;
+        }
+        void setQuestionInfo()
+        {
+            currentQuestionAnswerLabel.Content = "Answer: " + CurrentQuestion.getInstance().Answer.ToString();
+            currentQuestionPointLabel.Content = "Points: " + CurrentQuestion.getInstance().Points.ToString();
+        }
+        void loadAnsweringOrderStack()
+        {
+            answeringOrderStack.Visibility = System.Windows.Visibility.Visible;
+            foreach (Teams team in App.teams)
+            {
+                Label teamLabel = new Label();
+                teamLabel.Name = "team" + team.TeamId;
+                teamLabel.Content = team.Name;
+                teamLabel.Visibility = System.Windows.Visibility.Collapsed;
+                answeringOrderStack.Children.Add(teamLabel);
+            }
+        }
+        void resetAnsweringOrder()
+        {
+            foreach (Label label in answeringOrderStack.Children.OfType<Label>())
+            {
+                if (label.Name != answeringOrderTitle.Name)
+                    label.Visibility = System.Windows.Visibility.Collapsed;
+            }
+        }
+        void showAnsweringOrderLabel(int teamId)
+        {
+            (answeringOrderStack.FindName("team" + teamId) as Label).Visibility = System.Windows.Visibility.Visible;
         }
 
         #region Event Handlers
@@ -93,6 +121,13 @@ namespace Anime_Quiz_3.GameMaster
                                             select questionSet).Single());
             questionSetLoadBtn.IsEnabled = questionSetComboBox.SelectedIndex >= 0;
         }
+       
+        /// <summary>
+        ///     Refresh the Player Window when a new set is loaded,
+        ///     or set up the windows if this is the first set we load.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void questionSetLoadBtn_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -106,6 +141,7 @@ namespace Anime_Quiz_3.GameMaster
                 playerWindow.Show();
 
                 loadTeams();
+                loadAnsweringOrderStack();
             }
         }
         private void showAnswerBtn_Click(object sender, RoutedEventArgs e)
@@ -126,9 +162,10 @@ namespace Anime_Quiz_3.GameMaster
         void playerWindow_QuestionReady(object sender, EventArgs e)
         {
             toggleQuestionInfo(true);
-            currentQuestionAnswerLabel.Content = "Answer: " + CurrentQuestion.getInstance().Answer.ToString();
-            currentQuestionPointLabel.Content = "Points: " + CurrentQuestion.getInstance().Points.ToString();
-            //TODO: Reset answering order
+            setQuestionInfo();
+
+            resetAnsweringOrder();
+            //TODO: start serial listenner
         }
 
         /// <summary>
