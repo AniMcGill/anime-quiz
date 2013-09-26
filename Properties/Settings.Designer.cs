@@ -46,5 +46,29 @@ namespace Anime_Quiz_3.Properties {
                 this["defaultScreenshotFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool autoplay {
+            get {
+                return ((bool)(this["autoplay"]));
+            }
+            set {
+                this["autoplay"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int duration {
+            get {
+                return ((int)(this["duration"]));
+            }
+            set {
+                this["duration"] = value;
+            }
+        }
     }
 }

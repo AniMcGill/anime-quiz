@@ -1,0 +1,33 @@
+﻿<Window x:Class="Anime_Quiz_3.GameMaster.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="SettingsWindow" Height="300" Width="600">
+    <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="20"/>
+            <RowDefinition MinHeight="20"/>
+            <RowDefinition MinHeight="20"/>
+            <RowDefinition MinHeight="20"/>
+            <RowDefinition MinHeight="20"/>
+            <RowDefinition MinHeight="20"/>
+            <RowDefinition MinHeight="20"/>
+            <RowDefinition MinHeight="20"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="6*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label Name="defaultMusicFolderLabel" Content="Default Music Folder" Foreground="#999" Margin="5,5,5,5" Panel.ZIndex="1" />
+        <TextBox Name="defaultMusicFolder" Margin="5,5,5,5" Panel.ZIndex="0" Width="300" />
+        <Button Name="defaultMusicFolderButton" Content="Browse..." Margin="5,5,5,5" Grid.Column="1" Click="defaultMusicFolderButton_Click" />
+
+        <Label Name="defaultScreenshotFolderLabel" Content="Default Screenshot Folder" Foreground="#999" Margin="5,5,5,5" Panel.ZIndex="1" Grid.Row="1" />
+        <TextBox Name="defaultScreenshotFolder" Margin="5,5,5,5" Panel.ZIndex="0" Width="300" Grid.Row="1" />
+        <Button Name="defaultScreenshotFolderButton" Content="Browse..." Margin="5,5,5,5" Grid.Row="1" Grid.Column="1" Click="defaultScreenshotFolderButton_Click" />
+
+        <CheckBox Name="autoplayMusicCheckbox" Content="Auto-play music" Margin="5,5,5,5" Grid.Row="3" Checked="autoplayMusicCheckbox_Checked"  />
+        <Label Name="durationLabel" Content="Question duration:" Grid.Row="5" />
+        <Slider Name="durationSlider" Value="15" Interval="1" Minimum="1" Maximum="30" Grid.Row="6" ValueChanged="durationSlider_ValueChanged" />
+        <Label Name="durationValue" Margin="5,5,5,5" Grid.Row="6" Grid.Column="1" />
+    </Grid>
+</Window>

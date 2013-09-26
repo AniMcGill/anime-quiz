@@ -151,6 +151,9 @@
     <Compile Include="GameMaster\GameStartPage.xaml.cs">
       <DependentUpon>GameStartPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GameMaster\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GameMaster\TeamEditor.xaml.cs">
       <DependentUpon>TeamEditor.xaml</DependentUpon>
     </Compile>
@@ -190,6 +193,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GameMaster\QuestionSetEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GameMaster\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
