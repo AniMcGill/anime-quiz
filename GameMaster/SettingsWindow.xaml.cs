@@ -1,16 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using Anime_Quiz_3.Classes;
 
 namespace Anime_Quiz_3.GameMaster
 {
@@ -25,12 +15,13 @@ namespace Anime_Quiz_3.GameMaster
 
             defaultMusicFolder.Text = Properties.Settings.Default.defaultMusicFolder;
             defaultMusicFolderLabel.Visibility = Properties.Settings.Default.defaultMusicFolder.Equals(String.Empty) ? Visibility.Visible : Visibility.Hidden;
+
             defaultScreenshotFolder.Text = Properties.Settings.Default.defaultScreenshotFolder;
-            
+            defaultScreenshotFolderLabel.Visibility = Properties.Settings.Default.defaultScreenshotFolder.Equals(String.Empty) ? Visibility.Visible : Visibility.Hidden;
+
             autoplayMusicCheckbox.IsChecked = Properties.Settings.Default.autoplay;
             
             durationSlider.Value = Properties.Settings.Default.duration;
-            durationValue.Content = Properties.Settings.Default.duration;
         }
 
         private void defaultMusicFolderButton_Click(object sender, RoutedEventArgs e)
@@ -40,17 +31,31 @@ namespace Anime_Quiz_3.GameMaster
 
         private void defaultScreenshotFolderButton_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void autoplayMusicCheckbox_Checked(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.autoplay = (bool) (sender as CheckBox).IsChecked;
+            
         }
 
         private void durationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            //Y U NO int? Integer division in C#?
+            durationSlider.Value = e.NewValue - (e.NewValue % 1);
+        }
 
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            try
+            {
+                Properties.Settings.Default.defaultMusicFolder = defaultMusicFolder.Text;
+                Properties.Settings.Default.defaultScreenshotFolder = defaultScreenshotFolder.Text;
+                Properties.Settings.Default.autoplay = (bool) autoplayMusicCheckbox.IsChecked;
+                Properties.Settings.Default.duration = Int32.Parse(durationSlider.Value.ToString());
+                base.OnClosing(e);
+            }
+            catch (Exception crap)
+            {
+                SoundMessageBox.Show("There's a mistake in the settings, fix it or you'll regret it later\n" + crap.Message, 
+                    "Fail",
+                    Properties.Resources.w_lulu);
+            }
         }
     }
 }

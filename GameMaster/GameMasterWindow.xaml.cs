@@ -51,7 +51,9 @@ namespace Anime_Quiz_3
 
         private void settingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-
+            var settingWindow = new SettingsWindow();
+            settingWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            settingWindow.Show();
         }
 
         private void helpMenuItem_Click(object sender, RoutedEventArgs e)

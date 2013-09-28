@@ -61,7 +61,7 @@ namespace Anime_Quiz_3.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("15")]
         public int duration {
             get {
                 return ((int)(this["duration"]));
