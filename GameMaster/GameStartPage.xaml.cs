@@ -84,6 +84,12 @@ namespace Anime_Quiz_3.GameMaster
         void loadAnsweringOrderStack()
         {
             answeringOrderStack.Visibility = System.Windows.Visibility.Visible;
+            foreach (KeyValuePair<int, string> buzzerParam in App.buzzerParams)
+            {
+                BluetoothBuzzer buzzer = new BluetoothBuzzer(buzzerParam.Value, buzzerParam.Key);
+                answeringOrderStack.Children.Add(buzzer);
+            }
+            /*
             foreach (Teams team in App.teams)
             {
                 Label teamLabel = new Label();
@@ -91,20 +97,33 @@ namespace Anime_Quiz_3.GameMaster
                 teamLabel.Content = team.Name;
                 teamLabel.Visibility = System.Windows.Visibility.Collapsed;
                 answeringOrderStack.Children.Add(teamLabel);
+            }*/
+        }
+        void listenForAnsweringOrder()
+        {
+            foreach (BluetoothBuzzer buzzer in answeringOrderStack.Children.OfType<BluetoothBuzzer>())
+            {
+                buzzer.BuzzerStandby();
             }
         }
         void resetAnsweringOrder()
         {
+            foreach (BluetoothBuzzer buzzer in answeringOrderStack.Children.OfType<BluetoothBuzzer>())
+            {
+                buzzer.BuzzerStop();
+            }
+            /*
             foreach (Label label in answeringOrderStack.Children.OfType<Label>())
             {
                 if (label.Name != answeringOrderTitle.Name)
                     label.Visibility = System.Windows.Visibility.Collapsed;
-            }
+            }*/
         }
+        /*
         void showAnsweringOrderLabel(int teamId)
         {
             (answeringOrderStack.FindName("team" + teamId) as Label).Visibility = System.Windows.Visibility.Visible;
-        }
+        }*/
 
         #region Event Handlers
         public EventHandler ScoreUpdated;
@@ -164,8 +183,9 @@ namespace Anime_Quiz_3.GameMaster
             toggleQuestionInfo(true);
             setQuestionInfo();
 
-            resetAnsweringOrder();
+            resetAnsweringOrder(); //TODO: this should be used elsewhere...
             //TODO: start serial listenner
+            listenForAnsweringOrder();
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using GameContext;
 
@@ -12,6 +13,7 @@ namespace Anime_Quiz_3
         public static GameDataContext db;
         public static IQueryable<QuestionSets> questionSets;
         public static IQueryable<Teams> teams;
+        public static Dictionary<int, string> buzzerParams;
         public App()
         {
             db = new GameDataContext();

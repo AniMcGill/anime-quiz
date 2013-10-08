@@ -130,6 +130,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controls\AbstractQuestionControlDescriptionProvider.cs" />
+    <Compile Include="Controls\BluetoothBuzzer.xaml.cs">
+      <DependentUpon>BluetoothBuzzer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\MusicControl.cs" />
     <Compile Include="Controls\QuestionControl.cs" />
     <Compile Include="Controls\Score.xaml.cs">
@@ -173,6 +176,10 @@
       <DependentUpon>TeamScoresView.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\AbstractQuestionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\BluetoothBuzzer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
