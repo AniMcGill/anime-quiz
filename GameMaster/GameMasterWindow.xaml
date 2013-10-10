@@ -13,6 +13,7 @@
                 <MenuItem x:Name="exitMenuItem" Header="E_xit" Click="exitMenuItem_Click"/>
             </MenuItem>
             <MenuItem x:Name="teamsMenuItem" Header="_Teams" Click="teamsMenuItem_Click"></MenuItem>
+            <MenuItem x:Name="buzzerMenuItem" Header="_Buzzer" Click="buzzerMenuItem_Click"></MenuItem>
             <MenuItem x:Name="settingsMenuItem" Header="_Settings" Click="settingsMenuItem_Click"></MenuItem>
             <MenuItem x:Name="helpMenuItem" Header="_Help" Click="helpMenuItem_Click" />
         </Menu>

@@ -148,6 +148,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GameDB.lqml</DependentUpon>
     </Compile>
+    <Compile Include="GameMaster\BuzzerSetupWindow.xaml.cs">
+      <DependentUpon>BuzzerSetupWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GameMaster\GameMasterWindow.xaml.cs">
       <DependentUpon>GameMasterWindow.xaml</DependentUpon>
     </Compile>
@@ -188,6 +191,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ScoringControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GameMaster\BuzzerSetupWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

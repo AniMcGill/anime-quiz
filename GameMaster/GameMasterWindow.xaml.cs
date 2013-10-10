@@ -48,21 +48,26 @@ namespace Anime_Quiz_3
             _gmWindow.NavigationService.Navigate(new TeamEditor());
             _sideWindow.Visibility = System.Windows.Visibility.Collapsed;
         }
+        private void buzzerMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            BuzzerSetupWindow buzzerSetupWindow = new BuzzerSetupWindow();
+            buzzerSetupWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            buzzerSetupWindow.Show();
+        }
 
         private void settingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var settingWindow = new SettingsWindow();
+            SettingsWindow settingWindow = new SettingsWindow();
             settingWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             settingWindow.Show();
         }
 
         private void helpMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var helpWindow = new HelpWindow();
+            HelpWindow helpWindow = new HelpWindow();
             helpWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             helpWindow.Show();
         }
-
         private void exitMenuItem_Click(object sender, RoutedEventArgs e)
         {
             this.Close();

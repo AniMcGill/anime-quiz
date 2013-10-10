@@ -35,7 +35,9 @@ namespace Anime_Quiz_3.Player
                     break;
             }
             pageStack.Children.Add(questionControl);
-            //TODO: if settings contain autostart, startQuestion()
+            //if settings contain autostart, startQuestion()
+            if (Properties.Settings.Default.autoplay)
+                questionControl.startQuestion();
         }
         public void showAnswer()
         {

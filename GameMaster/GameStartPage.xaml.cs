@@ -163,9 +163,16 @@ namespace Anime_Quiz_3.GameMaster
                 loadAnsweringOrderStack();
             }
         }
+        
+        /// <summary>
+        ///     Show the answer and stop listenning for buzzers
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void showAnswerBtn_Click(object sender, RoutedEventArgs e)
         {
             playerWindow.showAnswer();
+            resetAnsweringOrder();
             CurrentQuestion.getInstance().Answered = true;
             App.db.SubmitChanges();
             App.refreshDb(CurrentQuestion.getInstance());
@@ -183,8 +190,7 @@ namespace Anime_Quiz_3.GameMaster
             toggleQuestionInfo(true);
             setQuestionInfo();
 
-            resetAnsweringOrder(); //TODO: this should be used elsewhere...
-            //TODO: start serial listenner
+            //start serial listenner
             listenForAnsweringOrder();
         }
 

@@ -1,0 +1,24 @@
+﻿<Window x:Class="Anime_Quiz_3.GameMaster.BuzzerSetupWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="BuzzerSetupWindow" Height="300" Width="600">
+    <Grid Margin="5,0,5,5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition MaxHeight="28"/>
+            <RowDefinition MaxHeight="28"/>
+            <RowDefinition/>
+            <RowDefinition MaxHeight="28"/>
+        </Grid.RowDefinitions>
+        <Label Name="instructionLabel" Content="Assign buzzer port to a team." HorizontalAlignment="Left" />
+        <Label Name="teamLabel" Content="Team Name" FontWeight="Bold" HorizontalAlignment="Center" Grid.Row="1" />
+        <Label Name="comLabel" Content="Com Port (Buzzer)" FontWeight="Bold" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1" />
+        <StackPanel Name="teamStack" Grid.Row="2" ></StackPanel>
+        <StackPanel Name="comStack" Grid.Row="2" Grid.Column="1"></StackPanel>
+        <Button Name="okButton" Content="Ok" Grid.Row="4" Grid.Column="1" Width="50" Height="20" HorizontalAlignment="Right" Margin="0,0,60,0" Click="okButton_Click" />
+        <Button Name="cancelButton" Content="Cancel" Grid.Row="4" Grid.Column="1" Width="50" Height="20" HorizontalAlignment="Right" Margin="0,0,5,0" Click="cancelButton_Click" />
+    </Grid>
+</Window>
