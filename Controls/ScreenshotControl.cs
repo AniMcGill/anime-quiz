@@ -16,7 +16,8 @@ namespace Anime_Quiz_3.Controls
             screenshot.ImageSource = CurrentQuestion.getInstance().Question;
             screenshot.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
             screenshot.VerticalAlignment = System.Windows.VerticalAlignment.Top;
-            screenshot.Interval = 500;  //for now, but use values in Settings to calculate "better" interval
+            // Convert the duration to milliseconds, then divide by number of checkerboard boxes.
+            screenshot.Interval = Properties.Settings.Default.duration * 1000 / 100;
 
             pageStack.Children.Add(screenshot);
         }

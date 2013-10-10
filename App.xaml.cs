@@ -19,6 +19,7 @@ namespace Anime_Quiz_3
             db = new GameDataContext();
             questionSets = db.GetTable<QuestionSets>();
             teams = db.GetTable<Teams>();
+            buzzerParams = new Dictionary<int,string>();
         }
 
         public static void refreshDb(object entity)
