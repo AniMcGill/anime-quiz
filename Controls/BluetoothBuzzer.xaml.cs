@@ -1,4 +1,5 @@
-﻿using System.IO.Ports;
+﻿using System;
+using System.IO.Ports;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,7 +10,7 @@ namespace Anime_Quiz_3.Controls
     /// <summary>
     /// Interaction logic for BluetoothBuzzer.xaml
     /// </summary>
-    public partial class BluetoothBuzzer : UserControl
+    public partial class BluetoothBuzzer : UserControl, IDisposable
     {
         string _comPort;
         int _baudRate = 9600;
@@ -94,6 +95,18 @@ namespace Anime_Quiz_3.Controls
         {
             //OnBuzzerPressed(EventArgs.Empty);
             this.Visibility = Visibility.Visible;
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+                serialPort.Dispose();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /*

@@ -25,7 +25,7 @@
         <TextBox Name="defaultScreenshotFolder" Margin="5,5,5,5" Panel.ZIndex="0" Width="300" Grid.Row="1" />
         <Button Name="defaultScreenshotFolderButton" Content="Browse..." Margin="5,5,5,5" Grid.Row="1" Grid.Column="1" Click="defaultScreenshotFolderButton_Click" />
 
-        <CheckBox Name="autoplayMusicCheckbox" Content="Auto-play music" Margin="5,5,5,5" Grid.Row="3"  />
+        <CheckBox Name="autoplayMusicCheckbox" Content="Auto-play animations/music" Margin="5,5,5,5" Grid.Row="3"  />
         <Label Name="durationLabel" Content="Question duration:" Grid.Row="5" />
         <Slider Name="durationSlider" Value="15" Interval="1" Minimum="1" Maximum="30" Grid.Row="6" ValueChanged="durationSlider_ValueChanged" SmallChange="1" TickPlacement="BottomRight" />
         <Label Name="durationValue" Margin="5,5,5,5" Grid.Row="6" Grid.Column="1" Content="{Binding Value, ElementName=durationSlider}" />

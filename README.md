@@ -3,6 +3,8 @@ anime-quiz
 
 ## MSAC Anime Quiz Application
 Provides an interface for creating quiz game questions and teams, as well as a Game Master and Player windows for administrating the quiz.
+### Disclaimer
+The following software is intended for the use of the McGill Students Anime Club and is otherwise provided as-is. It is assumed that any unintended users is able to adapt the source code to their specific uses.
 ## Question Set Creation/Editor
 Open an existing Question Set for editing, or create a new Question Set. Question Sets can be either text questions, music, or screenshots. Either way, the question "content" is stored as a string, so in the case of music and screenshots, the file path is stored. This makes more sense for our use...
 ## Team Editor
@@ -20,7 +22,5 @@ Available settings will be
 + Autoplay music (yes/no)
 + Question duration: set the duration for the question timers
 # TODO
-+ Add serial for the bluetooth
-+ Test music and screenshot question display
-+ Add a control for animating text questions
-+ Add and implement settings
++ Test serial for the bluetooth
++ Add playback options for when autoplay = false

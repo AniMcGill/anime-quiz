@@ -1,4 +1,5 @@
-﻿using System.Media;
+﻿using System;
+using System.Media;
 using System.Windows;
 
 namespace Anime_Quiz_3.GameMaster
@@ -6,7 +7,7 @@ namespace Anime_Quiz_3.GameMaster
     /// <summary>
     /// Interaction logic for HelpWindow.xaml
     /// </summary>
-    public partial class HelpWindow : Window
+    public partial class HelpWindow : Window, IDisposable
     {
         SoundPlayer soundPlayer;
         public HelpWindow()
@@ -20,6 +21,17 @@ namespace Anime_Quiz_3.GameMaster
             soundPlayer.Stop();
             soundPlayer.Dispose();
             base.OnClosing(e);
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+                soundPlayer.Dispose();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

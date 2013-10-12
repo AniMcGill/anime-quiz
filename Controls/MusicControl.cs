@@ -18,6 +18,7 @@ namespace Anime_Quiz_3.Controls
         {
             musicPlayer = new MediaElement();
             musicPlayer.Source = new Uri(CurrentQuestion.getInstance().Question, UriKind.RelativeOrAbsolute);
+            musicPlayer.LoadedBehavior = MediaState.Manual;
 
             pageStack.Children.Add(musicPlayer);
         }
@@ -44,7 +45,7 @@ namespace Anime_Quiz_3.Controls
 
         void mediaTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            musicPlayer.Pause();
+            this.Dispatcher.Invoke(pauseQuestion, System.Windows.Threading.DispatcherPriority.Normal);
         }
     }
 }
