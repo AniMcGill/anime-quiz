@@ -51,8 +51,14 @@ namespace Anime_Quiz_3.GameMaster
                     App.buzzerParams.Clear();
                     return;
                 }
-                App.buzzerParams.Add(Int32.Parse(box.Uid), box.SelectedValue.ToString());
+                App.buzzerParams.Add((int)Int32.Parse(box.Uid), box.SelectedValue.ToString());
             }
+            if (App.buzzerParams.Count.Equals(4))
+            {
+                this.Close();
+            }
+            else
+                SoundMessageBox.Show("Something went wrong, less than 4 buzzers are saved.", "Fail", Properties.Resources.w_lulu);
         }
         private void cancelButton_Click(object sender, RoutedEventArgs e)
         {

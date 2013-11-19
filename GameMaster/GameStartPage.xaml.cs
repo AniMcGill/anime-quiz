@@ -88,42 +88,27 @@ namespace Anime_Quiz_3.GameMaster
             {
                 BluetoothBuzzer buzzer = new BluetoothBuzzer(buzzerParam.Value, buzzerParam.Key);
                 answeringOrderStack.Children.Add(buzzer);
+                buzzer.BuzzerStandby(); //better just connect once and maintain connection throughout
             }
-            /*
-            foreach (Teams team in App.teams)
-            {
-                Label teamLabel = new Label();
-                teamLabel.Name = "team" + team.TeamId;
-                teamLabel.Content = team.Name;
-                teamLabel.Visibility = System.Windows.Visibility.Collapsed;
-                answeringOrderStack.Children.Add(teamLabel);
-            }*/
         }
         void listenForAnsweringOrder()
         {
             foreach (BluetoothBuzzer buzzer in answeringOrderStack.Children.OfType<BluetoothBuzzer>())
             {
-                buzzer.BuzzerStandby();
+                buzzer.BuzzerPressed += buzzer_BuzzerPressed;
             }
         }
+   
         void resetAnsweringOrder()
         {
+            // Remove event handlers
             foreach (BluetoothBuzzer buzzer in answeringOrderStack.Children.OfType<BluetoothBuzzer>())
             {
-                buzzer.BuzzerStop();
+                buzzer.BuzzerPressed -= buzzer_BuzzerPressed;
             }
-            /*
-            foreach (Label label in answeringOrderStack.Children.OfType<Label>())
-            {
-                if (label.Name != answeringOrderTitle.Name)
-                    label.Visibility = System.Windows.Visibility.Collapsed;
-            }*/
+            // Remove the team labels
+            labelStack.Children.Clear();
         }
-        /*
-        void showAnsweringOrderLabel(int teamId)
-        {
-            (answeringOrderStack.FindName("team" + teamId) as Label).Visibility = System.Windows.Visibility.Visible;
-        }*/
 
         #region Event Handlers
         public EventHandler ScoreUpdated;
@@ -181,6 +166,7 @@ namespace Anime_Quiz_3.GameMaster
         private void closeQuestionBtn_Click(object sender, RoutedEventArgs e)
         {
             toggleQuestionInfo(false);
+            resetAnsweringOrder();
             playerWindow.Refresh();
             CurrentQuestion.setInstance(null);
         }
@@ -192,6 +178,18 @@ namespace Anime_Quiz_3.GameMaster
 
             //start serial listenner
             listenForAnsweringOrder();
+        }
+        void buzzer_BuzzerPressed(object sender, EventArgs e)
+        {
+            // For some reason this fires twice but we have achieved our goal.
+            // TODO: eventually fix this.
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                Label teamLabel = new Label();
+                teamLabel.Content = ((BluetoothBuzzer)sender).getTeamName();
+                labelStack.Children.Add(teamLabel);
+                teamLabel.Visibility = Visibility.Visible;
+            }));
         }
 
         /// <summary>

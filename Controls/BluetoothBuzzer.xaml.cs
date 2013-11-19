@@ -61,22 +61,47 @@ namespace Anime_Quiz_3.Controls
         private void BuzzerSetUp()
         {
             serialPort = new SerialPort(_comPort, _baudRate, _parity, _dataBits, _stopBits);
-            teamName.Content = (from team in App.teams where team.TeamId.Equals(teamId) select team).Single();
-            
-            serialPort.Open();
-            serialPort.WriteLine(teamId.ToString());
-            
-            string response = serialPort.ReadLine();
-            SoundMessageBox.Show(response, Properties.Resources.W_hello);
-            serialPort.Close();
+            teamName.Content = (from team in App.teams where team.TeamId.Equals(teamId) select team).Single().Name;
+            // ugly hack
+            try
+            {
+                serialPort.Open();
+                serialPort.WriteLine(teamId.ToString());
+
+                string response = serialPort.ReadLine();
+                //SoundMessageBox.Show(response, Properties.Resources.W_hello);
+                serialPort.Close();
+            }
+            catch (Exception crap)
+            {
+                BuzzerSetUp();
+            }
+        }
+
+        /// <summary>
+        ///     Get the team name registered to the button
+        /// </summary>
+        /// <returns>The team name</returns>
+        public String getTeamName()
+        {
+            return teamName.Content.ToString();
+        }
+
+        /// <summary>
+        ///     Hide the buzzer label.
+        /// </summary>
+        public void BuzzerReset()
+        {
+            this.Visibility = Visibility.Collapsed;
+            //serialPort.Close();
         }
 
         /// <summary>
         ///     Closes the serial connection and hide the buzzer label.
         /// </summary>
-        public void BuzzerStop()
+        public void BuzzerClose()
         {
-            this.Visibility = Visibility.Collapsed;
+            BuzzerReset();
             serialPort.Close();
         }
 
@@ -86,15 +111,28 @@ namespace Anime_Quiz_3.Controls
         public void BuzzerStandby()
         {
             if (serialPort != null && serialPort.IsOpen)
-                serialPort.Close();
+                return;
+                //serialPort.Close();
             serialPort = new SerialPort(_comPort, _baudRate, _parity, _dataBits, _stopBits);
             serialPort.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceived);
-            serialPort.Open();
+            try
+            {
+                serialPort.Open();
+            }
+            catch (Exception crap)
+            {
+                BuzzerStandby();
+            }
         }
         void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            //OnBuzzerPressed(EventArgs.Empty);
-            this.Visibility = Visibility.Visible;
+            OnBuzzerPressed(EventArgs.Empty);
+            //this.Visibility = Visibility.Visible;
+            /*
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                Visibility = Visibility.Visible;
+            }));*/
         }
 
         protected virtual void Dispose(bool disposing)
@@ -109,13 +147,13 @@ namespace Anime_Quiz_3.Controls
             GC.SuppressFinalize(this);
         }
 
-        /*
+        
         public event EventHandler BuzzerPressed;
         protected virtual void OnBuzzerPressed(EventArgs e)
         {
             EventHandler handler = BuzzerPressed;
             if (handler != null)
                 handler(this, e);
-        }*/
+        }
     }
 }

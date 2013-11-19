@@ -21,6 +21,9 @@
         <StackPanel Name="teamsStackPanel" Width="600" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,150,0,0" />
         <StackPanel Name="answeringOrderStack" Width="300" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="610, 150,0,0" Visibility="Collapsed">
             <Label Name="answeringOrderTitle" Content="Answering Order" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" />
+            <ScrollViewer Visibility="Visible" Height="450">
+                <StackPanel Name="labelStack" Visibility="Visible" />
+            </ScrollViewer>
         </StackPanel>
     </Grid>
 </Page>
